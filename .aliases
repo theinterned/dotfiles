@@ -1,0 +1,102 @@
+alias n=npm
+alias nr="npm run"
+alias ni="npm install"
+alias nw="npm workspace"
+alias nws="npm workspaces"
+alias nwsr="npm workspaces run"
+alias ns="echo 'npm start' && npm start"
+alias nsb="echo 'npm run storybook' && npm run storybook"
+alias nnx="echo 'npm run nginx' && npm run nginx"
+alias nwr="echo 'npm run wr' && npm run wr"
+alias nt="echo 'npm test --notify --maxWorkers=65%' && npm test --notify --maxWorkers=65%"
+alias nta="echo 'yt --watchAll=false' && yt --watchAll=false"
+
+# start GCloud IAP tunnel to access mongo
+alias tunnel-stage-mongo="gcloud compute --project league-stage-ca start-iap-tunnel mongo-data-rs0-01 27018 --local-host-port=127.0.0.1:27021"
+alias mongo-tunnel-stage="tunnel-stage-mongo"
+alias tunnel-testprod-mongo="gcloud compute --project league-testprod-ca start-iap-tunnel mongo-data-rs0-01 27018 --local-host-port=127.0.0.1:27022 --zone=northamerica-northeast1-a"
+alias mongo-tunnel-testprod="tunnel-testprod-mongo"
+
+alias y=yarn
+alias yw="yarn workspace"
+alias yws="yarn workspaces"
+alias ywsr="yarn workspaces run"
+alias ys="echo 'yarn start' && yarn start"
+alias ysb="echo 'yarn storybook' && yarn storybook"
+alias yt="echo 'yarn test --notify --maxWorkers=65%' && yarn test --notify --maxWorkers=65%"
+alias yta="echo 'yt --watchAll=false' && yt --watchAll=false"
+
+alias edit=code
+
+# Git aliases
+alias gpo="echo 'git push -u origin HEAD' && git push -u origin HEAD"
+alias gpf="echo 'git push --force-with-lease' && git push --force-with-lease"
+gcob() {
+  git checkout -b $1 && git push --set-upstream origin $1
+}
+gcopr() { 
+  (git fetch -f upstream pull/${1}/head:pr-${1} || (echo 'trying origin'; git fetch -f origin pull/${1}/head:pr-${1})) && git checkout pr-${1}; 
+}
+alias gtfo="echo 'git reset --hard && git clean -fd' && git reset --hard && git clean -fd"
+alias gco-="git checkout -"
+alias gcm="git commit -m"
+alias glu="echo 'git pull upstream $(current_branch)' && git pull upstream $(current_branch)"
+
+
+alias gcom="echo 'git checkout main' && git checkout main"
+alias grum="echo 'git fetch upstream' && git fetch upstream && echo 'git rebase upstream/main' && git rebase upstream/main"
+alias gpum="echo 'git pull upstream main' && git pull upstream main"
+
+# legacy from when master was standard
+alias gcomaster="echo 'git checkout master' && git checkout master"
+alias grumaster="echo 'git fetch upstream' && git fetch upstream && echo 'git rebase upstream/master' && git rebase upstream/master"
+alias gpumaster="echo 'git pull upstream master' && git pull upstream master"
+
+alias gcm="git commit -m"
+alias gcma="git commit -m -a"
+
+hack() {
+  git checkout -b $1 && git push --set-upstream origin $1
+}
+
+# League Aliasses
+alias league="echo 'cd ~/src/league' && cd ~/src/league"
+alias fullstack="echo 'cd ~/src/league/fullstack' && cd ~/src/league/fullstack"
+alias frontend-web="echo 'fullstack && cd frontend-web' && fullstack && cd frontend-web"
+alias fw=frontend-web
+alias widget-runner=frontend-web
+alias wr=widget-runner
+alias league-web="echo 'fullstack && cd league-web' && fullstack && cd league-web"
+alias lw=league-web
+alias league-b2b="echo 'lw && cd apps/league-b2b' && lw && cd apps/league-b2b"
+alias lb=league-b2b
+
+alias wr.devstart="echo 'PORT=4321 DEV=1 MINIFY=0 bin/wr run league staging' && PORT=4321 DEV=1 MINIFY=0 bin/wr run league staging"
+alias wrs="echo 'lw && npm run wr' && lw && npm run wr"
+alias wrss="echo 'wr && git pull upstream $(current_branch) && lw && npm run wr' && wr && glu && lw && npm run wr"
+alias lws="echo 'league-web && npm start' && league-web && npm start"
+
+alias genesis="echo 'cd ~/src/league/genesis' && cd ~/src/league/genesis"
+
+# OKR tools
+okr-ui-kit-coverage () {
+  local stories=`find . -path '*/ui-kit/*' -name "*.stories.js" -not -path "./node_modules/*"  | wc -l | tr -d '[:space:]'`
+  local components=`find . -path '*/ui-kit/*' -name "*.component.js" -not -path "./node_modules/*"  | wc -l | tr -d '[:space:]'`
+
+  echo UI-Kit Storybook Coverage
+  echo stories:    ${stories}
+  echo components: $components
+  echo `echo "console.log(Math.round(${stories} / ${components} * 10000) / 100 + '%')"  |  node`
+  echo
+}
+
+okr-storybook-coverage () {
+  local stories=`find . -name "*.stories.js"  | wc -l | tr -d '[:space:]'`
+  local components=`find . -name "*.component.js"  | wc -l | tr -d '[:space:]'`
+
+  echo Storybook Coverage
+  echo stories:    ${stories}
+  echo components: $components
+  echo `echo "console.log(Math.round(${stories} / ${components} * 10000) / 100 + '%')"  |  node`
+  echo
+}
