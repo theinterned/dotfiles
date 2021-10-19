@@ -1,23 +1,23 @@
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
 [user]
-	name = Ned Schwartz
-	email = ned@theinterned.net
-	signingKey = 3D79219DD80B103B
+  name = Ned Schwartz
+  email = ned@theinterned.net
+  signingKey = 3D79219DD80B103B
 [gpg]
-	program = gpg
+  program = gpg
 [commit]
-	gpgsign = true
+  gpgsign = true
 [diff]
     tool = icdiff
 [push]
-	default = simple
+  default = simple
 [url "git@github.com:"]
-	insteadOf = https://github.com/
+  insteadOf = https://github.com/
 [init]
-	defaultBranch = main
+  defaultBranch = main
 [alias]
-	praise = blame
+  praise = blame
