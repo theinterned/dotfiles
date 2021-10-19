@@ -1,23 +1,65 @@
+[alias]
+  praise = blame
+  br = branch
+  cm = commit
+  co = checkout
+  p = push
+  pl = pull
+  st = status
+
+[color]
+  ui = true
+
+[color "diff"]
+  old = red
+  new = green
+
+[color "diff-highlight"]
+  oldNormal = red
+  newNormal = green
+  oldHighlight = red reverse
+  newHighlight = green reverse
+
+[core]
+  editor = pico
+
+[commit]
+  gpgsign = true
+
+[credential]
+	helper = osxkeychain
+
+[fetch]
+	prune = true
+
+[diff]
+  tool = icdiff
+
 [filter "lfs"]
   clean = git-lfs clean -- %f
   smudge = git-lfs smudge -- %f
   process = git-lfs filter-process
   required = true
+
+[github]
+	user = theinterned
+
+[gpg]
+  program = gpg
+
+[init]
+  defaultBranch = main
+
+[pull]
+	rebase = true
+
+[push]
+  default = simple
+
+[url "https://github.com/"]
+	insteadOf = git@github.com:
+
 [user]
   name = Ned Schwartz
   email = ned@theinterned.net
   signingKey = 3D79219DD80B103B
-[gpg]
-  program = gpg
-[commit]
-  gpgsign = true
-[diff]
-    tool = icdiff
-[push]
-  default = simple
-[url "git@github.com:"]
-  insteadOf = https://github.com/
-[init]
-  defaultBranch = main
-[alias]
-  praise = blame
