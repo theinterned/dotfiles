@@ -27,10 +27,27 @@ brew "pinentry-mac"
 cask "alfred"
 # Command-line helper for the 1Password password manager
 cask "1password-cli"
+# Open links in any browser
+cask choosy
+# Docker desktop app (as opposed to the brew docker which does not install docker for mac)
+cask docker
+# A feature not a product 
+cask dropbox
+# The open source browser
+cask firefox
+# Github desktop client
+cask githubapp
+# Google browser
+cask google-chrome
+# Nice terminal
+cask iterm2
 # Provides updates to various Microsoft products
 cask "microsoft-auto-update"
 # Web browser
 cask "microsoft-edge"
+# Must have music
+cask spotify
+cask spotify-now-playing
 # Open-source code editor
 cask "visual-studio-code"
 # Video communication and virtual meeting platform
@@ -38,6 +55,7 @@ cask "zoom"
 
 mas "1Password 7", id: 1333542190
 mas "Bear", id: 1091189122
+mas "Clockwise for Safari", id: 1576257926
 mas "Deliveries 3", id: 290986013
 mas "Instapaper Save", id: 1481302432  
 mas "Irvue", id: 1039633667
