@@ -28,26 +28,26 @@ cask "alfred"
 # Command-line helper for the 1Password password manager
 cask "1password-cli"
 # Open links in any browser
-cask choosy
+cask "choosy"
 # Docker desktop app (as opposed to the brew docker which does not install docker for mac)
-cask docker
+cask "docker"
 # A feature not a product 
-cask dropbox
+cask "dropbox"
 # The open source browser
-cask firefox
+cask "firefox"
 # Github desktop client
-cask githubapp
+cask "github"
 # Google browser
-cask google-chrome
+cask "google-chrome"
 # Nice terminal
-cask iterm2
+cask "iterm2"
 # Provides updates to various Microsoft products
 cask "microsoft-auto-update"
 # Web browser
 cask "microsoft-edge"
 # Must have music
-cask spotify
-cask spotify-now-playing
+cask "spotify"
+cask "spotify-now-playing"
 # Open-source code editor
 cask "visual-studio-code"
 # Video communication and virtual meeting platform
