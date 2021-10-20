@@ -84,3 +84,5 @@ then
 fi
 
 fish $SCRIPTPATH/fish-setup.fish
+
+$SCRIPTPATH/codespaces-post-start.sh

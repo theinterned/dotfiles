@@ -15,9 +15,9 @@ if [ (grep -c fish /etc/shells) = "0" ]
   echo (which fish 2>/dev/null) | sudo tee -a /etc/shells
 end
 
-if [ (which $SHELL) != (which fish) ]
-  chsh -s (which fish 2>/dev/null)
-end
+# if [ (which $SHELL) != (which fish) ]
+# chsh -s (which fish 2>/dev/null)
+# end
 
 echo
 echo
