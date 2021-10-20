@@ -1,13 +1,13 @@
 packages=(
-    fish
-    git
-    ack
-    bat
-    rbenv
-    direnv
-    gh
-    jq
-  )
+  fish
+  git
+  ack
+  bat
+  rbenv
+  direnv
+  gh
+  jq
+)
   # Arch
 if command -v pacman &> /dev/null
 then
@@ -31,8 +31,7 @@ then
   do
     apt install -y $package
   done
-
-end
+fi
 
 # nvm
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
