@@ -83,4 +83,4 @@ then
   $SCRIPTPATH/install-linux.sh
 fi
 
-$SCRIPTPATH/setup-fisher.fish
+fish $SCRIPTPATH/fish-setup.fish
