@@ -23,10 +23,12 @@ brew "mas"
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
 
-# Application launcher and productivity software
-cask "alfred"
+# Great password manager
+# cask "1password"
 # Command-line helper for the 1Password password manager
 cask "1password-cli"
+# Application launcher and productivity software
+cask "alfred"
 # Open links in any browser
 cask "choosy"
 # Docker desktop app (as opposed to the brew docker which does not install docker for mac)
@@ -52,6 +54,7 @@ cask "spotify-now-playing"
 cask "visual-studio-code"
 # Video communication and virtual meeting platform
 cask "zoom"
+
 
 mas "1Password 7", id: 1333542190
 mas "Bear", id: 1091189122
