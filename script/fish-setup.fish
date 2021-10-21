@@ -3,7 +3,7 @@
 echo
 echo
 echo "##################################################"
-echo "####### Using fisher shell ########"
+echo "####### Using Fish shell ########"
 echo "##################################################"
 echo
 echo
@@ -15,9 +15,10 @@ if [ (grep -c fish /etc/shells) = "0" ]
   echo (which fish 2>/dev/null) | sudo tee -a /etc/shells
 end
 
-# if [ (which $SHELL) != (which fish) ]
-# chsh -s (which fish 2>/dev/null)
-# end
+if [ (echo $SHELL) != (which fish) ]
+  echo "Using Fish shell"
+  chsh -s (which fish 2>/dev/null)
+end
 
 echo
 echo
