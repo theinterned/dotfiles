@@ -85,4 +85,4 @@ fi
 
 fish $SCRIPTPATH/fish-setup.fish
 
-$SCRIPTPATH/codespaces-post-start.sh
+$SCRIPTPATH/codespaces-post-start
