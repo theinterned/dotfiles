@@ -23,17 +23,8 @@
 [core]
   editor = pico
 
-# [commit]
-#   gpgsign = true
-
-[credential]
-	helper = osxkeychain
-
 [fetch]
 	prune = true
-
-[diff]
-  tool = icdiff
 
 [filter "lfs"]
   clean = git-lfs clean -- %f
@@ -62,4 +53,3 @@
 [user]
   name = Ned Schwartz
   email = ned@theinterned.net
-  signingKey = 3D79219DD80B103B
