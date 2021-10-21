@@ -3,11 +3,14 @@
 echo
 echo
 echo "##################################################"
-echo "####### Using Fish shell ########"
+echo "####### Fish shell setup #########################"
 echo "##################################################"
 echo
 echo
 
+echo 
+echo "🐟 Useing fish as default shell"
+echo
 # Setup Fish
 
 if [ $(grep -c fish /etc/shells) = "0" ]
@@ -24,12 +27,8 @@ else
   echo "Already using Fish!"
 fi
 
-echo
-echo
-echo "##################################################"
-echo "####### Seting-up fisher ########"
-echo "##################################################"
-echo
+echo 
+echo "🎣 Installing fisher package manager"
 echo
 
 FISH_CONFIG_DIR=$HOME/.config/fish
@@ -45,22 +44,22 @@ chmod +w $FISH_CONFIG
 
 fish -c 'curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher'
 
+echo 
+echo "🐡 Installing fisher plugins"
+echo
+
 fish -c 'fisher install jhillyerd/plugin-git' # oh-my-zsh git aliases https://github.com/jhillyerd/plugin-git
 fish -c 'fisher install jethrokuan/z' # jump to directory with memory https://github.com/jethrokuan/z
 fish -c 'fisher install jethrokuan/fzf' # command-line fuzzy finder https://github.com/jethrokuan/fzf
 
 
-echo
-echo
-echo "##################################################"
-echo "####### Using Starship prompt ########"
-echo "##################################################"
-echo
+echo 
+echo "🚤 Using Starship prompt"
 echo
 
 if [ "$(grep -c starship $FISH_CONFIG)" = "0" ]
 then
-  echo "Using Starship prompt"
+  echo "Setting Starship prompt"
   echo "starship init fish | source" >> $FISH_CONFIG
 else
   echo "Already using Starship"

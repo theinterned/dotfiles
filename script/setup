@@ -1,5 +1,13 @@
 #!/bin/bash
 
+echo
+echo
+echo "##################################################"
+echo "####### Dotfiles Setup ###########################"
+echo "##################################################"
+echo
+echo
+
 # Install dotfiles into home directory
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 DOTFILESDIR=$(dirname $SCRIPTPATH)
@@ -15,11 +23,7 @@ echo "LINUX: $LINUX"
 
 # Move dotfiles to home directory
 echo
-echo
-echo "##################################################"
-echo "####### Linking dotfiles to home directory ########"
-echo "##################################################"
-echo
+echo "🔗 Linking dotfiles to home directory "
 echo
 
 for DOTFILE in $DOTFILES; do
@@ -62,16 +66,6 @@ then
   chmod 700 /workspaces
 fi
 
-echo
-echo
-echo "##################################################"
-echo "####### DONE! ########"
-echo "##################################################"
-echo
-echo
-
-ls -la $HOME
-
 if [ $MACOS ]
 then
   $SCRIPTPATH/install-mac.sh
@@ -81,3 +75,11 @@ then
 fi
 
 $SCRIPTPATH/fish-setup.sh
+
+echo
+echo
+echo "##################################################"
+echo "####### DONE! ####################################"
+echo "##################################################"
+echo
+echo

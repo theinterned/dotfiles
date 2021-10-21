@@ -1,6 +1,16 @@
 #!/bin/sh
 # Run by github/github codespaces after starting
+echo
+echo
+echo "##################################################"
+echo "####### Codespaces Post Start ####################"
+echo "##################################################"
+echo
+echo
 
+echo 
+echo "🐟 Useing fish as default shell"
+echo
 # Always want to use Fish as my default shell (e.g. for SSH)
 if [ $(echo $SHELL) != $(which fish) ]
 then
