@@ -33,11 +33,8 @@ for DOTFILE in $DOTFILES; do
     echo $DOTFILE | egrep -q '^(gnupg|ssh)/' && continue
   fi
 
-  # Don't try to install documentation/script files
-  echo $DOTFILE | egrep -q '(^script/$|\.txt$|\.md$)' && continue
-
   # Don't try to install documentation/script/lock files
-  echo $DOTFILE | egrep -q '(./$|^script/$|setup.sh|\.txt$|\.md$)' && continue
+  echo $DOTFILE | egrep -q '(./$|^.git$|^script$|setup|\.txt$|\.md$)' && continue
 
   echo "DOTFILE $DOTFILE"
   echo "DIRFILE $DIRFILE"
