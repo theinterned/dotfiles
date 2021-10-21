@@ -80,6 +80,4 @@ then
   $SCRIPTPATH/install-linux.sh
 fi
 
-fish $SCRIPTPATH/fish-setup.fish
-
-$SCRIPTPATH/codespaces-post-start
+$SCRIPTPATH/fish-setup.sh
