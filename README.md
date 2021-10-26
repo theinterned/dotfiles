@@ -5,7 +5,7 @@ My dot files
 ## Setup
 
 ```sh
-./scripts/setup.sh`
+./scripts/setup.sh
 ```
 
 ## Update `Brewfile`
