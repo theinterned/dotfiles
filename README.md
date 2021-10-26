@@ -4,7 +4,15 @@ My dot files
 
 ## Setup
 
-Run `./scripts/setup.sh`
+```sh
+./scripts/setup.sh`
+```
+
+## Update `Brewfile`
+
+```sh
+brew bundle dump --describe --force
+```
 
 ## Some helpful reading
 
@@ -13,3 +21,4 @@ Run `./scripts/setup.sh`
 - <https://github.com/skalnik/dotfiles>
 - <https://github.com/manuelpuyol/dotfiles>
 - <https://github.com/keithamus/dotfiles>
+- <https://github.com/Homebrew/homebrew-cask-fonts>

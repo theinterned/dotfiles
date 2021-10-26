@@ -1,7 +1,7 @@
 tap "github/bootstrap"
-tap "github/packages"
 tap "homebrew/bundle"
 tap "homebrew/cask"
+tap "homebrew/cask-fonts"
 tap "homebrew/core"
 tap "homebrew/services"
 
@@ -31,7 +31,8 @@ brew "pinentry-mac"
 brew "rbenv"
 # Cross-shell prompt for astronauts
 brew "starship"
-
+# Version control system designed to be a better CVS
+brew "subversion"
 # Command-line helper for the 1Password password manager
 cask "1password-cli"
 # Application launcher and productivity software
@@ -44,6 +45,17 @@ cask "docker"
 cask "dropbox"
 # Web browser
 cask "firefox"
+
+cask "font-blex-mono-nerd-font"
+cask "font-ia-writer-duo"
+cask "font-ia-writer-duospace"
+cask "font-ia-writer-mono"
+cask "font-ia-writer-quattro"
+cask "font-ibm-plex-mono"
+cask "font-ibm-plex-sans"
+cask "font-ibm-plex-serif"
+cask "font-im-writing-nerd-font"
+
 # Desktop client for GitHub repositories
 cask "github"
 # Web browser
@@ -66,8 +78,11 @@ mas "1Password 7", id: 1333542190
 mas "Bear", id: 1091189122
 mas "Clockwise for Safari", id: 1576257926
 mas "Deliveries", id: 290986013
+mas "GarageBand", id: 682658836
+mas "iMovie", id: 408981434
 mas "Instapaper Save", id: 1481302432
 mas "Irvue", id: 1039633667
+mas "Keynote", id: 409183694
 mas "Magnet", id: 441258766
 mas "Numbers", id: 409203825
 mas "Okta Extension App", id: 1439967473
