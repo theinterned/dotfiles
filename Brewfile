@@ -4,7 +4,6 @@ tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/core"
 tap "homebrew/services"
-
 # Search tool like grep, but optimized for programmers
 brew "ack"
 # Clone of cat(1) with syntax highlighting and Git integration
@@ -45,7 +44,6 @@ cask "docker"
 cask "dropbox"
 # Web browser
 cask "firefox"
-
 cask "font-blex-mono-nerd-font"
 cask "font-ia-writer-duo"
 cask "font-ia-writer-duospace"
@@ -55,7 +53,6 @@ cask "font-ibm-plex-mono"
 cask "font-ibm-plex-sans"
 cask "font-ibm-plex-serif"
 cask "font-im-writing-nerd-font"
-
 # Desktop client for GitHub repositories
 cask "github"
 # Web browser
@@ -66,6 +63,8 @@ cask "iterm2"
 cask "microsoft-auto-update"
 # Web browser
 cask "microsoft-edge"
+# Control your tools with a few keystrokes
+cask "raycast"
 # Music streaming service
 cask "spotify"
 cask "spotify-now-playing"
@@ -73,7 +72,6 @@ cask "spotify-now-playing"
 cask "visual-studio-code"
 # Video communication and virtual meeting platform
 cask "zoom"
-
 mas "1Password 7", id: 1333542190
 mas "Bear", id: 1091189122
 mas "Clockwise for Safari", id: 1576257926
