@@ -22,8 +22,6 @@ brew "jq"
 brew "launchdns", restart_service: true
 # Mac App Store command-line interface
 brew "mas"
-# Manage multiple Node.js versions
-brew "nvm"
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
 # Ruby version manager

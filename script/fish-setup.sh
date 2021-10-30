@@ -51,6 +51,7 @@ echo
 fish -c 'fisher install jhillyerd/plugin-git' # oh-my-zsh git aliases https://github.com/jhillyerd/plugin-git
 fish -c 'fisher install jethrokuan/z' # jump to directory with memory https://github.com/jethrokuan/z
 fish -c 'fisher install jethrokuan/fzf' # command-line fuzzy finder https://github.com/jethrokuan/fzf
+fish -c 'fisher install fisher install jorgebucaran/nvm.fish' # Node.js version manager lovingly made for Fish (nvm officially does not support fish)
 
 
 echo 
