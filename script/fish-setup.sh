@@ -66,4 +66,11 @@ else
   echo "Already using Starship"
 fi
 
+echo
+echo "📜 NVM setup"
+echo
+
+fish -c 'nvm install lts'
+fish -c 'set --universal nvm_default_version lts'
+
 fish -c 'source $FISH_CONFIG'
