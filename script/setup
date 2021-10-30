@@ -12,14 +12,10 @@ echo
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 DOTFILESDIR=$(dirname $SCRIPTPATH)
 DOTFILES=$(ls -a $DOTFILESDIR)
-[ $(uname -s) = "Darwin" ] && export MACOS=1 && export UNIX=1
-[ $(uname -s) = "Linux" ] && export LINUX=1 && export UNIX=1
 
 echo "SCRIPTPATH: $SCRIPTPATH"
 echo "DOTFILESDIR: $DOTFILESDIR"
 echo "DOTFILES: $DOTFILES"
-echo "MACOS: $MACOS"
-echo "LINUX: $LINUX"
 
 # Move dotfiles to home directory
 echo
@@ -60,13 +56,7 @@ then
   chmod 700 /workspaces
 fi
 
-if [ $MACOS ]
-then
-  $SCRIPTPATH/install-mac.sh
-elif [ $LINUX ]
-then
-  $SCRIPTPATH/install-linux.sh
-fi
+$SCRIPTPATH/install.sh
 
 $SCRIPTPATH/fish-setup.sh
 
