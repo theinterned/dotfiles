@@ -14,6 +14,7 @@ function __git.init
   __git.create_abbr g          git
   __git.create_abbr ga         git add
   __git.create_abbr gaa        git add --all
+  __git.create_abbr gau        git add --update
   __git.create_abbr gapa       git add --patch
   __git.create_abbr gap        git apply
   __git.create_abbr gb         git branch -vv
@@ -116,6 +117,7 @@ function __git.init
   __git.create_abbr gst        git status
   __git.create_abbr gsta       git stash
   __git.create_abbr gstd       git stash drop
+  __git.create_abbr gstl       git stash list
   __git.create_abbr gstp       git stash pop
   __git.create_abbr gsts       git stash show --text
   __git.create_abbr gsu        git submodule update
