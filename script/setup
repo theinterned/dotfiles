@@ -52,6 +52,22 @@ for DOTFILE in $DOTFILES; do
   echo 
 done
 
+HOME_DOTFILES_ALIAS="$HOME/.dotfiles"
+
+echo 
+echo "🔗 Creating a symlink in ~/.dotfiles to this dotfiles repo"
+echo
+
+if [ -L "$HOME_DOTFILES_ALIAS" ] && ! [ -d $DOTFILESDIR ]
+then
+  ln -sfv "$DOTFILESDIR" "$HOME_DOTFILES_ALIAS"
+else
+  rm -rv "$HOME_DOTFILES_ALIAS" 2>/dev/null
+  ln -sv "$DOTFILESDIR" "$HOME_DOTFILES_ALIAS"
+fi
+
+
+
 # Fix up permissions for Codespaces
 if [ -n "$CODESPACES" ]
 then
