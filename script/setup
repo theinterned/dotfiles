@@ -27,6 +27,7 @@ for DOTFILE in $DOTFILES; do
   [ -d $DOTFILE ] && DOTFILE="$DOTFILE/"
   DIRFILE="$DOTFILESDIR/$DOTFILE"
 
+
   # Don't mess with Codespaces' default GPG/SSH setup.
   if [ -n "$CODESPACES" ]
   then
@@ -34,12 +35,11 @@ for DOTFILE in $DOTFILES; do
   fi
 
   # Don't try to install documentation/script/lock files
-  echo $DOTFILE | egrep -q '(./$|^.git$|^script$|setup|\.txt$|\.md$)' && continue
-
-  echo "DOTFILE $DOTFILE"
+  echo $DOTFILE | egrep -q '(\.\/$|^\.git\/$|^script$|setup|\.txt$|\.md$)' && continue
+  
+  echo "DOTFILE $DOTFILE"  
   echo "DIRFILE $DIRFILE"
   echo "HOMEFILE $HOMEFILE"
-  echo 
 
   if [ -L "$HOMEFILE" ] && ! [ -d $DOTFILE ]
   then
@@ -48,6 +48,8 @@ for DOTFILE in $DOTFILES; do
     rm -rv "$HOMEFILE" 2>/dev/null
     ln -sv "$DIRFILE" "$HOMEFILE"
   fi
+
+  echo 
 done
 
 # Fix up permissions for Codespaces
@@ -56,9 +58,9 @@ then
   chmod 700 /workspaces
 fi
 
-$SCRIPTPATH/install.sh
+# $SCRIPTPATH/install.sh
 
-$SCRIPTPATH/fish-setup.sh
+# $SCRIPTPATH/fish-setup.sh
 
 echo
 echo
