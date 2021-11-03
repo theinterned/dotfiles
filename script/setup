@@ -74,9 +74,9 @@ then
   chmod 700 /workspaces
 fi
 
-# $SCRIPTPATH/install.sh
+$SCRIPTPATH/install.sh
 
-# $SCRIPTPATH/fish-setup.sh
+$SCRIPTPATH/fish-setup.sh
 
 echo
 echo
