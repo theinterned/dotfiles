@@ -23,6 +23,9 @@
 [core]
   editor = pico
 
+[credential]
+	helper = osxkeychain
+
 [fetch]
 	prune = true
 
