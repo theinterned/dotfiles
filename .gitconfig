@@ -6,6 +6,8 @@
   p = push
   pl = pull
   st = status
+  coauthor = "!f() { $co = $(git get-coauthor \"${1}\"); echo; read -n1 -p $co y; [[ \"$y\" == 'y' ]] && git commit --amend -m\"$(git log --format=%B -n1)\" -m\"$co\"; }; f"
+  get-coauthor = "!f() { author=$(git log --no-merges -1 --author \"${1}\" --format='%an <%ae>' 2>/dev/null); test -z \"$author\" && exit 1; echo \"Co-authored-by: $author\"; }; f"
 
 [color]
   ui = true
