@@ -22,9 +22,6 @@
   oldHighlight = red reverse
   newHighlight = green reverse
 
-[core]
-  editor = pico
-
 [credential]
 	helper = osxkeychain
 
