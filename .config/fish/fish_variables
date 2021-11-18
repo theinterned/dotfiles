@@ -18,6 +18,7 @@ SETUVAR _fish_abbr_bn:bin/npm
 SETUVAR _fish_abbr_bnt:bin/npm\x20test
 SETUVAR _fish_abbr_br:bin/rails
 SETUVAR _fish_abbr_brt:bin/rails\x20test
+SETUVAR _fish_abbr_dotfiles:cd\x20~/\x2edotfiles/
 SETUVAR _fish_abbr_g:git
 SETUVAR _fish_abbr_ga:git\x20add
 SETUVAR _fish_abbr_gaa:git\x20add\x20\x2d\x2dall
@@ -105,6 +106,7 @@ SETUVAR _fish_abbr_gmom:git\x20merge\x20origin/\x28__git\x2edefault_branch\x29
 SETUVAR _fish_abbr_gmt:git\x20mergetool\x20\x2d\x2dno\x2dprompt
 SETUVAR _fish_abbr_gp:git\x20push
 SETUVAR _fish_abbr_gp_21_:git\x20push\x20\x2d\x2dforce\x2dwith\x2dlease
+SETUVAR _fish_abbr_gpf:git\x20push\x20\x2d\x2dforce\x2dwith\x2dlease
 SETUVAR _fish_abbr_gpo:git\x20push\x20origin
 SETUVAR _fish_abbr_gpo_21_:git\x20push\x20\x2d\x2dforce\x2dwith\x2dlease\x20origin
 SETUVAR _fish_abbr_gpu:ggp\x20\x2d\x2dset\x2dupstream
