@@ -6,6 +6,8 @@ tap "homebrew/core"
 tap "homebrew/services"
 # Search tool like grep, but optimized for programmers
 brew "ack"
+# CLI tool for working with Architecture Decision Records
+brew "adr-tools"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # Load/unload environment variables based on $PWD
