@@ -18,7 +18,7 @@ SETUVAR _fish_abbr_bn:bin/npm
 SETUVAR _fish_abbr_bnt:bin/npm\x20test
 SETUVAR _fish_abbr_br:bin/rails
 SETUVAR _fish_abbr_brt:bin/rails\x20test
-SETUVAR _fish_abbr_dotfiles:cd\x20~/\x2edotfiles/
+SETUVAR _fish_abbr_dotfiles:cd\x20/Users/theinterned/\x2edotfiles/
 SETUVAR _fish_abbr_g:git
 SETUVAR _fish_abbr_ga:git\x20add
 SETUVAR _fish_abbr_gaa:git\x20add\x20\x2d\x2dall
@@ -54,6 +54,7 @@ SETUVAR _fish_abbr_gclean_21_21_:git\x20reset\x20\x2d\x2dhard\x3b\x20and\x20git\
 SETUVAR _fish_abbr_gcm:git\x20commit\x20\x2dm
 SETUVAR _fish_abbr_gcn_21_:git\x20commit\x20\x2dv\x20\x2d\x2dno\x2dedit\x20\x2d\x2damend
 SETUVAR _fish_abbr_gco:git\x20checkout
+SETUVAR _fish_abbr_gco_2D_:git\x20checkout\x20\x2d
 SETUVAR _fish_abbr_gcod:git\x20checkout\x20develop
 SETUVAR _fish_abbr_gcom:git\x20checkout\x20\x28__git\x2edefault_branch\x29
 SETUVAR _fish_abbr_gcount:git\x20shortlog\x20\x2dsn
