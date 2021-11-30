@@ -1,0 +1,42 @@
+trigger: status_update
+title: Status Update
+description: Update the team on your project's status.
+surfaces:
+- issue
+steps:
+- type: form
+  style: embedded
+  body:
+  - type: dropdown
+    attributes:
+      label: Color
+      description: What's the status of your project?
+      options:
+      - label: 🟢 Green
+        value: 🟢
+      - label: 🟡 Yellow
+        value: 🟡
+      - label: 🔴 Red
+        value: 🔴
+  - type: textarea
+    attributes:
+      label: Demos
+      placeholder: Links to most recent demo gifs/recording/details
+  - type: textarea
+    attributes:
+      label: Ships
+      placeholder: Feature(s) completed or shipped this week
+  - type: textarea
+    attributes:
+      label: Up Next
+      placeholder: What items will be tackled for the next status update?
+  - type: input
+    attributes:
+      label: Project ship date
+      format: date
+  - type: textarea
+    attributes:
+      label: Blockers
+      placeholder: If blocked, clear description of blocker and resolution plan or next steps
+- type: fill
+  template: "The {{ data.project }} project is status {{ data.Color }}. {{ data.Details }}"
