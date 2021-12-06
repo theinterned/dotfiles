@@ -6,6 +6,8 @@ set -xg EDITOR "code --wait"
 abbr -a -U ss script/server
 abbr -a -U br bin/rails
 abbr -a -U brt bin/rails test
+abbr -a -U bbe bin/bundle exec
+abbr -a -U bbeg bin/bundle exec guard # run tests in watch mode
 abbr -a -U bn bin/npm
 abbr -a -U bnt bin/npm test
 
