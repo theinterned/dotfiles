@@ -16,6 +16,7 @@ SETUVAR __git_plugin_abbreviations:g\x1ega\x1egaa\x1egau\x1egapa\x1egap\x1egb\x1
 SETUVAR __git_plugin_initialized:Mon\x20\x208\x20Nov\x202021\x2016\x3a06\x3a14\x20EST
 SETUVAR _fish_abbr_bbe:bin/bundle\x20exec
 SETUVAR _fish_abbr_bbeg:bin/bundle\x20exec\x20guard
+SETUVAR _fish_abbr_bg:bin/guard
 SETUVAR _fish_abbr_bn:bin/npm
 SETUVAR _fish_abbr_bnt:bin/npm\x20test
 SETUVAR _fish_abbr_br:bin/rails
