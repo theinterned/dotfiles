@@ -58,6 +58,7 @@ SETUVAR _fish_abbr_gcm:git\x20commit\x20\x2dm
 SETUVAR _fish_abbr_gcn_21_:git\x20commit\x20\x2dv\x20\x2d\x2dno\x2dedit\x20\x2d\x2damend
 SETUVAR _fish_abbr_gco:git\x20checkout
 SETUVAR _fish_abbr_gco_2D_:git\x20checkout\x20\x2d
+SETUVAR _fish_abbr_gcob:git\x20checkout\x20\x2db
 SETUVAR _fish_abbr_gcod:git\x20checkout\x20develop
 SETUVAR _fish_abbr_gcom:git\x20checkout\x20\x28__git\x2edefault_branch\x29
 SETUVAR _fish_abbr_gcount:git\x20shortlog\x20\x2dsn

@@ -14,6 +14,7 @@ abbr -a -U bnt bin/npm test
 # Muscle memory git
 abbr -a -U gpf git push --force-with-lease
 abbr -a -U gco- git checkout -
+abbr -a -U gcob git checkout -b
 
 # shortcut to this project
 abbr -a -U dotfiles cd ~/.dotfiles/
