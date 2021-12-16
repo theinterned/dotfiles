@@ -11,6 +11,12 @@ abbr -a -U bg bin/guard # run tests in watch mode
 abbr -a -U bn bin/npm
 abbr -a -U bnt bin/npm test
 
+# npm stuff
+abbr -a -U n npm
+abbr -a -U ni npm install
+abbr -a -U ns npm start
+abbr -a -U nt npm test
+
 # Muscle memory git
 abbr -a -U gpf git push --force-with-lease
 abbr -a -U gco- git checkout -

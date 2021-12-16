@@ -58,7 +58,7 @@ SETUVAR _fish_abbr_gcm:git\x20commit\x20\x2dm
 SETUVAR _fish_abbr_gcn_21_:git\x20commit\x20\x2dv\x20\x2d\x2dno\x2dedit\x20\x2d\x2damend
 SETUVAR _fish_abbr_gco:git\x20checkout
 SETUVAR _fish_abbr_gco_2D_:git\x20checkout\x20\x2d
-SETUVAR _fish_abbr_gcob:git\x20checkout\x20\x2db
+SETUVAR _fish_abbr_gcob:git\x20checkout\x20\x2db\x20theinterned/
 SETUVAR _fish_abbr_gcod:git\x20checkout\x20develop
 SETUVAR _fish_abbr_gcom:git\x20checkout\x20\x28__git\x2edefault_branch\x29
 SETUVAR _fish_abbr_gcount:git\x20shortlog\x20\x2dsn
@@ -167,6 +167,10 @@ SETUVAR _fish_abbr_gupa:git\x20pull\x20\x2d\x2drebase\x20\x2d\x2dautostash
 SETUVAR _fish_abbr_gupav:git\x20pull\x20\x2d\x2drebase\x20\x2d\x2dautostash\x20\x2dv
 SETUVAR _fish_abbr_gupv:git\x20pull\x20\x2d\x2drebase\x20\x2dv
 SETUVAR _fish_abbr_gwch:git\x20whatchanged\x20\x2dp\x20\x2d\x2dabbrev\x2dcommit\x20\x2d\x2dpretty\x3dmedium
+SETUVAR _fish_abbr_n:npm
+SETUVAR _fish_abbr_ni:npm\x20install
+SETUVAR _fish_abbr_ns:npm\x20start
+SETUVAR _fish_abbr_nt:npm\x20test
 SETUVAR _fish_abbr_ss:script/server
 SETUVAR _fisher_jethrokuan_2F_fzf_files:/Users/theinterned/\x2econfig/fish/functions/__fzf_cd\x2efish\x1e/Users/theinterned/\x2econfig/fish/functions/__fzf_complete\x2efish\x1e/Users/theinterned/\x2econfig/fish/functions/__fzf_complete_preview\x2efish\x1e/Users/theinterned/\x2econfig/fish/functions/__fzf_find_file\x2efish\x1e/Users/theinterned/\x2econfig/fish/functions/__fzf_get_dir\x2efish\x1e/Users/theinterned/\x2econfig/fish/functions/__fzf_open\x2efish\x1e/Users/theinterned/\x2econfig/fish/functions/__fzf_parse_commandline\x2efish\x1e/Users/theinterned/\x2econfig/fish/functions/__fzf_reverse_isearch\x2efish\x1e/Users/theinterned/\x2econfig/fish/functions/__fzfcmd\x2efish\x1e/Users/theinterned/\x2econfig/fish/conf\x2ed/fzf\x2efish
 SETUVAR _fisher_jethrokuan_2F_z_files:/Users/theinterned/\x2econfig/fish/functions/__z\x2efish\x1e/Users/theinterned/\x2econfig/fish/functions/__z_add\x2efish\x1e/Users/theinterned/\x2econfig/fish/functions/__z_clean\x2efish\x1e/Users/theinterned/\x2econfig/fish/functions/__z_complete\x2efish\x1e/Users/theinterned/\x2econfig/fish/conf\x2ed/z\x2efish
