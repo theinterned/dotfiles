@@ -169,6 +169,7 @@ SETUVAR _fish_abbr_gupv:git\x20pull\x20\x2d\x2drebase\x20\x2dv
 SETUVAR _fish_abbr_gwch:git\x20whatchanged\x20\x2dp\x20\x2d\x2dabbrev\x2dcommit\x20\x2d\x2dpretty\x3dmedium
 SETUVAR _fish_abbr_n:npm
 SETUVAR _fish_abbr_ni:npm\x20install
+SETUVAR _fish_abbr_nr:npm\x20run
 SETUVAR _fish_abbr_ns:npm\x20start
 SETUVAR _fish_abbr_nt:npm\x20test
 SETUVAR _fish_abbr_ss:script/server

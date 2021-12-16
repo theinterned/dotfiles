@@ -14,6 +14,7 @@ abbr -a -U bnt bin/npm test
 # npm stuff
 abbr -a -U n npm
 abbr -a -U ni npm install
+abbr -a -U nr npm run
 abbr -a -U ns npm start
 abbr -a -U nt npm test
 
