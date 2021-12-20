@@ -26,7 +26,7 @@
   pager = delta
 
 [credential]
-	helper = osxkeychain
+  helper = osxkeychain
 
 [delta]
   line-numbers = true
@@ -37,7 +37,7 @@
   colorMoved = default
 
 [fetch]
-	prune = true
+  prune = true
 
 [filter "lfs"]
   clean = git-lfs clean -- %f
@@ -46,7 +46,7 @@
   required = true
 
 [github]
-	user = theinterned
+  user = theinterned
 
 [gpg]
   program = gpg
@@ -61,13 +61,13 @@
   conflictstyle = diff3
 
 [pull]
-	rebase = true
+  rebase = true
 
 [push]
   default = simple
 
 [url "https://github.com/"]
-	insteadOf = git@github.com:
+  insteadOf = git@github.com:
 
 [user]
   name = Ned Schwartz
