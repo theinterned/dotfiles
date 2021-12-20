@@ -9,6 +9,7 @@ echo
 packages=(
   fish
   git
+  git-delta
   ack
   bat
   rbenv

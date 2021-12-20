@@ -16,12 +16,14 @@ brew "direnv"
 brew "fish"
 # GitHub command-line tool
 brew "gh"
+# Syntax-highlighting pager for git and diff output
+brew "git-delta"
 # Open source programming language to build simple/reliable/efficient software
 brew "go", link: false
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # Mini DNS server designed solely to route queries to localhost
-brew "launchdns", restart_service: true
+brew "launchdns"
 # Mac App Store command-line interface
 brew "mas"
 # Pinentry for GPG on Mac
