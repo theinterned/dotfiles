@@ -32,6 +32,7 @@
   line-numbers = true
   color-only = true
   light = true
+  diff-so-fancy = true
 
 [diff]
   colorMoved = default
