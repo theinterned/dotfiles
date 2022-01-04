@@ -67,6 +67,8 @@ cask "microsoft-auto-update"
 cask "microsoft-edge"
 # Control your tools with a few keystrokes
 cask "raycast"
+# Emoji picker optimized for blind people
+cask "rocket"
 # Music streaming service
 cask "spotify"
 cask "spotify-now-playing"
