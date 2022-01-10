@@ -35,12 +35,16 @@ FISH_CONFIG_DIR=$HOME/.config/fish
 FISH_CONFIG=$FISH_CONFIG_DIR/config.fish
 
 if [[ ! -e $FISH_CONFIG ]]; then
+    echo "no fish config found at $FISH_CONFIG"
     mkdir -p $FISH_CONFIG_DIR
     touch -a $FISH_CONFIG
+    ls -a $FISH_CONFIG_DIR
 fi
 chmod +w $FISH_CONFIG
 
 # install fisher and plugins
+
+echo "Installing fisher"
 
 fish -c 'curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher'
 
