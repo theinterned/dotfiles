@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Run by github/github codespaces after starting
 echo
 echo
@@ -11,9 +11,13 @@ echo
 echo 
 echo "🐟 Useing fish as default shell"
 echo
+echo "shell is: $SHELL"
+echo "fish is installed at $(which fish)"
 # Always want to use Fish as my default shell (e.g. for SSH)
 if [ $(echo $SHELL) != $(which fish) ]
 then
   echo "Using Fish shell"
   chsh -s $(which fish 2>/dev/null)
+else
+  echo "✔️ Already using Fish shell"
 fi
