@@ -36,11 +36,11 @@ abbr -a -U bbe bin/bundle exec
 abbr -a -U bg bin/guard # run tests in watch mode
 
 # Rails npm stuff
-abbr -a -U bn npm
-abbr -a -U bni npm install
-abbr -a -U bnr npm run
-abbr -a -U bns npm start
-abbr -a -U bnt npm test
+abbr -a -U bn bin/npm
+abbr -a -U bni bin/npm install
+abbr -a -U bnr bin/npm run
+abbr -a -U bns bin/npm start
+abbr -a -U bnt bin/npm test
 
 # npm stuff
 abbr -a -U n npm
