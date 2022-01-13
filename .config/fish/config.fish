@@ -15,10 +15,14 @@ end
 
 echo
 echo "📜 NVM setup"
-echo
-nvm install lts
-set --universal nvm_default_version lts
+
+if not nvm list lts > /dev/null
+  nvm install lts
+  set --universal nvm_default_version lts
+end
+
 nvm list
+echo
 
 starship init fish | source
 

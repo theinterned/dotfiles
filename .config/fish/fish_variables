@@ -12,8 +12,8 @@ SETUVAR Z_DATA:/Users/theinterned/\x2elocal/share/z/data
 SETUVAR Z_DATA_DIR:/Users/theinterned/\x2elocal/share/z
 SETUVAR Z_EXCLUDE:\x5e/Users/theinterned\x24
 SETUVAR __fish_initialized:3100
-SETUVAR __git_plugin_abbreviations:g\x1ega\x1egaa\x1egau\x1egapa\x1egap\x1egb\x1egba\x1egban\x1egbd\x1egbD\x1egbl\x1egbs\x1egbsb\x1egbsg\x1egbsr\x1egbss\x1egc\x1egc\x21\x1egcn\x21\x1egca\x1egca\x21\x1egcan\x21\x1egcv\x1egcav\x1egcav\x21\x1egcm\x1egcam\x1egscam\x1egcfx\x1egcf\x1egcl\x1egclean\x1egclean\x21\x1egclean\x21\x21\x1egcount\x1egcp\x1egcpa\x1egcpc\x1egd\x1egdca\x1egds\x1egdsc\x1egdw\x1egdwc\x1egdto\x1egignore\x1egf\x1egfa\x1egfm\x1egfo\x1egl\x1egll\x1eglr\x1eglg\x1eglgg\x1eglgga\x1eglo\x1eglog\x1eglom\x1eglod\x1egloo\x1egm\x1egmt\x1egmom\x1egp\x1egp\x21\x1egpo\x1egpo\x21\x1egpv\x1egpv\x21\x1eggp\x21\x1egpu\x1egr\x1egra\x1egrb\x1egrba\x1egrbc\x1egrbi\x1egrbm\x1egrbmi\x1egrbmia\x1egrbd\x1egrbdi\x1egrbdia\x1egrbs\x1egrev\x1egrh\x1egrhh\x1egrhpa\x1egrm\x1egrmc\x1egrmv\x1egrrm\x1egrs\x1egrset\x1egrss\x1egrup\x1egrv\x1egsh\x1egsd\x1egsr\x1egss\x1egst\x1egsta\x1egstd\x1egstl\x1egstp\x1egsts\x1egsu\x1egsur\x1egsuri\x1egts\x1egtv\x1egsw\x1egswc\x1egunignore\x1egup\x1egupv\x1egupa\x1egupav\x1egwch\x1egco\x1egcb\x1egcod\x1egcom\x1egfb\x1egff\x1egfr\x1egfh\x1egfs\x1egfbs\x1egffs\x1egfrs\x1egfhs\x1egfss\x1egfbt\x1egfft\x1egfrt\x1egfht\x1egfst\x1egfp
-SETUVAR __git_plugin_initialized:Mon\x20\x208\x20Nov\x202021\x2016\x3a06\x3a14\x20EST
+SETUVAR __git_plugin_abbreviations:g\x1ega\x1egaa\x1egau\x1egapa\x1egap\x1egb\x1egba\x1egban\x1egbd\x1egbD\x1egbl\x1egbs\x1egbsb\x1egbsg\x1egbsr\x1egbss\x1egc\x1egc\x21\x1egcn\x21\x1egca\x1egca\x21\x1egcan\x21\x1egcv\x1egcav\x1egcav\x21\x1egcm\x1egcam\x1egscam\x1egcfx\x1egcf\x1egcl\x1egclean\x1egclean\x21\x1egclean\x21\x21\x1egcount\x1egcp\x1egcpa\x1egcpc\x1egd\x1egdca\x1egds\x1egdsc\x1egdw\x1egdwc\x1egdto\x1egignore\x1egf\x1egfa\x1egfm\x1egfo\x1egl\x1egll\x1eglr\x1eglg\x1eglgg\x1eglgga\x1eglo\x1eglog\x1eglom\x1eglod\x1egloo\x1egm\x1egmt\x1egmom\x1egp\x1egp\x21\x1egpo\x1egpo\x21\x1egpv\x1egpv\x21\x1eggp\x21\x1egpu\x1egr\x1egra\x1egrb\x1egrba\x1egrbc\x1egrbi\x1egrbm\x1egrbmi\x1egrbmia\x1egrbd\x1egrbdi\x1egrbdia\x1egrbs\x1egrev\x1egrh\x1egrhh\x1egrhpa\x1egrm\x1egrmc\x1egrmv\x1egrrm\x1egrs\x1egrset\x1egrss\x1egrst\x1egrup\x1egrv\x1egsh\x1egsd\x1egsr\x1egss\x1egst\x1egsta\x1egstd\x1egstl\x1egstp\x1egsts\x1egsu\x1egsur\x1egsuri\x1egts\x1egtv\x1egsw\x1egswc\x1egunignore\x1egup\x1egupv\x1egupa\x1egupav\x1egwch\x1egco\x1egcb\x1egcod\x1egcom\x1egfb\x1egff\x1egfr\x1egfh\x1egfs\x1egfbs\x1egffs\x1egfrs\x1egfhs\x1egfss\x1egfbt\x1egfft\x1egfrt\x1egfht\x1egfst\x1egfp
+SETUVAR __git_plugin_initialized:Thu\x20Jan\x2013\x2011\x3a54\x3a24\x20EST\x202022
 SETUVAR _fish_abbr_bbe:bin/bundle\x20exec
 SETUVAR _fish_abbr_bbeg:bin/bundle\x20exec\x20guard
 SETUVAR _fish_abbr_bg:bin/guard
@@ -96,8 +96,8 @@ SETUVAR _fish_abbr_gfst:git\x20flow\x20support\x20track
 SETUVAR _fish_abbr_ggp_21_:ggp\x20\x2d\x2dforce\x2dwith\x2dlease
 SETUVAR _fish_abbr_gignore:git\x20update\x2dindex\x20\x2d\x2dassume\x2dunchanged
 SETUVAR _fish_abbr_gl:git\x20pull
-SETUVAR _fish_abbr_glg:git\x20log\x20\x2d\x2dstat\x20\x2d\x2dmax\x2dcount\x3d10
-SETUVAR _fish_abbr_glgg:git\x20log\x20\x2d\x2dgraph\x20\x2d\x2dmax\x2dcount\x3d10
+SETUVAR _fish_abbr_glg:git\x20log\x20\x2d\x2dstat
+SETUVAR _fish_abbr_glgg:git\x20log\x20\x2d\x2dgraph
 SETUVAR _fish_abbr_glgga:git\x20log\x20\x2d\x2dgraph\x20\x2d\x2ddecorate\x20\x2d\x2dall
 SETUVAR _fish_abbr_gll:git\x20pull\x20origin
 SETUVAR _fish_abbr_glo:git\x20log\x20\x2d\x2doneline\x20\x2d\x2ddecorate\x20\x2d\x2dcolor
@@ -141,6 +141,7 @@ SETUVAR _fish_abbr_grrm:git\x20remote\x20remove
 SETUVAR _fish_abbr_grs:git\x20restore
 SETUVAR _fish_abbr_grset:git\x20remote\x20set\x2durl
 SETUVAR _fish_abbr_grss:git\x20restore\x20\x2d\x2dsource
+SETUVAR _fish_abbr_grst:git\x20restore\x20\x2d\x2dstaged
 SETUVAR _fish_abbr_grup:git\x20remote\x20update
 SETUVAR _fish_abbr_grv:git\x20remote\x20\x2dv
 SETUVAR _fish_abbr_gscam:git\x20commit\x20\x2dS\x20\x2da\x20\x2dm
@@ -207,6 +208,7 @@ SETUVAR fish_pager_color_completion:\x1d
 SETUVAR fish_pager_color_description:B3A06D\x1eyellow
 SETUVAR fish_pager_color_prefix:normal\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
 SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
+SETUVAR fish_user_paths:\x1d
 SETUVAR nvm_data:/Users/theinterned/\x2elocal/share/nvm
 SETUVAR nvm_default_version:lts
 SETUVAR nvm_mirror:https\x3a//nodejs\x2eorg/dist
