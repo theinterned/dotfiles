@@ -41,6 +41,7 @@ abbr -a -U bni bin/npm install
 abbr -a -U bnr bin/npm run
 abbr -a -U bns bin/npm start
 abbr -a -U bnt bin/npm test
+abbr -a -U bntw bin/npm run test:watch
 
 # npm stuff
 abbr -a -U n npm

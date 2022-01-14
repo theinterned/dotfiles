@@ -18,7 +18,11 @@ SETUVAR _fish_abbr_bbe:bin/bundle\x20exec
 SETUVAR _fish_abbr_bbeg:bin/bundle\x20exec\x20guard
 SETUVAR _fish_abbr_bg:bin/guard
 SETUVAR _fish_abbr_bn:bin/npm
+SETUVAR _fish_abbr_bni:bin/npm\x20install
+SETUVAR _fish_abbr_bnr:bin/npm\x20run
+SETUVAR _fish_abbr_bns:bin/npm\x20start
 SETUVAR _fish_abbr_bnt:bin/npm\x20test
+SETUVAR _fish_abbr_bntw:bin/npm\x20run\x20test\x3awatch
 SETUVAR _fish_abbr_br:bin/rails
 SETUVAR _fish_abbr_brt:bin/rails\x20test
 SETUVAR _fish_abbr_dotfiles:cd\x20/Users/theinterned/\x2edotfiles/
