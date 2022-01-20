@@ -65,6 +65,8 @@ cask "iterm2"
 cask "microsoft-auto-update"
 # Web browser
 cask "microsoft-edge"
+# Automatically hides or quits apps after periods of inactivity
+cask "quitter"
 # Control your tools with a few keystrokes
 cask "raycast"
 # Emoji picker optimized for blind people
@@ -86,9 +88,11 @@ mas "Instapaper Save", id: 1481302432
 mas "Irvue", id: 1039633667
 mas "Keynote", id: 409183694
 mas "Magnet", id: 441258766
+mas "Noir", id: 1592917505
 mas "Numbers", id: 409203825
 mas "Okta Extension App", id: 1439967473
 mas "Pages", id: 409201541
+mas "Save to Pocket", id: 1477385213
 mas "Slack", id: 803453959
 mas "Things", id: 904280696
 mas "Witch", id: 412485838
