@@ -17,28 +17,8 @@ packages=(
   gh
   jq
 )
-  # Arch
-if command -v pacman &> /dev/null
-then
-  echo 
-  echo "🙌 Installing packages via YaY"
-  echo
 
-  packages+=(nvm otf-hasklig starship)
-  pacman -S git base-devel
-
-  # Install YaY
-  git clone https://aur.archlinux.org/yay.git
-  cd yay
-  makepkg -si
-  cd ..
-  rm -rf yay
-
-  for package in "${packages[@]}"
-  do
-    yay -Sy $package
-  done
-elif command -v apt &> /dev/null
+if command -v apt &> /dev/null
 then
   echo 
   echo "📦 Installing packages via apt"
