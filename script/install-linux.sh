@@ -1,3 +1,4 @@
+#!/bin/bash
 echo
 echo
 echo "##################################################"
@@ -9,7 +10,7 @@ echo
 packages=(
   fish
   git
-  git-delta
+  # git-delta – not availble in debian / apt :( https://github.com/dandavison/delta/issues/26
   ack
   bat
   rbenv
@@ -29,6 +30,19 @@ then
     apt install -y $package
   done
 fi
+
+echo
+echo "📦 Installing Rust and Cargo"
+echo
+
+curl https://sh.rustup.rs -sSf | sh -s -- -y
+
+echo
+echo "🌳 Installing Git Delta via Cargo"
+echo
+
+# https://crates.io/crates/git-delta
+cargo install git-delta
 
 echo 
 echo "🖖 Installing nvm"
