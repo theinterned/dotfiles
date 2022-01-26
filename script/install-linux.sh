@@ -37,6 +37,8 @@ echo
 
 curl https://sh.rustup.rs -sSf | sh -s -- -y
 
+source $HOME/.cargo/env
+
 echo
 echo "🌳 Installing Git Delta via Cargo"
 echo
