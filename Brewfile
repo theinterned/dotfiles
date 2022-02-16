@@ -19,7 +19,7 @@ brew "gh"
 # Syntax-highlighting pager for git and diff output
 brew "git-delta"
 # Open source programming language to build simple/reliable/efficient software
-brew "go", link: false
+brew "go"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # Mini DNS server designed solely to route queries to localhost
@@ -74,6 +74,8 @@ cask "rocket"
 # Music streaming service
 cask "spotify"
 cask "spotify-now-playing"
+# Video game digital distribution service
+cask "steam"
 # Open-source code editor
 cask "visual-studio-code"
 # Video communication and virtual meeting platform
@@ -82,11 +84,13 @@ mas "1Password 7", id: 1333542190
 mas "Bear", id: 1091189122
 mas "Clockwise for Safari", id: 1576257926
 mas "Deliveries", id: 290986013
+mas "Flow", id: 1423210932
 mas "GarageBand", id: 682658836
 mas "iMovie", id: 408981434
 mas "Instapaper Save", id: 1481302432
 mas "Irvue", id: 1039633667
 mas "Keynote", id: 409183694
+mas "LG Screen Manager", id: 1142051783
 mas "Magnet", id: 441258766
 mas "Noir", id: 1592917505
 mas "Numbers", id: 409203825
