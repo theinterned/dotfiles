@@ -52,6 +52,9 @@
 [gpg]
   program = gpg
 
+[help]
+  autocorrect = 30
+
 [init]
   defaultBranch = main
 
