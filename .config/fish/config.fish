@@ -55,10 +55,8 @@ abbr -a -U gpf git push --force-with-lease
 abbr -a -U gco- git checkout -
 abbr -a -U gcob git checkout -b theinterned/
 
-abbr -a -U cww npx @koddsson/coworking-with 
-abbr -a -U cwws npx @koddsson/coworking-with --stop
-abbr -a -U gcww coworking-with 
-abbr -a -U gcwws coworking-with --stop
+abbr -a -U cww coworking-with 
+abbr -a -U cwws coworking-with --stop
 
 
 # shortcut to this project
