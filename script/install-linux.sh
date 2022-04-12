@@ -12,6 +12,7 @@ packages=(
   git
   # git-delta – not availble in debian / apt :( https://github.com/dandavison/delta/issues/26
   ack
+  asciinema
   bat
   rbenv
   direnv
