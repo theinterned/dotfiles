@@ -8,6 +8,8 @@ tap "homebrew/services"
 brew "ack"
 # CLI tool for working with Architecture Decision Records
 brew "adr-tools"
+# Record and share terminal sessions
+brew "asciinema"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # Load/unload environment variables based on $PWD
