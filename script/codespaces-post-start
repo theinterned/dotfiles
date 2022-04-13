@@ -21,3 +21,7 @@ then
 else
   echo "✔️ Already using Fish shell"
 fi
+
+SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+
+fish $SCRIPTPATH/setup.fish
