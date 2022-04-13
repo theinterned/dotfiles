@@ -2,14 +2,10 @@
 if not functions -q fisher
   echo 
   echo "🎣 Installing fisher package manager"
-  echo
-  
-  curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
-  
-  echo 
   echo "🐡 Installing fisher plugins"
   echo
-  fisher update
+
+  curl -sL https://git.io/fisher | source && fisher update
 end
 
 echo
