@@ -3,3 +3,4 @@
 .envrc
 node_modules
 .vscode/extensions
+.config/fish/fish_variables
