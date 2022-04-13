@@ -76,7 +76,9 @@ fi
 
 $SCRIPTPATH/install.sh
 
-$SCRIPTPATH/fish-setup.sh
+$SCRIPTPATH/install-fish.sh
+
+fish $SCRIPTPATH/setup.fish
 
 echo
 echo

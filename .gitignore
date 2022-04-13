@@ -4,3 +4,4 @@
 node_modules
 .vscode/extensions
 .config/fish/fish_variables
+.config/gh/hosts.yml
