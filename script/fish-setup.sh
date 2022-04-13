@@ -22,7 +22,7 @@ fi
 if [ $(echo $SHELL) != $(which fish) ]
 then
   echo "Using Fish shell"
-  chsh -s $(which fish 2>/dev/null)
+  sudo chsh -s $(which fish 2>/dev/null)
 else
   echo "Already using Fish!"
 fi

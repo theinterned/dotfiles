@@ -28,7 +28,7 @@ then
 
   for package in "${packages[@]}"
   do
-    apt install -y $package
+    sudo apt install -y $package
   done
 fi
 
