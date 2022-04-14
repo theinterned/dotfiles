@@ -22,17 +22,8 @@
   oldHighlight = red reverse
   newHighlight = green reverse
 
-[core]
-  pager = delta
-
 [credential]
   helper = osxkeychain
-
-[delta]
-  line-numbers = true
-  color-only = true
-  light = true
-  diff-so-fancy = true
 
 [diff]
   colorMoved = default
@@ -57,9 +48,6 @@
 
 [init]
   defaultBranch = main
-
-[interactive]
-    diffFilter = delta --color-only --features=interactive
 
 [merge]
   conflictstyle = diff3
