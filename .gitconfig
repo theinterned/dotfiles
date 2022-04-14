@@ -70,6 +70,9 @@
 [push]
   default = simple
 
+[remote]
+  pushDefault = origin
+
 [url "https://github.com/"]
   insteadOf = git@github.com:
 
