@@ -25,6 +25,11 @@ then
   echo "📦 Installing packages via apt"
   echo
 
+  curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+
+  sudo apt update
+
   for package in "${packages[@]}"
   do
     sudo apt install -y $package
