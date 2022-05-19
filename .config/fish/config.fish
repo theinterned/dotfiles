@@ -32,6 +32,8 @@ abbr -a -U gcob git checkout -b theinterned/
 abbr -a -U cww coworking-with 
 abbr -a -U cwws coworking-with --stop
 
+# Codespaces
+abbr -a -U ncs 'gh cs code -c "$(gh cs create -r github/github --default-permissions)"'
 
 # shortcut to this project
 abbr -a -U dotfiles cd ~/.dotfiles/
