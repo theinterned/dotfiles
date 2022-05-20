@@ -8,3 +8,4 @@ node_modules
 .config/fish/conf.d
 .config/fish/functions
 .config/gh/hosts.yml
+.config/op/
