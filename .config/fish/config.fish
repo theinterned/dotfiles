@@ -38,6 +38,3 @@ abbr -a -U ncs 'gh cs code -c "$(gh cs create -r github/github --default-permiss
 
 # shortcut to this project
 abbr -a -U dotfiles cd ~/.dotfiles/
-
-# add rust / cargo to path
-set -U fish_user_paths ~/.cargo/bin $fish_user_paths
