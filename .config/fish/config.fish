@@ -38,3 +38,7 @@ abbr -a -U ncs 'gh cs code -c "$(gh cs create -r github/github --default-permiss
 
 # shortcut to this project
 abbr -a -U dotfiles cd ~/.dotfiles/
+
+# Other
+abbr -a -U ffon bin/toggle-feature-flag enable
+abbr -a -U ffoff bin/toggle-feature-flag disable
