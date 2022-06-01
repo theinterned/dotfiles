@@ -3,7 +3,7 @@
 # Required parameters:
 # @raycast.schemaVersion 1
 # @raycast.title New Github Codespace
-# @raycast.mode compact
+# @raycast.mode fullOutput
 
 # Optional parameters:
 # @raycast.icon 🤖
@@ -21,15 +21,17 @@ REPO=${1:-$DEFAULT_REPO}
 
 # Available machines: [basicLinux32gb standardLinux32gb premiumLinux largePremiumLinux xLargePremiumLinux]
 DEFAULT_MACHINE=(--machine xLargePremiumLinux)
-MACHINE=${2:$DEFAULT_MACHINE}
+MACHINE=${2:-${DEFAULT_MACHINE[@]}}
 # github/github codespaces are prebuilt
 if [ $REPO == $DEFAULT_REPO ]; then
-  MACHINE=""
+  MACHINE=()
 fi
 
-NEW_COPDESPACE=$(gh cs create -r $REPO $MACHINE)
+# echo "gh cs create -r $REPO $MACHINE"
+NEW_CODESPACE=$(gh cs create -r $REPO $MACHINE)
 
-gh cs code -c $NEW_COPDESPACE
+echo $NEW_CODESPACE | pbcopy
 
-echo $NEW_COPDESPACE | pbcopy
-echo "Created $NEW_COPDESPACE"
+gh cs code -c $NEW_CODESPACE
+
+echo "Created $NEW_CODESPACE"
