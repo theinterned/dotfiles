@@ -27,7 +27,7 @@ if [ $REPO == $DEFAULT_REPO ]; then
   MACHINE=""
 fi
 
-NEW_COPDESPACE=$(gh cs create -r $REPO $MACHINE --default-permissions)
+NEW_COPDESPACE=$(gh cs create -r $REPO $MACHINE)
 
 gh cs code -c $NEW_COPDESPACE
 
