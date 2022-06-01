@@ -20,15 +20,17 @@ DEFAULT_REPO="github/github"
 REPO=${1:-$DEFAULT_REPO}
 
 # Available machines: [basicLinux32gb standardLinux32gb premiumLinux largePremiumLinux xLargePremiumLinux]
-DEFAULT_MACHINE=(--machine xLargePremiumLinux)
-MACHINE=${2:-${DEFAULT_MACHINE[@]}}
+DEFAULT_MACHINE="xLargePremiumLinux"
+MACHINE_TYPE=${2:-${DEFAULT_MACHINE}}
 # github/github codespaces are prebuilt
 if [ $REPO == $DEFAULT_REPO ]; then
   MACHINE=()
+else
+  MACHINE=(--machine $MACHINE_TYPE)
 fi
 
 # echo "gh cs create -r $REPO $MACHINE"
-NEW_CODESPACE=$(gh cs create -r $REPO $MACHINE)
+NEW_CODESPACE=$(gh cs create -r $REPO ${MACHINE[@]})
 
 echo $NEW_CODESPACE | pbcopy
 
