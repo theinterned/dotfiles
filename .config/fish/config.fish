@@ -21,6 +21,7 @@ abbr -a -U bntw bin/npm run test:watch
 abbr -a -U n npm
 abbr -a -U ni npm install
 abbr -a -U nr npm run
+abbr -a -U nrd npm run dev
 abbr -a -U ns npm start
 abbr -a -U nt npm test
 
