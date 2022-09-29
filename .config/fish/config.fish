@@ -2,6 +2,11 @@ starship init fish | source
 
 set -xg EDITOR "code --wait"
 
+# alloy
+abbr -a -U alloy cd /workspaces/github/vendor/alloy
+abbr -a -U anrd npm run dev --prefix /workspaces/github/vendor/alloy
+abbr -a -U ani npm install --prefix /workspaces/github/vendor/alloy
+
 # Rails stuff
 abbr -a -U ss script/server
 abbr -a -U br bin/rails
@@ -20,7 +25,7 @@ abbr -a -U bntw bin/npm run test:watch
 # npm stuff
 abbr -a -U n npm
 abbr -a -U ni npm install
-abbr -a -U nr npm run
+abbr -a -U nr npm runcd '/workspaces/github/vendor/alloy'
 abbr -a -U nrd npm run dev
 abbr -a -U ns npm start
 abbr -a -U nt npm test
