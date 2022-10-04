@@ -2,6 +2,14 @@ starship init fish | source
 
 set -xg EDITOR "code --wait"
 
+# places
+abbr -aU ~ 'cd ~'
+abbr -aU - 'cd -'
+abbr -aU docs 'cd ~/Documents'
+abbr -aU down 'cd ~/Downloads'
+abbr -aU desk 'cd ~/Desktop'
+abbr -aU src 'cd ~/Documents/src'
+
 # alloy
 abbr -a -U alloy cd /workspaces/github/vendor/alloy
 abbr -a -U anrd npm run dev --prefix /workspaces/github/vendor/alloy
