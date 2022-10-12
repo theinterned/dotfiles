@@ -17,6 +17,7 @@ abbr -a -U ani npm install --prefix /workspaces/github/vendor/alloy
 
 # Rails stuff
 abbr -a -U ss script/server
+abbr -a -U sb script/bootstrap
 abbr -a -U br bin/rails
 abbr -a -U brt bin/rails test
 abbr -a -U bbe bin/bundle exec
