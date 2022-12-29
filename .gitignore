@@ -9,3 +9,4 @@ node_modules
 .config/fish/functions
 .config/gh/hosts.yml
 .config/op/
+.config/configstore/update-notifier-npm.json
