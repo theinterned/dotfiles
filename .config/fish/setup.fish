@@ -8,8 +8,7 @@ if not functions -q fisher
   echo "🎣 Installing fisher package manager"
   echo
 
-  curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
-
+  curl -sL https://git.io/fisher | source
   echo
   echo "🐡 Installing fisher plugins"
   echo
