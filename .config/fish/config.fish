@@ -1,5 +1,4 @@
 set -xg EDITOR "code --wait"
-set -U FISH_CONFIG_PATH (realpath (dirname (status --current-filename)))
 
 # places
 abbr -aU ~ 'cd ~'
@@ -64,7 +63,7 @@ abbr -a -U ffoff bin/toggle-feature-flag disable
 if  [ "$FISH_SETUP_DONE" != "true" ]
   echo "🍥 fish not setup yet"
   set -Ux FISH_SETUP_DONE "true"
-  source $FISH_CONFIG_PATH/setup.fish
+  source $__fish_config_dir/setup.fish
 end
 
 starship init fish | source
