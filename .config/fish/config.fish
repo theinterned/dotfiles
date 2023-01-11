@@ -55,7 +55,8 @@ abbr -a -U cwws coworking-with --stop
 abbr -a -U ncs 'gh cs code -c "$(gh cs create -r github/github --default-permissions)"'
 
 # shortcut to this project
-abbr -a -U dotfiles cd ~/.dotfiles/
+abbr -a -U dotfiles cd ~/.dotfiles
+abbr -a -U config ~/.dotfiles/script/setup.fish
 
 # Other
 abbr -a -U ffon bin/toggle-feature-flag enable
