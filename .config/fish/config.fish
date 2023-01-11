@@ -1,5 +1,3 @@
-starship init fish | source
-
 set -xg EDITOR "code --wait"
 
 # places
@@ -61,3 +59,31 @@ abbr -a -U config ~/.dotfiles/script/setup.fish
 # Other
 abbr -a -U ffon bin/toggle-feature-flag enable
 abbr -a -U ffoff bin/toggle-feature-flag disable
+
+# setup fisher if not already installed
+if not functions -q fisher
+  echo 
+  echo "🎣 Installing fisher package manager"
+  echo
+
+  curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
+
+  echo
+  echo "🐡 Installing fisher plugins"
+  echo
+
+  fisher update
+end
+
+if not nvm list lts > /dev/null
+  echo
+  echo "📜 NVM setup"
+
+  nvm install lts
+  set --universal nvm_default_version lts
+
+  nvm list
+  echo
+end
+
+starship init fish | source
