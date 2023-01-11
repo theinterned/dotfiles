@@ -1,0 +1,57 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "hubbers",
+  "title": "Hubbers",
+  "description": "Finds fellow Hubbers",
+  "icon": "command-icon.png",
+  "author": "hmarr",
+  "owner": "github",
+  "categories": [
+    "Other"
+  ],
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "index",
+      "title": "Search Hubbers",
+      "subtitle": "Search Hubbers by handle or name",
+      "description": "Search Hubbers by handle or name",
+      "mode": "view",
+      "preferences": [
+        {
+          "name": "githubToken",
+          "description": "Make sure it's a new (non-legacy) token with read-only access to the contents of the `github/thehub` repo.",
+          "type": "password",
+          "required": true,
+          "title": "GitHub Personal Access Token",
+          "placeholder": "ghp_xxx"
+        }
+      ]
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.39.3",
+    "country-emoji": "^1.5.6",
+    "js-yaml": "^4.1.0",
+    "match-sorter": "^6.3.1",
+    "node-fetch": "^3.2.10"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.5",
+    "@types/node": "^18.7.18",
+    "@types/react": "^18.0.20",
+    "@typescript-eslint/eslint-plugin": "^5.38.0",
+    "@typescript-eslint/parser": "^5.38.0",
+    "eslint": "^8.23.1",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.3"
+  },
+  "scripts": {
+    "build": "ray build -e dist",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint",
+    "publish": "ray publish"
+  }
+}

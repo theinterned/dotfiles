@@ -1,0 +1,69 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "raycast-github-merge-queue",
+  "title": "Merge queue",
+  "description": "See the merge queue from Raycast",
+  "icon": "command-icon.png",
+  "author": "WillHalto",
+  "license": "MIT",
+  "owner": "github",
+  "commands": [
+    {
+      "name": "index",
+      "title": "Merge Queue list",
+      "description": "List the current merge queue",
+      "keywords": [
+        "qfg", "queue", "q"
+      ],
+      "mode": "view"
+    },
+    {
+      "name": "menuBar",
+      "title": "Pin to menu bar",
+      "description": "Pin your queued PRs to see them at a glance",
+      "mode": "menu-bar",
+      "interval": "1m"
+    }
+  ],
+  "preferences": [
+    {
+      "name": "token",
+      "description": "Github PAT with repo permissions",
+      "type": "password",
+      "required": true,
+      "title": "GitHub PAT",
+      "placeholder": "ghp_xxxx"
+    },
+    {
+      "name": "defaultRepo",
+      "description": "Default repo",
+      "type": "textfield",
+      "required": true,
+      "title": "Default repo",
+      "placeholder": "owner/repo"
+    }
+  ],
+  "dependencies": {
+    "@octokit/graphql": "^5.0.4",
+    "@raycast/api": "^1.41.1",
+    "octokit": "^2.0.10"
+  },
+  "devDependencies": {
+    "@types/node": "16.10.3",
+    "@types/node-fetch": "^2.6.2",
+    "@types/react": "18.0.9",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "prettier": "^2.5.1",
+    "typescript": "^4.4.3"
+  },
+  "scripts": {
+    "build": "ray build -e dist",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint",
+    "publish": "ray publish"
+  }
+}
