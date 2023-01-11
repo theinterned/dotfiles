@@ -62,7 +62,7 @@ abbr -a -U ffon bin/toggle-feature-flag enable
 abbr -a -U ffoff bin/toggle-feature-flag disable
 
 if  [ "$FISH_SETUP_DONE" != "true" ]
-  echo "🐟 Setting up fish"
+  echo "🍥 fish not setup yet"
   set -Ux FISH_SETUP_DONE "true"
   source $FISH_CONFIG_PATH/setup.fish
 end

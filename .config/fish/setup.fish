@@ -1,5 +1,7 @@
 #!/usr/bin/env fish
 
+echo "🐟 Setting up fish"
+
 # setup fisher if not already installed
 if not functions -q fisher
   echo 
