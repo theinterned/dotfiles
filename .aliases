@@ -31,6 +31,7 @@ alias ga="git add"
 alias gaa="git add -A"
 alias gcm="git commit -m"
 alias gcam="git commit -am"
+alias gp="echo 'git push' && git push"
 alias gpo="echo 'git push -u origin HEAD' && git push -u origin HEAD"
 gcopr() { 
   (git fetch -f upstream pull/${1}/head:pr-${1} || (echo 'trying origin'; git fetch -f origin pull/${1}/head:pr-${1})) && git checkout pr-${1}; 
