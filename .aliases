@@ -1,15 +1,16 @@
 alias n=npm
 alias nr="npm run"
+alias nrd="npm run dev"
 alias ni="npm install"
 alias nw="npm workspace"
 alias nws="npm workspaces"
 alias nwsr="npm workspaces run"
 alias ns="echo 'npm start' && npm start"
 alias nsb="echo 'npm run storybook' && npm run storybook"
-alias nnx="echo 'npm run nginx' && npm run nginx"
-alias nwr="echo 'npm run wr' && npm run wr"
-alias nt="echo 'npm test --notify --maxWorkers=65%' && npm test --notify --maxWorkers=65%"
-alias nta="echo 'yt --watchAll=false' && yt --watchAll=false"
+alias nt="echo 'npm test' && npm test"
+alias ntw="echo 'npm test -- --watch' && npm test -- --watch"
+alias nto="echo 'npm test --notify --maxWorkers=65%' && npm test --notify --maxWorkers=65%"
+alias nta="echo 'nt --watchAll=false' && nt --watchAll=false"
 
 alias y=yarn
 alias yw="yarn workspace"
@@ -23,23 +24,35 @@ alias yta="echo 'yt --watchAll=false' && yt --watchAll=false"
 alias edit=code
 
 # Git aliases
+alias g=git
+alias gst="echo 'git status' && git status"
+alias gd="echo 'git diff' && git dif"
+alias ga="git add"
+alias gaa="git add -A"
+alias gcm="git commit -m"
+alias gcam="git commit -am"
 alias gpo="echo 'git push -u origin HEAD' && git push -u origin HEAD"
 gcopr() { 
   (git fetch -f upstream pull/${1}/head:pr-${1} || (echo 'trying origin'; git fetch -f origin pull/${1}/head:pr-${1})) && git checkout pr-${1}; 
 }
 alias gtfo="echo 'git reset --hard && git clean -fd' && git reset --hard && git clean -fd"
 alias gco-="git checkout -"
-alias glu="echo 'git pull upstream $(current_branch)' && git pull upstream $(current_branch)"
-
+# alias glo="echo 'git pull origin $(current_branch)' && git pull origin $(current_branch)"
+# alias glu="echo 'git pull upstream $(current_branch)' && git pull upstream $(current_branch)"
 
 alias gcom="echo 'git checkout main' && git checkout main"
+alias grom="echo 'git fetch origin' && git fetch origin && echo 'git rebase origin/main' && git rebase upstream/main"
 alias grum="echo 'git fetch upstream' && git fetch upstream && echo 'git rebase upstream/main' && git rebase upstream/main"
+alias gpom="echo 'git pull origin main' && git pull origin main"
 alias gpum="echo 'git pull upstream main' && git pull upstream main"
 
 # legacy from when master was standard
 alias gcomaster="echo 'git checkout master' && git checkout master"
+alias gcoma=gcomaster
 alias grumaster="echo 'git fetch upstream' && git fetch upstream && echo 'git rebase upstream/master' && git rebase upstream/master"
+alias gruma=grumaster
 alias gpumaster="echo 'git pull upstream master' && git pull upstream master"
+alias gpuma=gpumaster
 
 hack() {
   git checkout -b $1 && git push --set-upstream origin $1
