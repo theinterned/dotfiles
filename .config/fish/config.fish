@@ -32,6 +32,13 @@ abbr -a -U bns bin/npm start
 abbr -a -U bnt bin/npm test
 abbr -a -U bntw bin/npm run test:watch
 
+# overmind
+abbr -a -U o overmind
+abbr -a -U oc overmind connect
+abbr -a -U os overmind start
+abbr -a -U ost overmind stop
+abbr -a -U ors overmind restart
+
 # npm stuff
 abbr -a -U n npm
 abbr -a -U ni npm install
