@@ -83,6 +83,7 @@ alias gpf="git push --force-with-lease"
 alias gco-="git checkout -"
 alias gco.="git checkout ."
 alias gcob="git checkout -b theinterned/"
+alias gl="git pull"
 # alias glo="echo 'git pull origin $(current_branch)' && git pull origin $(current_branch)"
 # alias glu="echo 'git pull upstream $(current_branch)' && git pull upstream $(current_branch)"
 
