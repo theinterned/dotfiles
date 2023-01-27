@@ -1,3 +1,16 @@
+# places
+alias ~='cd ~'
+alias -='cd -'
+alias docs='cd ~/Documents'
+alias down='cd ~/Downloads'
+alias desk='cd ~/Desktop'
+alias src='cd ~/Documents/src'
+alias alloy="cd vendor/alloy"
+
+# shortcut to this project
+alias dotfiles="cd ~/.dotfiles"
+alias config="~/.dotfiles/script/setup.fish"
+
 # npm
 alias n=npm
 alias nr="npm run"
@@ -13,14 +26,6 @@ alias ntw="echo 'npm test:watch' && npm test:watch"
 alias nto="echo 'npm test --notify --maxWorkers=65%' && npm test --notify --maxWorkers=65%"
 alias nta="echo 'nt --watchAll=false' && nt --watchAll=false"
 
-# Rails npm stuff
-alias bn="bin/npm"
-alias bni="bin/npm install"
-alias bnr="bin/npm run"
-alias bns="bin/npm start"
-alias bnt="bin/npm test"
-alias bntw="bin/npm run test:watch"
-
 #  yarn
 alias y=yarn
 alias yw="yarn workspace"
@@ -31,18 +36,13 @@ alias ysb="echo 'yarn storybook' && yarn storybook"
 alias yt="echo 'yarn test --notify --maxWorkers=65%' && yarn test --notify --maxWorkers=65%"
 alias yta="echo 'yt --watchAll=false' && yt --watchAll=false"
 
-alias c=code
-alias edit=code
-alias e=edit
-
-# places
-alias ~='cd ~'
-alias -='cd -'
-alias docs='cd ~/Documents'
-alias down='cd ~/Downloads'
-alias desk='cd ~/Desktop'
-alias src='cd ~/Documents/src'
-alias alloy="cd vendor/alloy"
+# Rails npm stuff
+alias bn="bin/npm"
+alias bni="bin/npm install"
+alias bnr="bin/npm run"
+alias bns="bin/npm start"
+alias bnt="bin/npm test"
+alias bntw="bin/npm run test:watch"
 
 # Rails stuff
 alias ss="script/server"
@@ -54,10 +54,6 @@ alias br="bin/rails"
 alias brt="bin/rails test"
 alias bbe="bin/bundle exec"
 alias bg="bin/guard" # run tests in watch mode
-
-# Other
-alias ffon="bin/toggle-feature-flag enable"
-alias ffoff="bin/toggle-feature-flag disable"
 
 # overmind
 alias o="overmind"
@@ -108,8 +104,10 @@ hack() {
   git checkout -b $1 && git push --set-upstream origin $1
 }
 
-# shortcut to this project
-alias dotfiles="cd ~/.dotfiles"
-alias config="~/.dotfiles/script/setup.fish"
+# Other
+alias c=code
+alias edit=code
+alias e=edit
 
-
+alias ffon="bin/toggle-feature-flag enable"
+alias ffoff="bin/toggle-feature-flag disable"
