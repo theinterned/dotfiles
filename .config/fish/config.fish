@@ -13,16 +13,15 @@ end
 string match -q "$TERM_PROGRAM" "vscode"
 and . (code --locate-shell-integration-path fish)
 
-set CODE_VERSION (code --version | string split " " | tail -n2  | head -n1 )
-echo "VS Code commit version: $CODE_VERSION"
-
 # Temporary fix for VS Code setup breaking in fish
-# if  string match -q "xcode or code-insiders not installed" $CODE_VERSION
-if test -z "$CODE_VERSION"
+if test -z "$(code --version)"
+  # Update this SHA when VS Code updates
+  set CODE_VERSION 97dec172d3256f8ca4bfb2143f3f76b503ca0534
   echo "Patching VS CODE PATHS for VS Code $CODE_VERSION"
-  fish_add_path /vscode/bin/linux-x64/$CODE_VERSION/bin/
-  fish_add_path /vscode/bin/linux-x64/$CODE_VERSION/bin/remote-cli/
-  fish_add_path /vscode/bin/linux-x64/$CODE_VERSION/bin/helpers/
+  fish_add_path -P /vscode/bin/linux-x64/$CODE_VERSION/bin/
+  fish_add_path -P /vscode/bin/linux-x64/$CODE_VERSION/bin/remote-cli/
+  fish_add_path -P /vscode/bin/linux-x64/$CODE_VERSION/bin/helpers/
+  echo $PATH
 end
 
 starship init fish | source
