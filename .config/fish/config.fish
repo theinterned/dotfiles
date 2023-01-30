@@ -18,7 +18,7 @@ echo "VS Code commit version: $CODE_VERSION"
 
 # Temporary fix for VS Code setup breaking in fish
 # if  string match -q "xcode or code-insiders not installed" $CODE_VERSION
-if test -z $CODE_VERSION
+if test -z "$CODE_VERSION"
   echo "Patching VS CODE PATHS for VS Code $CODE_VERSION"
   fish_add_path /vscode/bin/linux-x64/$CODE_VERSION/bin/
   fish_add_path /vscode/bin/linux-x64/$CODE_VERSION/bin/remote-cli/
