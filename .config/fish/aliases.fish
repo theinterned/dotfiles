@@ -40,6 +40,7 @@ abbr -a -U ssl script/dx/server-logs
 abbr -a -U sb script/bootstrap
 abbr -a -U br bin/rails
 abbr -a -U brt bin/rails test
+abbr -a -U brtc bin/rails test_changes
 abbr -a -U bbe bin/bundle exec
 abbr -a -U bg bin/guard # run tests in watch mode
 
