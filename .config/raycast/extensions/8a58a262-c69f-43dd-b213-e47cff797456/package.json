@@ -1,0 +1,48 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "fiscal-year-calendar",
+  "title": "Microsoft & GitHub Fiscal Year Calendar",
+  "description": "Struggle to tell your Zinc from your FY23H2? Ever wonder if January is Q1 or Q3? This extension is for you!",
+  "icon": "command-icon.png",
+  "author": "hmarr",
+  "owner": "github",
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "index",
+      "title": "Fiscal Year Calendar",
+      "subtitle": "Translate normal dates to FYs, Qs, and Semesters",
+      "description": "See the where we are in Microsoft & GitHub's fiscal calendar",
+      "mode": "view",
+      "keywords": [
+        "fy",
+        "semester",
+        "microsoft",
+        "github"
+      ]
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.47.3",
+    "@raycast/utils": "^1.4.8",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "18.8.3",
+    "@types/react": "18.0.9",
+    "@types/react-dom": "^18.0.10",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "prettier": "^2.5.1",
+    "typescript": "^4.4.3"
+  },
+  "scripts": {
+    "build": "ray build -e dist",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint",
+    "publish": "ray publish"
+  }
+}
