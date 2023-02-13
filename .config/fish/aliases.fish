@@ -34,6 +34,7 @@ abbr -a -U bntw bin/npm run test:watch
 
 # Rails stuff
 abbr -a -U ss script/server
+abbr -a -U ssd script/server --debug
 abbr -a -U sss script/dx/server-start
 abbr -a -U sst script/dx/server-stop
 abbr -a -U ssl script/dx/server-logs

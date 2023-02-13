@@ -46,6 +46,7 @@ alias bntw="bin/npm run test:watch"
 
 # Rails stuff
 alias ss="script/server"
+alias ssd="script/server --debug"
 alias sss="script/dx/server-start"
 alias sst="script/dx/server-stop"
 alias ssl="script/dx/server-logs"
