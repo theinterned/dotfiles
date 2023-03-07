@@ -57,6 +57,9 @@ alias brt="bin/rails test_changes"
 alias bbe="bin/bundle exec"
 alias bg="bin/guard" # run tests in watch mode
 
+# Stuff
+alias bgsf="bin/generate-service-files.rb"
+
 # overmind
 alias o="overmind"
 alias oc="overmind connect"

@@ -45,6 +45,9 @@ abbr -a -U brtc bin/rails test_changes
 abbr -a -U bbe bin/bundle exec
 abbr -a -U bg bin/guard # run tests in watch mode
 
+# Stuff
+abbr -a -U bgsf bin/generate-service-files.rb
+
 # overmind
 abbr -a -U o overmind
 abbr -a -U oc overmind connect
