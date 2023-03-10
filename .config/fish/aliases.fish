@@ -62,7 +62,7 @@ abbr -a -U ncs 'gh cs code -c "$(gh cs create -r github/github --default-permiss
 abbr -a -U gpf git push --force-with-lease
 abbr -a -U gco- git checkout -
 abbr -a -U gco. git checkout .
-abbr -a -U gcob git checkout -b theinterned/
+abbr -a -U gcob git checkout -b ns/
 
 abbr -a -U cww coworking-with 
 abbr -a -U cwws coworking-with --stop
