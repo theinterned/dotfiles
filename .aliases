@@ -1,6 +1,5 @@
 # places
 alias ~='cd ~'
-alias -='cd -'
 alias docs='cd ~/Documents'
 alias down='cd ~/Downloads'
 alias desk='cd ~/Desktop'
