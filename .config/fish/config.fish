@@ -1,4 +1,4 @@
-set -xg EDITOR "code --wait"
+set -U EDITOR "code --wait"
 
 source $__fish_config_dir/aliases.fish 
 
