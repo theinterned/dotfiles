@@ -77,6 +77,7 @@ alias ga="git add"
 alias gaa="git add -A"
 alias gcm="git commit -m"
 alias gcam="git commit -am"
+alias gdst="git diff --staged"
 alias gp="echo 'git push' && git push"
 alias gpo="echo 'git push -u origin HEAD' && git push -u origin HEAD"
 gcopr() { 
