@@ -1,4 +1,6 @@
 set -U EDITOR "code --wait"
+# Run server in background. See https://github.rewatch.com/video/8pex35764vboieau-script-server-daemonized-demo
+set -U FEATURE_DAEMONIZE_SCRIPT_SERVER true
 
 source $__fish_config_dir/aliases.fish 
 
