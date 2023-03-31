@@ -63,6 +63,7 @@ abbr -aU gpf git push --force-with-lease
 abbr -aU gco- git checkout -
 abbr -aU gco. git checkout .
 abbr -aU gcob git checkout -b ns/
+abbr -aU gdst git diff --staged
 
 abbr -aU cww coworking-with 
 abbr -aU cwws coworking-with --stop
