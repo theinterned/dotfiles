@@ -11,7 +11,8 @@ aliases:
   co: pr checkout
   prvw: pr view --web
   prv: pr view --web
-  prc: pr create --web
+  prc: pr create
+  prcw: pr create --web
   ports: cs ports forward 80:80
 # The path to a unix socket through which send HTTP connections. If blank, HTTP traffic will be handled by net/http.DefaultTransport.
 http_unix_socket:
