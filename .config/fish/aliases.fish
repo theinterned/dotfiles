@@ -34,7 +34,7 @@ abbr -aU bntw bin/npm run test:watch
 
 # Rails stuff
 abbr -aU ss script/server
-abbr -aU ssmd gh medic && script/server
+abbr -aU ssmd "gh medic && script/server"
 abbr -aU ssd script/server --debug
 abbr -aU sss script/dx/server-start
 abbr -aU sst script/dx/server-stop
