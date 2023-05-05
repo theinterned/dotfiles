@@ -16,7 +16,7 @@ end
 # Temporary fix for VS Code setup breaking in fish
 if test -z "$(code --version)"
   # Update this SHA when VS Code updates
-  set CODE_VERSION b7886d7461186a5eac768481578c1d7ca80e2d21
+  set CODE_VERSION 704ed70d4fd1c6bd6342c436f1ede30d1cff4710
   echo "Patching VS CODE PATHS for VS Code $CODE_VERSION"
   fish_add_path -P /vscode/bin/linux-x64/$CODE_VERSION/bin/
   fish_add_path -P /vscode/bin/linux-x64/$CODE_VERSION/bin/remote-cli/
