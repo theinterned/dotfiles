@@ -1,3 +1,5 @@
+#!/usr/bin/env fish
+
 # places
 abbr -aU ~ 'cd ~'
 abbr -aU - 'cd -'
