@@ -1,7 +1,7 @@
 # What protocol to use when performing git operations. Supported values: ssh, https
 git_protocol: https
 # What editor gh should run when creating issues, pull requests, etc. If blank, will refer to environment.
-editor:
+editor: code --wait
 # When to interactively prompt. This is a global config that cannot be overridden by hostname. Supported values: enabled, disabled
 prompt: enabled
 # A pager program to send command output to, e.g. "less". Set the value to "cat" to disable the pager.
@@ -11,6 +11,7 @@ aliases:
   co: pr checkout
   prvw: pr view --web
   prv: pr view --web
+  prview: pr view
   prc: pr create
   prcw: pr create --web
   ports: cs ports forward 80:80
