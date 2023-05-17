@@ -22,6 +22,9 @@
   oldHighlight = red reverse
   newHighlight = green reverse
 
+[core]
+  editor = code --wait
+
 [credential]
   helper = osxkeychain
 
@@ -67,4 +70,5 @@
 [user]
   name = Ned Schwartz
   email = ned@theinterned.net
+
 
