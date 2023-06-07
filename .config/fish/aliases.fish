@@ -79,3 +79,7 @@ abbr -aU e edit
 
 abbr -aU ffon bin/toggle-feature-flag enable
 abbr -aU ffoff bin/toggle-feature-flag disable
+
+# fix a garbled terminal
+# https://www.oreilly.com/library/view/bash-cookbook/0596526784/ch19s09.html
+abbr -aU sane stty sane
