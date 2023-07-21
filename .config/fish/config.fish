@@ -30,4 +30,6 @@ end
 string match -q "$TERM_PROGRAM" "vscode"
 and . (code --locate-shell-integration-path fish)
 
-starship init fish | source
+if type -q starship
+  starship init fish | source
+end
