@@ -22,6 +22,7 @@ abbr -a n npm
 abbr -a ni npm install
 abbr -a nr npm run
 abbr -a nrd npm run dev
+abbr -a nsb npm run storybook
 abbr -a ns npm start
 abbr -a nt npm test
 abbr -a ntw npm test:watch

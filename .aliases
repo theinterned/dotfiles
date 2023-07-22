@@ -14,6 +14,7 @@ alias config="~/.dotfiles/script/setup.fish"
 alias n=npm
 alias nr="npm run"
 alias nrd="npm run dev"
+alias nsb="npm run storybook"
 alias ni="npm install"
 alias nw="npm workspace"
 alias nws="npm workspaces"
