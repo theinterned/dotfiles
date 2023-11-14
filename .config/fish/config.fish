@@ -33,3 +33,9 @@ and . (code --locate-shell-integration-path fish)
 if type -q starship
   starship init fish | source
 end
+
+function __check_nvm --on-variable PWD --description 'attempt to install node version from .nvmrc'
+  status --is-command-substitution; and return
+  nvm install 2>/dev/null
+end
+__check_nvm
