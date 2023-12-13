@@ -36,8 +36,6 @@ brew "starship"
 brew "subversion"
 # Command-line helper for the 1Password password manager
 cask "1password-cli"
-# Application launcher and productivity software
-cask "alfred"
 # Open links in any browser
 cask "choosy"
 # App to build and share containerized applications and microservices
