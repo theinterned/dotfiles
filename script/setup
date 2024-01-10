@@ -35,7 +35,7 @@ for DOTFILE in $DOTFILES; do
   fi
 
   # Don't try to install documentation/script/lock files
-  echo $DOTFILE | egrep -q '(\.\/$|^\.git\/$|^script\/$|setup|\.txt$|\.md$)' && continue
+  echo $DOTFILE | egrep -q '(\.\/$|^\.git\/$|^(script|iterm|raycast)\/$|setup|\.txt$|\.md$)' && continue
   
   echo "DOTFILE $DOTFILE"  
   echo "DIRFILE $DIRFILE"

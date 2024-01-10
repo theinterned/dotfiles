@@ -40,4 +40,6 @@ function __check_nvm --on-variable PWD --description 'attempt to install node ve
 end
 __check_nvm
 
-status --is-interactive; and rbenv init - fish | source
+if type -q rbenv
+  status --is-interactive; and rbenv init - fish | source
+end
