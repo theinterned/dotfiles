@@ -78,7 +78,7 @@ $SCRIPTPATH/install.sh
 
 $SCRIPTPATH/install-fish.sh
 
-source $__fish_config_dir/setup.fish
+source $__fish_config_dir/setup.fish || source ~/.config/fish/setup.fish
 
 echo
 echo
