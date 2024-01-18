@@ -26,3 +26,7 @@ then
 else
   echo "Already using Fish!"
 fi
+
+echo
+echo "✅ Fish setup complete"
+echo
