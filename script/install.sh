@@ -24,8 +24,19 @@ then
   echo
   echo "⬇️ Installing Homebrew"
   echo
-
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  
+  if [ "$CODESPACES" = "true" ]
+  then
+    # don't fully clone homebrew on codespaces
+    export HOMEBREW_INSTALL_FROM_API=true
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/vscode/.bashrc
+    (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/vscode/.zshrc
+    (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/vscode/.config/fish/config.fish
+  else
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
 else
   echo "✅ Homebrew already installed"
 fi
