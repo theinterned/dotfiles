@@ -66,14 +66,6 @@ else
   ln -sv "$DOTFILESDIR" "$HOME_DOTFILES_ALIAS"
 fi
 
-
-
-# # Fix up permissions for Codespaces
-# if [ -n "$CODESPACES" ]
-# then
-#   chmod 700 /workspaces
-# fi
-
 $SCRIPTPATH/install.sh
 
 $SCRIPTPATH/install-fish.sh
