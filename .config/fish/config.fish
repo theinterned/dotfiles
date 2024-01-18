@@ -1,5 +1,11 @@
 #!/usr/bin/env fish
 
+if [ -n "$CODESPACES" ]
+  # this fixes an error `bash: warning: setlocale: LC_ALL: cannot change locale (C.UTF-8)` I started getting when
+  # pushing in a codespace \_(ツ)_/¯
+  export LC_ALL="en_US.UTF-8"
+end
+
 set -U EDITOR "code --wait"
 # Run server in background. See https://github.rewatch.com/video/8pex35764vboieau-script-server-daemonized-demo
 set -U FEATURE_DAEMONIZE_SCRIPT_SERVER true
