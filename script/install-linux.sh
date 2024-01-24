@@ -24,6 +24,7 @@ then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/vscode/.bashrc
   (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/vscode/.zshrc
+  touch /home/vscode/.config/fish/conf.d/homebrew.fish
   (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/vscode/.config/fish/conf.d/homebrew.fish
 else
   echo "✅ Homebrew already installed"
