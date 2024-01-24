@@ -21,16 +21,6 @@ end
 #
 # VSCode shell integration
 #
-# Temporary fix for VS Code setup breaking in fish
-if test -z "$(code --version)"
-  # Update this SHA when VS Code updates
-  set CODE_VERSION 252e5463d60e63238250799aef7375787f68b4ee
-  echo "Patching VS CODE PATHS for VS Code $CODE_VERSION"
-  fish_add_path -P /vscode/bin/linux-x64/$CODE_VERSION/bin/
-  fish_add_path -P /vscode/bin/linux-x64/$CODE_VERSION/bin/remote-cli/
-  fish_add_path -P /vscode/bin/linux-x64/$CODE_VERSION/bin/helpers/
-  echo "\n$PATH\n"
-end
 # https://code.visualstudio.com/docs/terminal/shell-integration#_manual-installation
 # https://github.com/microsoft/vscode/issues/139400
 string match -q "$TERM_PROGRAM" "vscode"
