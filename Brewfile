@@ -50,8 +50,6 @@ brew "pinentry-mac"
 brew "rbenv"
 # Install Ruby, JRuby, Rubinius, TruffleRuby, or mruby
 brew "ruby-install"
-# Cross-shell prompt for astronauts
-brew "starship"
 # Version control system designed to be a better CVS
 brew "subversion"
 # Command-line interface for 1Password

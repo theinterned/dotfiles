@@ -26,9 +26,7 @@ end
 string match -q "$TERM_PROGRAM" "vscode"
 and . (code --locate-shell-integration-path fish)
 
-if type -q starship
-  starship init fish | source
-end
+fish_config prompt choose arrow
 
 function __check_nvm --on-variable PWD --description 'attempt to install node version from .nvmrc'
   status --is-command-substitution; and return

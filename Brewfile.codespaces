@@ -1,5 +1,3 @@
-# Cross-shell prompt for astronauts
-brew "starship"
 # Search tool like grep, but optimized for programmers
 brew "ack"
 # Clone of cat(1) with syntax highlighting and Git integration
