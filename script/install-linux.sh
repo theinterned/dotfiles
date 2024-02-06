@@ -22,10 +22,10 @@ then
   export HOMEBREW_INSTALL_FROM_API=true
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/vscode/.bashrc
-  (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/vscode/.zshrc
-  touch /home/vscode/.config/fish/conf.d/homebrew.fish
-  (echo; echo 'eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)') >> /home/vscode/.config/fish/conf.d/homebrew.fish
+  (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> $HOME/.bashrc
+  (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> $HOME/.zshrc
+  touch -p $HOME/.config/fish/conf.d/homebrew.fish
+  (echo; echo 'eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)') >> $HOME/.config/fish/conf.d/homebrew.fish
 else
   echo "✅ Homebrew already installed"
 fi
