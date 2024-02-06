@@ -24,7 +24,7 @@ then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> $HOME/.bashrc
   (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> $HOME/.zshrc
-  touch -p $HOME/.config/fish/conf.d/homebrew.fish
+  touch $HOME/.config/fish/conf.d/homebrew.fish
   (echo; echo 'eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)') >> $HOME/.config/fish/conf.d/homebrew.fish
 else
   echo "✅ Homebrew already installed"
