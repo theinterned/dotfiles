@@ -47,6 +47,7 @@ abbr -a sb script/bootstrap
 abbr -a br bin/rails
 abbr -a brt bin/rails test
 abbr -a brtc bin/rails test_changes
+abbr -a brto bin/rails_oracle -r
 abbr -a bbe bin/bundle exec
 abbr -a bg bin/guard # run tests in watch mode
 
