@@ -37,6 +37,8 @@ echo
 defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "$HOME/.dotfiles/iterm/"
 # Tell iTerm2 to use the custom preferences in the directory
 defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
+# Show cmd+tab app switcher on all monitors
+defaults write com.apple.Dock appswitcher-all-displays -bool true
 
 echo
 echo "✅ MacOS setup complete"
