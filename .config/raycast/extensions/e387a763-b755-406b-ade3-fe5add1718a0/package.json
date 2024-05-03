@@ -5,8 +5,16 @@
   "description": "Run shell commands from Raycast",
   "icon": "bash-icon.png",
   "author": "asubbotin",
+  "contributors": [
+    "emiara"
+  ],
   "categories": ["Developer Tools"],
   "license": "MIT",
+  "keywords": [
+    "command line",
+    "commandline",
+    "terminal"
+  ],
   "commands": [
     {
       "name": "index",
