@@ -51,6 +51,12 @@ abbr -a brtc bin/rails test_changes
 abbr -a brto bin/rails_oracle -r
 abbr -a bbe bin/bundle exec
 abbr -a bg bin/guard # run tests in watch mode
+abbr -a rc bin/rubocop
+abbr -a rcc bin/rubocop --auto-correct
+abbr -a rcd "git diff --diff-filter=d --name-only master... | xargs bin/rubocop --only-recognized-file-types"
+abbr -a rcdc "git diff --diff-filter=d --name-only master... | xargs bin/rubocop --only-recognized-file-types --auto-correct"
+abbr -a rccd "git diff --diff-filter=d --name-only master... | xargs bin/rubocop --only-recognized-file-types --auto-correct"
+
 
 # Stuff
 abbr -a bgsf bin/generate-service-files.rb

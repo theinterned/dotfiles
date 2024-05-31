@@ -43,6 +43,11 @@ alias bnr="bin/npm run"
 alias bns="bin/npm start"
 alias bnt="bin/npm test"
 alias bntw="bin/npm run test:watch"
+alias rc="bin/rubocop"
+alias rcc="bin/rubocop --auto-correct"
+alias rcd="git diff --diff-filter=d --name-only master... | xargs bin/rubocop --only-recognized-file-types"
+alias rcdc="git diff --diff-filter=d --name-only master... | xargs bin/rubocop --only-recognized-file-types --auto-correct"
+alias rccd="rcdc"
 
 # Rails stuff
 alias ss="script/server"
