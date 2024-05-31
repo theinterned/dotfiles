@@ -10,4 +10,5 @@ node_modules
 .config/fish/functions
 .config/gh/hosts.yml
 .config/op/
+.config/raycast/
 .config/configstore/update-notifier-npm.json
