@@ -42,6 +42,8 @@ brew "libffi"
 brew "libyaml"
 # Mac App Store command-line interface
 brew "mas"
+# Open source relational database management system
+brew "mysql"
 # Cryptography and SSL/TLS Toolkit
 brew "openssl@1.1"
 # Pinentry for GPG on Mac
@@ -54,24 +56,25 @@ brew "ruby-install"
 brew "subversion"
 # Command-line interface for 1Password
 cask "1password-cli"
+# PlayStation remote play client
+cask "chiaki"
 # Open links in any browser
 cask "choosy"
 # App to build and share containerised applications and microservices
 cask "docker"
 # Client for the Dropbox cloud storage service
 cask "dropbox"
+# Control your Elgato key lights
+cask "elgato-control-center"
 # Web browser
 cask "firefox"
-# Developer targeted fonts with a high number of glyphs
 cask "font-blex-mono-nerd-font"
 cask "font-ia-writer-duo"
 cask "font-ia-writer-mono"
 cask "font-ia-writer-quattro"
-# Corporate typeface for IBM
 cask "font-ibm-plex-mono"
 cask "font-ibm-plex-sans"
 cask "font-ibm-plex-serif"
-# Developer targeted fonts with a high number of glyphs
 cask "font-im-writing-nerd-font"
 # Desktop client for GitHub repositories
 cask "github"
@@ -83,7 +86,7 @@ cask "iterm2"
 cask "latest"
 # Provides updates to various Microsoft products
 cask "microsoft-auto-update"
-# Web browser
+# Multi-platform web browser
 cask "microsoft-edge"
 # Tool to control external monitor brightness & volume
 cask "monitorcontrol"
@@ -150,7 +153,6 @@ vscode "donjayamanne.githistory"
 vscode "eamodio.gitlens"
 vscode "ecmel.vscode-html-css"
 vscode "editorconfig.editorconfig"
-vscode "equinusocio.vsc-material-theme-icons"
 vscode "ericadamski.carbon-now-sh"
 vscode "esbenp.prettier-vscode"
 vscode "ethan-reesor.vscode-byebug"
@@ -219,25 +221,26 @@ vscode "prisma.prisma"
 vscode "pustelto.bracketeer"
 vscode "qinjia.seti-icons"
 vscode "rebornix.project-snippets"
-vscode "rebornix.ruby"
 vscode "redhat.vscode-commons"
 vscode "redhat.vscode-yaml"
 vscode "ritwickdey.liveserver"
 vscode "rubymaniac.vscode-direnv"
 vscode "sdras.night-owl"
+vscode "shopify.ruby-lsp"
 vscode "skyapps.fish-vscode"
 vscode "sorbet.sorbet-vscode-extension"
 vscode "streetsidesoftware.code-spell-checker"
 vscode "stylelint.vscode-stylelint"
 vscode "swashata.beautiful-ui"
 vscode "tamasfe.even-better-toml"
+vscode "timonwong.shellcheck"
 vscode "unclebeast.har-viewer"
 vscode "unifiedjs.vscode-mdx"
+vscode "vitest.explorer"
 vscode "vscode-icons-team.vscode-icons"
 vscode "vsls-contrib.gistfs"
 vscode "wallabyjs.quokka-vscode"
 vscode "will-wow.vscode-alternate-file"
-vscode "wingrunr21.vscode-ruby"
 vscode "wmaurer.change-case"
 vscode "yoavbls.pretty-ts-errors"
 vscode "yzhang.markdown-all-in-one"
