@@ -39,6 +39,8 @@ defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "$HOME/.dot
 defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
 # Show cmd+tab app switcher on all monitors
 defaults write com.apple.Dock appswitcher-all-displays -bool true
+# restart the Dock to apply changes
+killall Dock
 
 echo
 echo "✅ MacOS setup complete"
