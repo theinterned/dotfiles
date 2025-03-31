@@ -50,8 +50,8 @@ alias rcdc="git diff --diff-filter=d --name-only master... | xargs bin/rubocop -
 alias rccd="rcdc"
 
 # Rails stuff
-alias ss="VITE=1 script/server"
-alias ssv="script/server"
+alias ss="SKIP_LOOKBOOK=1 VITE=1 script/server"
+alias ssv="SKIP_LOOKBOOK=1 script/server"
 alias ssmd="gh medic && script/server"
 alias ghm="gh medic"
 alias ssd="script/server --debug"

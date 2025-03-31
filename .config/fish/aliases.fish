@@ -37,8 +37,8 @@ abbr -a bnt bin/npm test
 abbr -a bntw bin/npm run test:watch
 
 # Rails stuff
-abbr -a ss VITE=1 script/server
-abbr -a ssv script/server
+abbr -a ss SKIP_LOOKBOOK=1 VITE=1 script/server
+abbr -a ssv SKIP_LOOKBOOK=1 script/server
 abbr -a ssmd "gh medic && script/server"
 abbr -a ghm "gh medic"
 abbr -a ssd script/server --debug
