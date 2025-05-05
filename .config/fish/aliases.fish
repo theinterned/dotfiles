@@ -28,6 +28,12 @@ abbr -a ns npm start
 abbr -a nt npm test
 abbr -a ntw npm test:watch
 
+# nx stuff
+abbr -a @gui/ @github-ui/
+abbr -a nxr nx run @github-ui/
+abbr -a nxrm nx run-many -p @github-ui/
+abbr -a nxa nx affected -t 
+
 # Rails npm stuff
 abbr -a bn bin/npm
 abbr -a bni bin/npm install

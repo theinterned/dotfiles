@@ -26,6 +26,11 @@ alias ntw="echo 'npm test:watch' && npm test:watch"
 alias nto="echo 'npm test --notify --maxWorkers=65%' && npm test --notify --maxWorkers=65%"
 alias nta="echo 'nt --watchAll=false' && nt --watchAll=false"
 
+# nx stuff
+alias nxr="nx run @github-ui/"
+alias nxrm="nx run-many -p @github-ui/"
+alias nxa="nx affected -t "
+
 #  yarn
 alias y=yarn
 alias yw="yarn workspace"
