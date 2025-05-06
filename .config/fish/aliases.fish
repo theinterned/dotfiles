@@ -1,8 +1,8 @@
 #!/usr/bin/env fish
 
 abbr -a edit code
-abbr -a c edit
-abbr -a e edit
+abbr -a c code
+abbr -a e code
 
 # places
 abbr -a ~ 'cd ~'
