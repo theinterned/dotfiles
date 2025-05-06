@@ -1,5 +1,9 @@
 #!/usr/bin/env fish
 
+abbr -a edit code
+abbr -a c edit
+abbr -a e edit
+
 # places
 abbr -a ~ 'cd ~'
 abbr -a - 'cd -'
@@ -64,10 +68,6 @@ abbr -a rcd "git diff --diff-filter=d --name-only master... | xargs bin/rubocop 
 abbr -a rcdc "git diff --diff-filter=d --name-only master... | xargs bin/rubocop --only-recognized-file-types --auto-correct"
 abbr -a rccd "git diff --diff-filter=d --name-only master... | xargs bin/rubocop --only-recognized-file-types --auto-correct"
 
-
-# Stuff
-abbr -a bgsf bin/generate-service-files.rb
-
 # overmind
 abbr -a o overmind
 abbr -a oc overmind connect
@@ -85,16 +85,12 @@ abbr -a gco. git checkout .
 abbr -a gcob git checkout -b ns/
 abbr -a gdst git diff --staged
 
-abbr -a cww coworking-with 
-abbr -a cwws coworking-with --stop
-
-# Other
-abbr -a c code
-abbr -a edit code
-abbr -a e edit
-
+# Stuff
+abbr -a bgsf bin/generate-service-files.rb
 abbr -a ffon bin/toggle-feature-flag enable
 abbr -a ffoff bin/toggle-feature-flag disable
+abbr -a cww coworking-with 
+abbr -a cwws coworking-with --stop
 
 # fix a garbled terminal
 # https://www.oreilly.com/library/view/bash-cookbook/0596526784/ch19s09.html

@@ -1,3 +1,9 @@
+#!/bin/zsh
+
+alias c=code
+alias edit=code
+alias e=edit
+
 # places
 alias ~='cd ~'
 alias docs='cd ~/Documents'
@@ -71,9 +77,6 @@ alias brto="bin/rails test_oracle -r"
 alias bbe="bin/bundle exec"
 alias bg="bin/guard" # run tests in watch mode
 
-# Stuff
-alias bgsf="bin/generate-service-files.rb"
-
 # overmind
 alias o="overmind"
 alias oc="overmind connect"
@@ -125,13 +128,12 @@ hack() {
   git checkout -b $1 && git push --set-upstream origin $1
 }
 
-# Other
-alias c=code
-alias edit=code
-alias e=edit
-
+# Stuff
+alias bgsf="bin/generate-service-files.rb"
 alias ffon="bin/toggle-feature-flag enable"
 alias ffoff="bin/toggle-feature-flag disable"
+alias cww="coworking-with "
+alias cwws="coworking-with --stop"
 
 # fix a garbled terminal
 # https://www.oreilly.com/library/view/bash-cookbook/0596526784/ch19s09.html
