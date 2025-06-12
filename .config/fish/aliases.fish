@@ -34,8 +34,10 @@ abbr -a ntw npm test:watch
 
 # nx stuff
 abbr -a @gui/ @github-ui/
-abbr -a nxr nx run @github-ui/
-abbr -a nxrm nx run-many -p @github-ui/
+abbr -a nxr nx run
+abbr -a nxrg nx run @github-ui/
+abbr -a nxrm nx run-many -p
+abbr -a nxrmg nx run-many -p @github-ui/
 abbr -a nxa nx affected -t 
 
 # Rails npm stuff
