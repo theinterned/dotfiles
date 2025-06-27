@@ -64,7 +64,7 @@ alias rccd="rcdc"
 
 # Rails stuff
 alias ss="SKIP_LOOKBOOK=1 VITE=1 script/server"
-alias ssv="SKIP_LOOKBOOK=1 script/server"
+alias ssw="SKIP_LOOKBOOK=1 script/server"
 alias ssmd="gh medic && script/server"
 alias ghm="gh medic"
 alias ssd="script/server --debug"
