@@ -37,3 +37,7 @@ __check_nvm
 if type -q rbenv
   status --is-interactive; and rbenv init - fish | source
 end
+
+# Speed precommit up since I'm really working in rails
+set -U SORBET_SKIP 1
+set -U RUBOCOP_NEW_ONLY 1
