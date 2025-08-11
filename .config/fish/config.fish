@@ -39,5 +39,5 @@ if type -q rbenv
 end
 
 # Speed precommit up since I'm really working in rails
-set -U SORBET_SKIP 1
-set -U RUBOCOP_NEW_ONLY 1
+export SORBET_SKIP=1
+export RUBOCOP_NEW_ONLY=1
