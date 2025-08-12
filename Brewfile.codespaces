@@ -16,3 +16,5 @@ brew "hey"
 brew "jq"
 # Ruby version manager
 brew "rbenv"
+# CLI tool to pay respects
+brew "timescam/tap/pay-respects"
