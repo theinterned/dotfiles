@@ -54,6 +54,8 @@ brew "rbenv"
 brew "ruby-install"
 # Version control system designed to be a better CVS
 brew "subversion"
+# CLI tool to pay respects
+brew "timescam/tap/pay-respects"
 # Command-line interface for 1Password
 cask "1password-cli"
 # PlayStation remote play client

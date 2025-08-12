@@ -7,6 +7,7 @@ if [ -n "$CODESPACES" ]
 end
 
 set -U EDITOR "code --wait"
+
 # Run server in background. See https://github.rewatch.com/video/8pex35764vboieau-script-server-daemonized-demo
 set -U FEATURE_DAEMONIZE_SCRIPT_SERVER true
 
@@ -41,3 +42,6 @@ end
 # Speed precommit up since I'm really working in rails
 export SORBET_SKIP=1
 export RUBOCOP_NEW_ONLY=1
+
+# Typo fixer aliased to "f" https://github.com/iffse/pay-respects
+pay-respects fish | source
