@@ -2,6 +2,7 @@ tap "github/bootstrap"
 tap "homebrew/bundle"
 tap "homebrew/cask-fonts"
 tap "homebrew/services"
+tap "timescam/tap"
 # Search tool like grep, but optimized for programmers
 brew "ack"
 # CLI tool for working with Architecture Decision Records
