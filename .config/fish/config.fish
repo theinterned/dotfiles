@@ -44,4 +44,6 @@ export SORBET_SKIP=1
 export RUBOCOP_NEW_ONLY=1
 
 # Typo fixer aliased to "f" https://github.com/iffse/pay-respects
-pay-respects fish | source
+if type -q pay-respects
+  pay-respects fish | source
+end
