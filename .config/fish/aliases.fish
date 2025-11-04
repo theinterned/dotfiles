@@ -15,6 +15,12 @@ abbr -a src 'cd ~/Documents/src'
 # shortcut to this project
 abbr -a dotfiles cd ~/.dotfiles
 abbr -a config ~/.dotfiles/script/setup.fish
+abbr -a csdotfiles cd /home/vscode/.dotfiles
+
+# work stuff
+abbr -a cdgui cd /workspaces/github/github-ui
+abbr -a codegui code /workspaces/github/github-ui
+
 
 # alloy
 abbr -a alloy cd /workspaces/github/vendor/alloy

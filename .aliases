@@ -1,4 +1,5 @@
 #!/bin/zsh
+# shellcheck shell=bash
 
 alias c=code
 alias edit=code
@@ -15,6 +16,11 @@ alias alloy="cd vendor/alloy"
 # shortcut to this project
 alias dotfiles="cd ~/.dotfiles"
 alias config="~/.dotfiles/script/setup.fish"
+alias csdotfiles="cd /home/vscode/.dotfiles"
+
+# work stuff
+alias cdgui="cd /workspaces/github/github-ui"
+alias codegui="code /workspaces/github/github-ui"
 
 # npm
 alias n=npm
