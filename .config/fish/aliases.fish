@@ -18,8 +18,8 @@ abbr -a config ~/.dotfiles/script/setup.fish
 abbr -a csdotfiles cd /home/vscode/.dotfiles
 
 # work stuff
-abbr -a cdgui cd /workspaces/github-ui
-abbr -a codegui code /workspaces/github-ui
+abbr -a cdui cd /workspaces/github-ui
+abbr -a cui code /workspaces/github-ui
 
 
 # alloy

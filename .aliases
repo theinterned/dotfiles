@@ -19,8 +19,8 @@ alias config="~/.dotfiles/script/setup.fish"
 alias csdotfiles="cd /home/vscode/.dotfiles"
 
 # work stuff
-alias cdgui="cd /workspaces/github-ui"
-alias codegui="code /workspaces/github-ui"
+alias cdui="cd /workspaces/github-ui"
+alias cui="code /workspaces/github-ui"
 
 # npm
 alias n=npm
