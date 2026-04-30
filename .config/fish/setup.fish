@@ -16,13 +16,10 @@ if not functions -q fisher
   fisher update
 end
 
-if not nvm list lts > /dev/null
+if type -q mise
   echo
-  echo "📜 NVM setup"
-
-  nvm install lts
-  set --universal nvm_default_version lts
-
-  nvm list
+  echo "🔧 Installing default runtimes via mise"
   echo
+
+  mise install
 end
