@@ -35,11 +35,11 @@ for DOTFILE in $DOTFILES; do
   fi
 
   # Don't try to install documentation/script/lock files
-  echo $DOTFILE | grep -Eq '(\./\$|^\.git/\$|^(script|iterm|raycast)/\$|setup|\.txt\$|\.md\$)' && continue
+  echo $DOTFILE | grep -Eq '(\.\/$|^\.git\/$|^(script|iterm|raycast)\/$|setup|\.txt$|\.md$)' && continue
 
   # .copilot/ contains machine-specific IDE data alongside tracked config;
   # handle it separately in install-mac.sh
-  echo $DOTFILE | grep -Eq '^\.copilot/\$' && continue
+  echo $DOTFILE | grep -Eq '^\.copilot\/$' && continue
 
   if [ -L "$HOMEFILE" ] && ! [ -d $DOTFILE ]
   then
