@@ -101,7 +101,7 @@ alias ncs='gh cs code -c "$(gh cs create -r github/github --default-permissions)
 # Git aliases
 alias g=git
 alias gst="echo 'git status' && git status"
-alias gd="echo 'git diff' && git dif"
+alias gd="echo 'git diff' && git diff"
 alias ga="git add"
 alias gaa="git add -A"
 alias gcm="git commit -m"
