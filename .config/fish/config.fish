@@ -29,14 +29,10 @@ and . (code --locate-shell-integration-path fish)
 
 fish_config prompt choose arrow
 
-function __check_nvm --on-variable PWD --description 'attempt to install node version from .nvmrc'
-  status --is-command-substitution; and return
-  nvm install 2>/dev/null
-end
-__check_nvm
-
-if type -q rbenv
-  status --is-interactive; and rbenv init - fish | source
+# mise: polyglot runtime version manager (node, ruby, etc.)
+# https://mise.jdx.dev/
+if type -q mise
+  mise activate fish | source
 end
 
 # Speed precommit up since I'm really working in rails

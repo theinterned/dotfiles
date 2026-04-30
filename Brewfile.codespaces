@@ -5,17 +5,13 @@ brew "ack"
 brew "bat"
 # User-friendly command-line shell for UNIX-like operating systems
 brew "fish"
-# Thin wrapper around chruby to make it work with the Fish shell
-brew "chruby-fish"
 # Load/unload environment variables based on $PWD
 brew "direnv"
-# Fast and simple Node.js version manager
-brew "fnm"
 # HTTP load generator, ApacheBench (ab) replacement
 brew "hey"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
-# Ruby version manager
-brew "rbenv"
+# Polyglot runtime version manager (Node, Ruby, Python, Go, etc.)
+brew "mise"
 # CLI tool to pay respects
 brew "timescam/tap/pay-respects"

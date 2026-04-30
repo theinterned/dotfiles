@@ -17,12 +17,10 @@ brew "bat"
 brew "bison"
 # User-friendly command-line shell for UNIX-like operating systems
 brew "fish"
-# Thin wrapper around chruby to make it work with the Fish shell
-brew "chruby-fish"
 # Load/unload environment variables based on $PWD
 brew "direnv"
-# Fast and simple Node.js version manager
-brew "fnm"
+# Polyglot runtime version manager (Node, Ruby, Python, Go, etc.)
+brew "mise"
 # GNU database manager
 brew "gdbm"
 # GitHub command-line tool
@@ -49,10 +47,6 @@ brew "mysql"
 brew "openssl@3"
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
-# Ruby version manager
-brew "rbenv"
-# Install Ruby, JRuby, Rubinius, TruffleRuby, or mruby
-brew "ruby-install"
 # Version control system designed to be a better CVS
 brew "subversion"
 # Python package manager and tool runner (provides uvx, required for fabric-rti-mcp)

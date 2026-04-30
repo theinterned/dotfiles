@@ -15,14 +15,3 @@ if not functions -q fisher
 
   fisher update
 end
-
-if not nvm list lts > /dev/null
-  echo
-  echo "📜 NVM setup"
-
-  nvm install lts
-  set --universal nvm_default_version lts
-
-  nvm list
-  echo
-end
