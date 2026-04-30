@@ -31,19 +31,15 @@ for DOTFILE in $DOTFILES; do
   # Don't mess with Codespaces' default GPG/SSH setup.
   if [ -n "$CODESPACES" ]
   then
-    echo $DOTFILE | egrep -q '^(gnupg|ssh)/' && continue
+    echo $DOTFILE | grep -Eq '^(gnupg|ssh)/' && continue
   fi
 
   # Don't try to install documentation/script/lock files
-  echo $DOTFILE | egrep -q '(\.\/\$|^\.git\/\$|^(script|iterm|raycast)\/\$|setup|\.txt\$|\.md\$)' && continue
+  echo $DOTFILE | grep -Eq '(\./\$|^\.git/\$|^(script|iterm|raycast)/\$|setup|\.txt\$|\.md\$)' && continue
 
   # .copilot/ contains machine-specific IDE data alongside tracked config;
   # handle it separately in install-mac.sh
-  echo $DOTFILE | egrep -q '^\.copilot\/$' && continue
-  
-  echo "DOTFILE $DOTFILE"  
-  echo "DIRFILE $DIRFILE"
-  echo "HOMEFILE $HOMEFILE"
+  echo $DOTFILE | grep -Eq '^\.copilot/\$' && continue
 
   if [ -L "$HOMEFILE" ] && ! [ -d $DOTFILE ]
   then
