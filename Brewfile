@@ -46,7 +46,7 @@ brew "mas"
 # Open source relational database management system
 brew "mysql"
 # Cryptography and SSL/TLS Toolkit
-brew "openssl@1.1"
+brew "openssl@3"
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
 # Ruby version manager
