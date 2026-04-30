@@ -12,3 +12,4 @@ node_modules
 .config/op/
 .config/raycast/
 .config/configstore/update-notifier-npm.json
+.copilot/ide/

@@ -55,10 +55,14 @@ brew "rbenv"
 brew "ruby-install"
 # Version control system designed to be a better CVS
 brew "subversion"
+# Python package manager and tool runner (provides uvx, required for fabric-rti-mcp)
+brew "uv"
 # CLI tool to pay respects
 brew "timescam/tap/pay-respects"
 # Command-line interface for 1Password
 cask "1password-cli"
+# GitHub Copilot for the command line
+cask "copilot-cli"
 # PlayStation remote play client
 cask "chiaki"
 # Open links in any browser
