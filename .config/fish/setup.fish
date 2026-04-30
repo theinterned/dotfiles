@@ -15,11 +15,3 @@ if not functions -q fisher
 
   fisher update
 end
-
-if type -q mise
-  echo
-  echo "🔧 Installing default runtimes via mise"
-  echo
-
-  mise install
-end
