@@ -25,3 +25,8 @@ fi
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 fish $SCRIPTPATH/setup.fish
+
+echo
+echo "🎣 Installing fisher plugins"
+echo
+fish -c "fisher update"
