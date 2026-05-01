@@ -31,8 +31,6 @@ brew "go"
 brew "hey"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
-# Mini DNS server designed solely to route queries to localhost
-brew "launchdns"
 # Portable Foreign Function Interface library
 brew "libffi"
 # YAML Parser
