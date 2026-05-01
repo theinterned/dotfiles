@@ -56,8 +56,6 @@ cask "chiaki"
 cask "choosy"
 # App to build and share containerised applications and microservices
 cask "docker"
-# Client for the Dropbox cloud storage service
-cask "dropbox"
 # Control your Elgato key lights
 cask "elgato-control-center"
 # Web browser
@@ -84,12 +82,8 @@ cask "microsoft-auto-update"
 cask "microsoft-edge"
 # Tool to control external monitor brightness & volume
 cask "monitorcontrol"
-# Automatically hides or quits apps after periods of inactivity
-cask "quitter"
 # Control your tools with a few keystrokes
 cask "raycast"
-# Emoji picker optimised for blind people
-cask "rocket"
 # Music streaming service
 cask "spotify"
 cask "spotify-now-playing"
@@ -107,13 +101,10 @@ mas "Deliveries", id: 290986013
 mas "Flow", id: 1423210932
 mas "GarageBand", id: 682658836
 mas "GIPHY CAPTURE", id: 668208984
-mas "Hand Mirror", id: 1502839586
 mas "iMovie", id: 408981434
 mas "Instapaper Save", id: 1481302432
-mas "Irvue", id: 1039633667
 mas "Keynote", id: 409183694
 mas "LG Screen Manager", id: 1142051783
-mas "Magnet", id: 441258766
 mas "Noir", id: 1592917505
 mas "Numbers", id: 409203825
 mas "Okta Extension App", id: 1439967473
