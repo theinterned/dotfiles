@@ -35,7 +35,7 @@ for DOTFILE in $DOTFILES; do
   fi
 
   # Don't try to install documentation/script/lock files
-  echo $DOTFILE | grep -Eq '(\.\/$|^\.git\/$|^(script|iterm|raycast)\/$|setup|\.txt$|\.md$)' && continue
+  echo $DOTFILE | grep -Eq '(\.\/$|^\.git\/$|^\.config\/$|^(script|iterm|raycast)\/$|setup|\.txt$|\.md$)' && continue
 
   # .copilot/ contains machine-specific IDE data alongside tracked config;
   # handle it separately in install-mac.sh
@@ -50,6 +50,31 @@ for DOTFILE in $DOTFILES; do
   fi
 
   echo 
+done
+
+# Link .config files individually so untracked dirs (gh/, op/, raycast/, etc.) are preserved
+echo
+echo "🔗 Linking .config files"
+echo
+
+# We symlink individual files rather than the whole .config/ dir so that
+# untracked subdirs (gh/, op/, raycast/, etc.) are left untouched.
+mkdir -p "$HOME/.config"
+find "$DOTFILESDIR/.config" -type f | while read CONFIGFILE; do
+  # Strip the dotfiles repo prefix to get the relative path, e.g. .config/fish/config.fish
+  RELPATH="${CONFIGFILE#$DOTFILESDIR/}"
+  HOMEFILE="$HOME/$RELPATH"
+  # Ensure the parent dir exists (e.g. ~/.config/fish/, ~/.config/mise/)
+  mkdir -p "$(dirname "$HOMEFILE")"
+  if [ -L "$HOMEFILE" ]; then
+    # Already a symlink — update it in place
+    ln -sfv "$CONFIGFILE" "$HOMEFILE"
+  else
+    # Real file or missing — remove and replace with symlink
+    rm -v "$HOMEFILE" 2>/dev/null
+    ln -sv "$CONFIGFILE" "$HOMEFILE"
+  fi
+  echo
 done
 
 HOME_DOTFILES_ALIAS="$HOME/.dotfiles"
