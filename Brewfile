@@ -13,8 +13,6 @@ brew "asciinema"
 brew "automake"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
-# Parser generator
-brew "bison"
 # User-friendly command-line shell for UNIX-like operating systems
 brew "fish"
 # Load/unload environment variables based on $PWD

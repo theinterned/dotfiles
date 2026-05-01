@@ -22,5 +22,3 @@ elif [ $LINUX ]
 then
   $SCRIPTPATH/install-linux.sh
 fi
-
-npm i -g @koddsson/coworking-with
