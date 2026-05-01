@@ -24,6 +24,7 @@ then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> $HOME/.bashrc
   (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> $HOME/.zshrc
+  mkdir -p $HOME/.config/fish/conf.d
   touch $HOME/.config/fish/conf.d/homebrew.fish
   (echo; echo 'eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)') >> $HOME/.config/fish/conf.d/homebrew.fish
 else
@@ -42,4 +43,15 @@ echo
 
 echo
 echo "✅ Linux setup complete"
+echo
+
+echo
+echo "🔗 Linking Copilot CLI MCP config"
+echo
+
+mkdir -p "$HOME/.copilot"
+ln -sfv "$HOME/.dotfiles/.copilot/mcp-config.json" "$HOME/.copilot/mcp-config.json"
+
+echo
+echo "✅ Copilot CLI MCP config linked"
 echo
