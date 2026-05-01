@@ -26,7 +26,11 @@
   editor = code --wait
 
 [credential]
-  helper = osxkeychain
+  helper =
+
+# Machine-local overrides (not tracked in dotfiles)
+[include]
+  path = ~/.gitconfig-local
 
 [diff]
   colorMoved = default

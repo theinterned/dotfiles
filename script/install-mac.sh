@@ -55,3 +55,12 @@ ln -sfv "$HOME/.dotfiles/.copilot/mcp-config.json" "$HOME/.copilot/mcp-config.js
 
 echo
 echo "✅ Copilot CLI MCP config linked"
+
+echo
+echo "🔑 Configuring macOS git credential helper"
+echo
+
+git config -f "$HOME/.gitconfig-local" credential.helper osxkeychain
+
+echo
+echo "✅ Git credential helper configured"
