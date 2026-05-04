@@ -1,6 +1,3 @@
-tap "timescam/tap"
-# Search tool like grep, but optimized for programmers
-brew "ack"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # User-friendly command-line shell for UNIX-like operating systems
@@ -13,5 +10,3 @@ brew "hey"
 brew "jq"
 # Polyglot runtime version manager (Node, Ruby, Python, Go, etc.)
 brew "mise"
-# CLI tool to pay respects
-brew "timescam/tap/pay-respects"
