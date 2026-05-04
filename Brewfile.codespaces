@@ -2,8 +2,6 @@
 brew "bat"
 # User-friendly command-line shell for UNIX-like operating systems
 brew "fish"
-# Load/unload environment variables based on $PWD
-brew "direnv"
 # HTTP load generator, ApacheBench (ab) replacement
 brew "hey"
 # Lightweight and flexible command-line JSON processor
