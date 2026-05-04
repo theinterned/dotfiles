@@ -1,13 +1,8 @@
 tap "github/bootstrap"
-tap "timescam/tap"
-# Search tool like grep, but optimized for programmers
-brew "ack"
 # CLI tool for working with Architecture Decision Records
 brew "adr-tools"
 # Record and share terminal sessions
 brew "asciinema"
-# Tool for generating GNU Standards-compliant Makefiles
-brew "automake"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # User-friendly command-line shell for UNIX-like operating systems
@@ -16,36 +11,24 @@ brew "fish"
 brew "direnv"
 # Polyglot runtime version manager (Node, Ruby, Python, Go, etc.)
 brew "mise"
-# GNU database manager
-brew "gdbm"
 # GitHub command-line tool
 brew "gh"
 # Syntax-highlighting pager for git and diff output
 brew "git-delta"
-# Open source programming language to build simple/reliable/efficient software
-brew "go"
 # HTTP load generator, ApacheBench (ab) replacement
 brew "hey"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
-# Portable Foreign Function Interface library
-brew "libffi"
-# YAML Parser
-brew "libyaml"
 # Mac App Store command-line interface
 brew "mas"
 # Open source relational database management system
 brew "mysql"
-# Cryptography and SSL/TLS Toolkit
-brew "openssl@3"
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
-# Version control system designed to be a better CVS
-brew "subversion"
 # Python package manager and tool runner (provides uvx, required for fabric-rti-mcp)
 brew "uv"
-# CLI tool to pay respects
-brew "timescam/tap/pay-respects"
+# Fast search tool that respects .gitignore
+brew "ripgrep"
 # Command-line interface for 1Password
 cask "1password-cli"
 # GitHub Copilot for the command line
