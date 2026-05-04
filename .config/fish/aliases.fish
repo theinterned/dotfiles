@@ -95,7 +95,9 @@ abbr -a gco- git checkout -
 abbr -a gco. git checkout .
 abbr -a gcob git checkout -b ns/
 abbr -a gdst git diff --staged
-abbr -a gum git pull --rebase origin (__git.default_branch)
+function gum --description "git pull --rebase from default branch"
+    git pull --rebase origin (__git.default_branch)
+end
 
 # Stuff
 abbr -a bgsf bin/generate-service-files.rb

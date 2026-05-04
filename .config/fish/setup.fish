@@ -10,3 +10,10 @@ if not functions -q fisher
 
   curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
 end
+
+if functions -q fisher
+  echo
+  echo "🔌 Installing fish plugins"
+  echo
+  fisher install < $__fish_config_dir/fish_plugins
+end

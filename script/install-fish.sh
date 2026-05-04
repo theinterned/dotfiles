@@ -14,7 +14,13 @@ echo
 # Setup Fish
 # Use the Homebrew-managed fish path directly — `which fish` may not resolve
 # correctly in non-interactive bash sessions where Homebrew isn't in PATH yet.
-FISH_PATH="$(brew --prefix)/bin/fish"
+# On Linux, brew may not be in PATH (eval'd only in the install-linux.sh subprocess),
+# so fall back to the well-known linuxbrew path.
+if command -v brew &>/dev/null; then
+  FISH_PATH="$(brew --prefix)/bin/fish"
+else
+  FISH_PATH="/home/linuxbrew/.linuxbrew/bin/fish"
+fi
 
 if [ $(grep -c "$FISH_PATH" /etc/shells) = "0" ]
 then
