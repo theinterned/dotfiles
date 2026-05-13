@@ -101,6 +101,7 @@ end
 
 # Stuff
 abbr -a bgsf bin/generate-service-files.rb
+abbr -a ff toggle-feature-flag
 abbr -a ffon bin/toggle-feature-flag enable
 abbr -a ffoff bin/toggle-feature-flag disable
 abbr -a cww coworking-with 
