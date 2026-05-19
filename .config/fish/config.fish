@@ -35,6 +35,11 @@ if type -q mise
   mise activate fish | source
 end
 
+# Go: add GOPATH/bin to PATH
+if type -q go
+  fish_add_path (go env GOPATH)/bin
+end
+
 # Speed precommit up since I'm really working in rails
 export SORBET_SKIP=1
 export RUBOCOP_NEW_ONLY=1
