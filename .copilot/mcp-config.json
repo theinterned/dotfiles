@@ -1,27 +1,54 @@
 {
   "mcpServers": {
     "sentry": {
+      "tools": [
+        "*"
+      ],
       "type": "http",
       "url": "https://mcp.sentry.dev/mcp",
       "headers": {},
-      "tools": ["*"]
+      "source": "user",
+      "sourcePath": "/Users/theinterned/.copilot/mcp-config.json"
     },
     "fabric-rti-mcp": {
+      "tools": [
+        "*"
+      ],
       "command": "uvx",
       "args": [
-          "microsoft-fabric-rti-mcp"
+        "microsoft-fabric-rti-mcp"
       ],
       "env": {
         "KUSTO_SERVICE_URI": "https://gh-analytics.eastus.kusto.windows.net",
         "KUSTO_SERVICE_DEFAULT_DB": "hydro",
         "FABRIC_API_BASE_URL": "https://api.fabric.microsoft.com/v1"
-      }
+      },
+      "source": "user",
+      "sourcePath": "/Users/theinterned/.copilot/mcp-config.json"
     },
     "datadog": {
+      "tools": [
+        "*"
+      ],
       "type": "http",
       "url": "https://mcp.datadoghq.com/api/unstable/mcp-server/mcp",
       "headers": {},
-      "tools": ["*"]
+      "source": "user",
+      "sourcePath": "/Users/theinterned/.copilot/mcp-config.json"
+    },
+    "1up": {
+      "type": "stdio",
+      "command": "1up",
+      "tools": [
+        "*"
+      ],
+      "args": []
+    },
+    "slack": {
+      "type": "http",
+      "url": "https://mcp.slack.com/mcp",
+      "oauthClientId": "12348411142.11062036567072",
+      "oauthPublicClient": true
     }
   }
 }
