@@ -33,7 +33,6 @@
       "type": "http",
       "url": "https://mcp.datadoghq.com/api/unstable/mcp-server/mcp",
       "headers": {},
-      "source": "user",
       "sourcePath": "/Users/theinterned/.copilot/mcp-config.json"
     },
     "1up": {
