@@ -1,0 +1,7 @@
+/* Safari-specific styles https://blog.jim-nielsen.com/2021/custom-style-sheet-in-safari/ */
+
+/* GitHub: Remove the underline from rendered markdown diffs making them easier to read */
+ins {
+  text-decoration: none;
+  text-decoration-line: none;
+}
