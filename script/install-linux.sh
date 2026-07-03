@@ -55,3 +55,17 @@ ln -sfv "$HOME/.dotfiles/.copilot/mcp-config.json" "$HOME/.copilot/mcp-config.js
 echo
 echo "✅ Copilot CLI MCP config linked"
 echo
+
+echo
+echo "🔑 Configuring git credential helpers"
+echo
+
+# Use the GitHub CLI as the credential helper for github.com so auth stays
+# in sync with `gh` and works the same way across machines (incl. Codespaces).
+# The empty value first clears any inherited helpers for this host.
+git config -f "$HOME/.gitconfig-local" credential.https://github.com.helper ""
+git config -f "$HOME/.gitconfig-local" --add credential.https://github.com.helper "!gh auth git-credential"
+
+echo
+echo "✅ Git credential helpers configured"
+echo

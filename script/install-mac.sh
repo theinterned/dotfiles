@@ -57,10 +57,17 @@ echo
 echo "✅ Copilot CLI MCP config linked"
 
 echo
-echo "🔑 Configuring macOS git credential helper"
+echo "🔑 Configuring git credential helpers"
 echo
 
+# Keep osxkeychain as the general (host-agnostic) fallback helper
 git config -f "$HOME/.gitconfig-local" credential.helper osxkeychain
 
+# Use the GitHub CLI as the credential helper for github.com so auth stays
+# in sync with `gh` and works the same way across machines.
+# The empty value first clears any inherited helpers for this host.
+git config -f "$HOME/.gitconfig-local" credential.https://github.com.helper ""
+git config -f "$HOME/.gitconfig-local" --add credential.https://github.com.helper "!gh auth git-credential"
+
 echo
-echo "✅ Git credential helper configured"
+echo "✅ Git credential helpers configured"
