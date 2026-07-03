@@ -10,7 +10,8 @@ alias ~='cd ~'
 alias docs='cd ~/Documents'
 alias down='cd ~/Downloads'
 alias desk='cd ~/Desktop'
-alias src='cd ~/Documents/src'
+alias src='cd ~/Developer'
+alias dev='cd ~/Developer'
 alias alloy="cd vendor/alloy"
 
 # shortcut to this project

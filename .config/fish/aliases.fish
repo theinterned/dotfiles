@@ -10,7 +10,8 @@ abbr -a - 'cd -'
 abbr -a docs 'cd ~/Documents'
 abbr -a down 'cd ~/Downloads'
 abbr -a desk 'cd ~/Desktop'
-abbr -a src 'cd ~/Documents/src'
+abbr -a src 'cd ~/Developer'
+abbr -a dev 'cd ~/Developer'
 
 # shortcut to this project
 abbr -a dotfiles cd ~/.dotfiles
