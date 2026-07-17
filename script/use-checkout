@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
 # use-checkout — flip the whole live dotfiles environment between checkouts.
 #
