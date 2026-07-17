@@ -33,7 +33,7 @@ main_worktree() {
 common_dir() {
   ( cd "$1" 2>/dev/null || exit 0
     d="$(git rev-parse --git-common-dir 2>/dev/null)" || exit 0
-    cd "$d" 2>/dev/null && pwd -P )
+    cd "$d" 2>/dev/null && pwd -P || exit 0 )
 }
 
 worktree_root() {
