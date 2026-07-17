@@ -36,6 +36,12 @@ common_dir() {
     cd "$d" 2>/dev/null && pwd -P )
 }
 
+worktree_root() {
+  ( cd "$1" 2>/dev/null || exit 0
+    d="$(git rev-parse --show-toplevel 2>/dev/null)" || exit 0
+    cd "$d" 2>/dev/null && pwd -P )
+}
+
 current_target() { readlink "$ALIAS" 2>/dev/null || true; }
 
 classify() {
@@ -94,6 +100,8 @@ USAGE
     rc="$(common_dir "$REPO")"
     [ -n "$tc" ] || die "$target is not inside a git worktree"
     [ "$tc" = "$rc" ] || die "$target is not a worktree of this dotfiles repo"
-    repoint "$target"
+    root="$(worktree_root "$target")"
+    [ -n "$root" ] || die "$target is not inside a git worktree"
+    repoint "$root"
     ;;
 esac
