@@ -39,7 +39,7 @@ common_dir() {
 worktree_root() {
   ( cd "$1" 2>/dev/null || exit 0
     d="$(git rev-parse --show-toplevel 2>/dev/null)" || exit 0
-    cd "$d" 2>/dev/null && pwd -P )
+    cd "$d" 2>/dev/null && pwd -P || exit 0 )
 }
 
 current_target() { readlink "$ALIAS" 2>/dev/null || true; }
