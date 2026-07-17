@@ -54,6 +54,15 @@ mkdir -p "$HOME/.copilot"
 ln -sfv "$HOME/.dotfiles/.copilot/mcp-config.json" "$HOME/.copilot/mcp-config.json"
 
 echo
+echo "🔗 Linking Copilot CLI skills"
+echo
+
+mkdir -p "$HOME/.copilot/skills"
+for skill in "$HOME"/.dotfiles/.copilot/skills/*/; do
+  ln -sfn "${skill%/}" "$HOME/.copilot/skills/$(basename "$skill")"
+done
+
+echo
 echo "✅ Copilot CLI MCP config linked"
 
 echo
