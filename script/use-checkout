@@ -50,6 +50,9 @@ classify() {
 
 show_status() {
   local t; t="$(current_target)"
+  if [ -e "$ALIAS" ] && [ ! -L "$ALIAS" ]; then
+    die "$ALIAS exists and is not a symlink; refusing to report it as unset."
+  fi
   echo "~/.dotfiles -> ${t:-(none)}   [$(classify "$t")]"
 }
 
