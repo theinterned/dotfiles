@@ -1,0 +1,79 @@
+#!/bin/bash
+#
+# link-dotfiles — link tracked dotfiles into $HOME, routing every link
+# through ~/.dotfiles.
+#
+# ~/.dotfiles is a single indirection symlink that points at the canonical
+# (main) checkout of this repo. Because every dotfile in $HOME points at
+# ~/.dotfiles/<path> rather than at an absolute checkout path, flipping the one
+# ~/.dotfiles symlink (see `script/use-checkout`) atomically repoints the whole
+# live environment — shell, git, Copilot skills, Safari, .config, etc. — at a
+# git worktree, and back again.
+#
+# This script only creates symlinks. It has no other side effects and is safe
+# to re-run any time you add a new tracked dotfile.
+
+set -euo pipefail
+
+SCRIPTPATH="$( cd -- "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd -P )"
+REPO="$( cd -- "$SCRIPTPATH/.." >/dev/null 2>&1 && pwd -P )"
+ALIAS="$HOME/.dotfiles"
+
+# The canonical target for ~/.dotfiles is always the repo's *main* worktree, so
+# running this from a linked worktree still points the alias back at main.
+MAIN="$( git -C "$REPO" worktree list --porcelain 2>/dev/null | sed -n 's/^worktree //p' | head -1 || true )"
+[ -n "$MAIN" ] || MAIN="$REPO"
+
+echo "🔗 Pointing ~/.dotfiles at the main checkout"
+echo "   $ALIAS -> $MAIN"
+if [ -e "$ALIAS" ] && [ ! -L "$ALIAS" ]; then
+  echo "   ✋ $ALIAS exists and is not a symlink; refusing to replace it." >&2
+  exit 1
+fi
+ln -sfn "$MAIN" "$ALIAS"
+
+# Link $HOME/<rel> -> ~/.dotfiles/<rel>, replacing an existing symlink or regular
+# file but never clobbering a real directory.
+link_through_alias() {
+  local rel="$1"
+  local dest="$HOME/$rel"
+  local src="$ALIAS/$rel"
+  if [ -d "$dest" ] && [ ! -L "$dest" ]; then
+    echo "   ⚠️  skipping $dest (real directory, not a symlink)" >&2
+    return
+  fi
+  mkdir -p "$(dirname "$dest")"
+  ln -sfn "$src" "$dest"
+  echo "   $dest -> $src"
+}
+
+echo
+echo "🔗 Linking top-level dotfiles"
+# Enumerate from the canonical checkout so sources and targets always match.
+while IFS= read -r -d '' rel; do
+  case "$rel" in
+    */*) continue ;;
+  esac
+  name="$rel"
+  case "$name" in
+    .|..|.git) continue ;;                       # never touch . / .. / the git dir
+    .config|.copilot|script|iterm|raycast) continue ;;  # dirs handled elsewhere / not linked wholesale
+    gnupg|ssh) continue ;;                        # leave GPG/SSH alone
+    setup|*.md|*.txt) continue ;;                # docs / meta
+  esac
+  # Only link regular files at the top level; real dirs are handled explicitly.
+  [ -f "$MAIN/$rel" ] || continue
+  link_through_alias "$name"
+done < <(git -C "$MAIN" ls-files -z)
+
+echo
+echo "🔗 Linking .config files individually (untracked subdirs are preserved)"
+if [ -d "$MAIN/.config" ]; then
+  while IFS= read -r -d '' rel; do
+    [ -f "$MAIN/$rel" ] || continue
+    link_through_alias "$rel"
+  done < <(git -C "$MAIN" ls-files -z -- .config)
+fi
+
+echo
+echo "✅ Dotfiles linked through ~/.dotfiles"

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 echo
 echo
 echo "##################################################"
@@ -8,88 +10,16 @@ echo "##################################################"
 echo
 echo
 
-# Install dotfiles into home directory
+# Resolve this script's location so we can call sibling scripts.
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-DOTFILESDIR=$(dirname $SCRIPTPATH)
-DOTFILES=$(ls -a $DOTFILESDIR)
 
-echo "SCRIPTPATH: $SCRIPTPATH"
-echo "DOTFILESDIR: $DOTFILESDIR"
-echo "DOTFILES: $DOTFILES"
-
-# Move dotfiles to home directory
-echo
-echo "🔗 Linking dotfiles to home directory "
-echo
-
-for DOTFILE in $DOTFILES; do
-  HOMEFILE="$HOME/$DOTFILE"
-  [ -d $DOTFILE ] && DOTFILE="$DOTFILE/"
-  DIRFILE="$DOTFILESDIR/$DOTFILE"
-
-
-  # Don't mess with Codespaces' default GPG/SSH setup.
-  if [ -n "$CODESPACES" ]
-  then
-    echo $DOTFILE | grep -Eq '^(gnupg|ssh)/' && continue
-  fi
-
-  # Don't try to install documentation/script/lock files
-  echo $DOTFILE | grep -Eq '(\.\/$|^\.git\/$|^\.config\/$|^(script|iterm|raycast)\/$|setup|\.txt$|\.md$)' && continue
-
-  # .copilot/ contains machine-specific IDE data alongside tracked config;
-  # handle it separately in install-mac.sh
-  echo $DOTFILE | grep -Eq '^\.copilot\/$' && continue
-
-  if [ -L "$HOMEFILE" ] && ! [ -d $DOTFILE ]
-  then
-    ln -sfv "$DIRFILE" "$HOMEFILE"
-  else
-    rm -rv "$HOMEFILE" 2>/dev/null
-    ln -sv "$DIRFILE" "$HOMEFILE"
-  fi
-
-  echo 
-done
-
-# Link .config files individually so untracked dirs (gh/, op/, raycast/, etc.) are preserved
-echo
-echo "🔗 Linking .config files"
-echo
-
-# We symlink individual files rather than the whole .config/ dir so that
-# untracked subdirs (gh/, op/, raycast/, etc.) are left untouched.
-mkdir -p "$HOME/.config"
-find "$DOTFILESDIR/.config" -type f | while read CONFIGFILE; do
-  # Strip the dotfiles repo prefix to get the relative path, e.g. .config/fish/config.fish
-  RELPATH="${CONFIGFILE#$DOTFILESDIR/}"
-  HOMEFILE="$HOME/$RELPATH"
-  # Ensure the parent dir exists (e.g. ~/.config/fish/, ~/.config/mise/)
-  mkdir -p "$(dirname "$HOMEFILE")"
-  if [ -L "$HOMEFILE" ]; then
-    # Already a symlink — update it in place
-    ln -sfv "$CONFIGFILE" "$HOMEFILE"
-  else
-    # Real file or missing — remove and replace with symlink
-    rm -v "$HOMEFILE" 2>/dev/null
-    ln -sv "$CONFIGFILE" "$HOMEFILE"
-  fi
-  echo
-done
-
-HOME_DOTFILES_ALIAS="$HOME/.dotfiles"
-
-echo 
-echo "🔗 Creating a symlink in ~/.dotfiles to this dotfiles repo"
-echo
-
-if [ -L "$HOME_DOTFILES_ALIAS" ] && ! [ -d $DOTFILESDIR ]
-then
-  ln -sfv "$DOTFILESDIR" "$HOME_DOTFILES_ALIAS"
-else
-  rm -rv "$HOME_DOTFILES_ALIAS" 2>/dev/null
-  ln -sv "$DOTFILESDIR" "$HOME_DOTFILES_ALIAS"
-fi
+# Link tracked dotfiles into $HOME and (re)create the ~/.dotfiles alias.
+#
+# Every link is routed through ~/.dotfiles, so the entire live environment can
+# be flipped to a git worktree with `script/use-checkout` (see the README,
+# "Working in a worktree"). link-dotfiles only creates symlinks, so it is safe
+# to re-run any time you add a new tracked dotfile.
+"$SCRIPTPATH/link-dotfiles"
 
 $SCRIPTPATH/install.sh
 
