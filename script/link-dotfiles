@@ -50,8 +50,11 @@ link_through_alias() {
 echo
 echo "🔗 Linking top-level dotfiles"
 # Enumerate from the canonical checkout so sources and targets always match.
-for path in "$MAIN"/.* "$MAIN"/*; do
-  name="$(basename "$path")"
+while IFS= read -r -d '' rel; do
+  case "$rel" in
+    */*) continue ;;
+  esac
+  name="$rel"
   case "$name" in
     .|..|.git) continue ;;                       # never touch . / .. / the git dir
     .config|.copilot|script|iterm|raycast) continue ;;  # dirs handled elsewhere / not linked wholesale
@@ -59,17 +62,17 @@ for path in "$MAIN"/.* "$MAIN"/*; do
     setup|*.md|*.txt) continue ;;                # docs / meta
   esac
   # Only link regular files at the top level; real dirs are handled explicitly.
-  [ -f "$path" ] || continue
+  [ -f "$MAIN/$rel" ] || continue
   link_through_alias "$name"
-done
+done < <(git -C "$MAIN" ls-files -z)
 
 echo
 echo "🔗 Linking .config files individually (untracked subdirs are preserved)"
 if [ -d "$MAIN/.config" ]; then
-  while IFS= read -r configfile; do
-    rel="${configfile#"$MAIN"/}"
+  while IFS= read -r -d '' rel; do
+    [ -f "$MAIN/$rel" ] || continue
     link_through_alias "$rel"
-  done < <(find "$MAIN/.config" -type f)
+  done < <(git -C "$MAIN" ls-files -z -- .config)
 fi
 
 echo
