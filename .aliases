@@ -17,6 +17,8 @@ alias alloy="cd vendor/alloy"
 # shortcut to this project
 alias dotfiles="cd ~/.dotfiles"
 alias config="~/.dotfiles/script/setup.fish"
+# flip the live environment between the main checkout and a worktree
+alias dots-use="~/.dotfiles/script/use-checkout"
 alias csdotfiles="cd /home/vscode/.dotfiles"
 
 # work stuff
