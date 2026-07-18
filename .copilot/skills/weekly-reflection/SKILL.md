@@ -149,16 +149,22 @@ Then, for each update:
 Also leave room for **work that happened outside the status updates** — ask the
 user if anything should be added manually, and mark ⭐ items they own.
 
-### 🏆 Wins / 💩 Fails / 🙏 Kudos / 🌳 Decisions / 🔮 Ideas (optional)
+### 🏆 Wins / 💩 Fails / 🙏 Kudos / 🌳 Decisions / 🔮 Ideas (optional content — but always ask)
 
-Most weeks several of these are empty. **Ask the user about each one** (surface any
-obvious candidate you spotted in the week's work). **If a section has no content,
-delete its heading entirely** — don't leave an empty heading.
+These are the heart of the reflection, not an afterthought. **You MUST walk the
+user through all five, one at a time** — even the ones you think are empty. For
+each: surface any candidate you spotted in the week's work, then let the user
+add, edit, or skip it. **Never silently omit a section** because you found no
+candidate — ask first. Only *after* the user has decided on each, **delete the
+headings for the ones left empty** (don't leave an empty heading).
 
 ## Review, back up, then prepend
 
-**1. Draft and confirm.** Write the assembled week block to a local draft file and
-**show it to the user for confirmation.** Never write to Bear before they approve.
+**1. Draft and confirm.** First make sure you've already **prompted goal by goal
+and walked the user through all five optional sections** — don't assemble the
+final block until both are done. Then write the assembled week block to a local
+draft file and **show it to the user for confirmation.** Never write to Bear
+before they approve.
 
 **2. Back up first.** Dump the whole current note to a timestamped file so a bad
 write is always recoverable (`NOTE_ID` = the diary note id you resolved above):
@@ -199,7 +205,9 @@ trailing `---` intact. If anything looks wrong, restore from the backup with
 - **Draft → confirm → back up → overwrite.** Always show the entry and dump a
   backup before touching the live note.
 - **Prepend, don't append** — newest week goes at the top, under the standing header.
-- **Fill Goal Progress every week**, prompting goal by goal; drop empty optional
-  sections entirely.
+- **Fill Goal Progress every week**, prompting goal by goal.
+- **Walk the user through all five optional sections (Wins / Fails / Kudos /
+  Decisions / Ideas) one at a time** — surface candidates, never silently drop
+  them; only delete a heading after the user confirms it's empty.
 - **Include every status update written**, each demoted one heading level under a
   linked h3, with the Howie `<!-- data -->` markers stripped.
