@@ -170,9 +170,9 @@ delete its heading entirely** — don't leave an empty heading.
 
    ```bash
    # new-week.md = the approved entry (ends with a trailing `---`)
-   "$BC" cat <id> > /tmp/diary-current.md
-   python3 - "$id" /tmp/diary-current.md /tmp/new-week.md <<'PY'
-   import re, subprocess, sys
+"$BC" cat <id> > /tmp/diary-current.md
+python3 - <id> /tmp/diary-current.md /tmp/new-week.md <<'PY'
+import re, subprocess, sys
    note_id, cur_path, new_path = sys.argv[1], sys.argv[2], sys.argv[3]
    cur = open(cur_path, encoding="utf-8").read()
    block = open(new_path, encoding="utf-8").read().rstrip("\n") + "\n"
