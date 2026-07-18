@@ -58,9 +58,14 @@ echo "🔗 Linking Copilot CLI skills"
 echo
 
 mkdir -p "$HOME/.copilot/skills"
-for skill in "$HOME"/.dotfiles/.copilot/skills/*/; do
-  ln -sfn "${skill%/}" "$HOME/.copilot/skills/$(basename "$skill")"
-done
+skills_dir="$HOME/.dotfiles/.copilot/skills"
+if [ -d "$skills_dir" ]; then
+  shopt -s nullglob
+  for skill in "$skills_dir"/*/; do
+    ln -sfn "${skill%/}" "$HOME/.copilot/skills/$(basename "${skill%/}")"
+  done
+  shopt -u nullglob
+fi
 
 echo
 echo "✅ Copilot CLI MCP config linked"
