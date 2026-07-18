@@ -4,7 +4,7 @@
 
 1. Drive Trusted Type Violations to zero in UI Service and for reported bug bounty surfaces
    -
-2. Consult with Matt / Derrick etc on how to increase copilot usage from 900 tokens to 3k tokens per week
+2. Reflect on my AI usage and how to improve it — adopt new modalities and leverage AI to increase my productivity
    -
 3. Look for regular opportunities to communicate current work more broadly: Core UX discussions, ADRs, Decision Records (others?)
    -
