@@ -157,38 +157,41 @@ delete its heading entirely** — don't leave an empty heading.
 
 ## Review, back up, then prepend
 
-1. Write the assembled week block to a local draft file and **show it to the user
-   for confirmation.** Never write to Bear before they approve.
-2. **Back up first.** Dump the whole current note to a timestamped file so a bad
-   write is always recoverable:
+**1. Draft and confirm.** Write the assembled week block to a local draft file and
+**show it to the user for confirmation.** Never write to Bear before they approve.
 
-   ```bash
-   BC=/Applications/Bear.app/Contents/MacOS/bearcli
-   "$BC" cat <id> > "/tmp/diary-backup-$(date +%Y%m%d-%H%M%S).md"
-   ```
-3. **Prepend via read → splice → overwrite** (robust against dynamic anchors):
+**2. Back up first.** Dump the whole current note to a timestamped file so a bad
+write is always recoverable (`NOTE_ID` = the diary note id you resolved above):
 
-   ```bash
-   # new-week.md = the approved entry (ends with a trailing `---`)
-"$BC" cat <id> > /tmp/diary-current.md
-python3 - <id> /tmp/diary-current.md /tmp/new-week.md <<'PY'
+```bash
+BC=/Applications/Bear.app/Contents/MacOS/bearcli
+NOTE_ID="paste-the-resolved-note-id"
+"$BC" cat "$NOTE_ID" > "/tmp/diary-backup-$(date +%Y%m%d-%H%M%S).md"
+```
+
+**3. Prepend via read → splice → overwrite** (robust against dynamic anchors):
+
+```bash
+# new-week.md = the approved entry (ends with a trailing `---`)
+"$BC" cat "$NOTE_ID" > /tmp/diary-current.md
+python3 - "$NOTE_ID" /tmp/diary-current.md /tmp/new-week.md <<'PY'
 import re, subprocess, sys
-   note_id, cur_path, new_path = sys.argv[1], sys.argv[2], sys.argv[3]
-   cur = open(cur_path, encoding="utf-8").read()
-   block = open(new_path, encoding="utf-8").read().rstrip("\n") + "\n"
-   m = re.search(r"(?m)^# \d{4}-\d{2}-\d{2}\b", cur)   # first existing week heading
-   if not m:
-       sys.exit("Could not find a week heading to insert before — aborting.")
-   out = cur[:m.start()] + block + cur[m.start():]
-   subprocess.run([BC := "/Applications/Bear.app/Contents/MacOS/bearcli",
-                   "overwrite", note_id], input=out, text=True, check=True)
-   PY
-   ```
+note_id, cur_path, new_path = sys.argv[1], sys.argv[2], sys.argv[3]
+cur = open(cur_path, encoding="utf-8").read()
+block = open(new_path, encoding="utf-8").read().rstrip("\n") + "\n"
+m = re.search(r"(?m)^# \d{4}-\d{2}-\d{2}\b", cur)   # first existing week heading
+if not m:
+    sys.exit("Could not find a week heading to insert before — aborting.")
+out = cur[:m.start()] + block + cur[m.start():]
+subprocess.run(["/Applications/Bear.app/Contents/MacOS/bearcli",
+                "overwrite", note_id], input=out, text=True, check=True)
+PY
+```
 
-4. **Verify:** `bearcli cat <id> | head -40` and confirm the new `# <date>` block
-   now sits directly under the `⭐` header, above last week's block, with its
-   trailing `---` intact. If anything looks wrong, restore from the backup with
-   `overwrite`.
+**4. Verify:** `"$BC" cat "$NOTE_ID" | head -40` and confirm the new `# <date>` block
+now sits directly under the `⭐` header, above last week's block, with its
+trailing `---` intact. If anything looks wrong, restore from the backup with
+`overwrite`.
 
 ## Golden rules
 

@@ -54,6 +54,9 @@ mkdir -p "$HOME/.copilot"
 ln -sfv "$HOME/.dotfiles/.copilot/mcp-config.json" "$HOME/.copilot/mcp-config.json"
 
 echo
+echo "✅ Copilot CLI MCP config linked"
+
+echo
 echo "🔗 Linking Copilot CLI skills"
 echo
 
@@ -68,7 +71,7 @@ if [ -d "$skills_dir" ]; then
 fi
 
 echo
-echo "✅ Copilot CLI MCP config linked"
+echo "✅ Copilot CLI skills linked"
 
 echo
 echo "🔑 Configuring git credential helpers"
