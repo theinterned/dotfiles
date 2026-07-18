@@ -140,8 +140,8 @@ Then, for each update:
    ### [<issue title> · Issue #<n> · github/<repo>](<comment-url>)
    ```
 3. **Clean the body:** strip every `<!-- data ... -->` Howie marker line (and the
-   blank lines they leave), then **demote every ATX heading by one level** so the
-   update's sections nest under the h3 title (`### Update` → `#### Update`, etc.).
+   blank lines they leave), then **demote ATX headings so they are strictly below
+   the h3 title line** (minimum `####`, e.g. `##` → `####`, `###` → `####`, `####` → `#####`).
 4. Order the blocks epic-level update(s) first, then the rollup (the user can
    reorder on review).
 
