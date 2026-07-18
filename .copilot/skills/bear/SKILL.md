@@ -24,7 +24,7 @@ configuration and Bear's own FAQ recommends it for CLI/terminal use.
 ```bash
 BC=/Applications/Bear.app/Contents/MacOS/bearcli
 "$BC" --help          # top-level help + subcommand list
-"$BC" <sub> --help    # detailed help for any subcommand
+"$BC" "<subcommand>" --help    # detailed help for any subcommand
 ```
 
 Requires **Bear 2.8+**. If the binary isn't there, check for a non-default app
