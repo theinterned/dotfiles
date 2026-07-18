@@ -70,10 +70,10 @@ Mutations:
 - **Pipe body content via stdin to avoid escaping bugs.** `create`/`append`/
   `edit`/`overwrite` accept `--content`/text args that interpret `\n \t \r \\`,
   but **stdin is NOT unescaped** — so piping literal Markdown is safest:
-  `printf '%s' "$body" | "$BC" append <id> --position beginning`.
+  `printf '%s' "$body" | "$BC" append "<note-id>" --position beginning`.
 - **Back up before destructive writes.** Before `overwrite` (or a large `edit`),
   dump the current note so a bad write is recoverable:
-  `"$BC" cat <id> > "/tmp/bear-backup-$(date +%Y%m%d-%H%M%S).md"`.
+  `"$BC" cat "<note-id>" > "/tmp/bear-backup-$(date +%Y%m%d-%H%M%S).md"`.
 - **Attachments are protected.** Edits that would drop attachments are rejected
   unless re-run with `--force`; read the rejection before forcing.
 - **Preserve tags.** Bear derives tags from `#hashtags` in the body and title from
