@@ -57,6 +57,15 @@ echo
 echo "✅ Copilot CLI MCP config linked"
 
 echo
+echo "🔗 Linking Copilot CLI custom instructions"
+echo
+
+ln -sfv "$HOME/.dotfiles/.copilot/copilot-instructions.md" "$HOME/.copilot/copilot-instructions.md"
+
+echo
+echo "✅ Copilot CLI custom instructions linked"
+
+echo
 echo "🔗 Linking Copilot CLI skills"
 echo
 
