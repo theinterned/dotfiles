@@ -5,3 +5,11 @@ ins {
   text-decoration: none;
   text-decoration-line: none;
 }
+
+/* 
+ * fix for image gallery on a number of bike shops including 
+ * https://www.sweetpetes.com and Bike Depot
+ */
+.seProductImageContainer .seZoomImageContainer .zoomPad, .zoomPad.zoomPad.zoomPad {
+  transform: translateY(0) !important;
+}
