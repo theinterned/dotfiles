@@ -72,6 +72,17 @@ The stable header (title + tag line + `⭐` note line) stays at the top. Week bl
 follow, **newest first**, each ending with `---`. The new entry is inserted
 **immediately before the first `# YYYY-MM-DD` heading**.
 
+### Conventions
+
+- **⭐ ownership marker.** Prefix work the user is **directly responsible for** with
+  a `⭐` (per the note's own standing convention).
+- **People tags.** Bear uses `#hashtags` for tags, and the user tags people by their
+  handle nested under a `#@` parent tag: handle `@theinterned` is written
+  `#@/theinterned`, `@alidusha` is `#@/alidusha`, etc. This groups every person under
+  the `#@` tag. **Always write people mentions in this `#@/<handle>` form** (not a
+  bare `@handle` or a GitHub link) so they register as Bear tags — most useful in
+  Kudos, but applies anywhere a person is named.
+
 ## Build the entry
 
 Start from `references/template.md`. Replace `{{DATE}}` with **today's date**
@@ -92,14 +103,32 @@ Otherwise omit it.
 ### 🥅 Goal Progress (always filled)
 
 Fill a sub-bullet under **each** goal. First read the status update(s) and draft a
-candidate line for any goal the week's work speaks to, then **prompt the user goal
-by goal** — show your suggested line, let them confirm/edit, and flag which goals
-have a strong candidate. Typical mappings for this initiative:
+candidate line for any goal the week's work speaks to. Then **interview the user
+one item at a time** (see *Interview format* below) — one goal per question,
+proposing your candidate line where you have one and flagging its strength. Typical
+mappings for this initiative:
 
 - **Goal 1 (TT violations → zero):** the sanitization / DOMPurify / preset / spike work.
 - **Goal 3 (communicate more broadly):** decision-log entries, ADRs, Core UX discussions.
 
 If a goal genuinely had no movement, `No progress` is a fine answer — don't invent one.
+
+#### Interview format (Goal Progress *and* the five optional sections)
+
+Ask about **one item at a time** — never batch several goals or sections into a
+single question, and never present the whole draft as one big confirm/edit gate.
+For each item, in order:
+
+1. Ask a focused, single question scoped to that one item (one goal, or one of
+   Wins / Fails / Kudos / Decisions / Ideas).
+2. **Propose candidate content when you have it** — surface the line you drafted
+   (for goals) or the candidate you spotted in the week's work (for sections), so
+   the user is reacting to something concrete rather than a blank prompt. Note when
+   a candidate is strong vs. light/speculative.
+3. Let the user confirm, edit, replace, or skip it, then move to the next item.
+
+Use the `ask_user` tool for each question. This one-at-a-time rhythm applies to all
+four goals and all five optional sections.
 
 ### 🏗️ Work done (all updates written this week)
 
@@ -152,11 +181,12 @@ user if anything should be added manually, and mark ⭐ items they own.
 ### 🏆 Wins / 💩 Fails / 🙏 Kudos / 🌳 Decisions / 🔮 Ideas (optional content — but always ask)
 
 These are the heart of the reflection, not an afterthought. **You MUST walk the
-user through all five, one at a time** — even the ones you think are empty. For
-each: surface any candidate you spotted in the week's work, then let the user
-add, edit, or skip it. **Never silently omit a section** because you found no
-candidate — ask first. Only *after* the user has decided on each, **delete the
-headings for the ones left empty** (don't leave an empty heading).
+user through all five, one at a time** — even the ones you think are empty —
+following the *Interview format* above (one focused `ask_user` question per
+section, proposing any candidate you spotted before letting the user add, edit, or
+skip it). **Never silently omit a section** because you found no candidate — ask
+first. Only *after* the user has decided on each, **delete the headings for the
+ones left empty** (don't leave an empty heading).
 
 ## Review, back up, then prepend
 
@@ -205,9 +235,10 @@ trailing `---` intact. If anything looks wrong, restore from the backup with
 - **Draft → confirm → back up → overwrite.** Always show the entry and dump a
   backup before touching the live note.
 - **Prepend, don't append** — newest week goes at the top, under the standing header.
-- **Fill Goal Progress every week**, prompting goal by goal.
+- **Fill Goal Progress every week**, interviewing the user one goal at a time.
 - **Walk the user through all five optional sections (Wins / Fails / Kudos /
-  Decisions / Ideas) one at a time** — surface candidates, never silently drop
-  them; only delete a heading after the user confirms it's empty.
+  Decisions / Ideas) one at a time** — one focused question each, proposing any
+  candidate you spotted; never silently drop them; only delete a heading after the
+  user confirms it's empty.
 - **Include every status update written**, each demoted one heading level under a
   linked h3, with the Howie `<!-- data -->` markers stripped.
