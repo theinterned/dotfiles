@@ -86,4 +86,4 @@ Mutations:
 
 For the specific weekly-work-journal workflow (priming this week's diary entry from
 the status updates), use the **weekly-reflection** skill, which builds on this
-one.
+one. That skill now lives in the `theinterned/reflections` repo.
