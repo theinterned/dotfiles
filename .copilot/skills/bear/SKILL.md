@@ -86,4 +86,5 @@ Mutations:
 
 For the specific weekly-work-journal workflow (priming this week's diary entry from
 the status updates), use the **weekly-reflection** skill, which builds on this
-one.
+one. That skill has been moved out of these public dotfiles into a private
+project skill and is no longer distributed here.
