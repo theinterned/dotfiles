@@ -2,6 +2,15 @@
 
 User-level instructions applied across all repositories on this machine.
 
+## User-facing communication
+
+- Lead with the practical answer.
+- Use short sentences and everyday words.
+- Define necessary technical terms immediately.
+- Avoid unexplained acronyms and internal jargon.
+- Use examples for concepts that can confuse non-specialists.
+- Preserve precision without needlessly complex phrasing.
+
 ## Code comment quality
 
 Comments state only the facts needed to interpret what the code does and its
