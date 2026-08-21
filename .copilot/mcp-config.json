@@ -39,7 +39,7 @@
       "tools": [
         "*"
       ],
-      "type": "local",
+      "type": "stdio",
       "command": "bash",
       "args": [
         "-lc",
