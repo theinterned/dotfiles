@@ -67,6 +67,9 @@ Use `/mcp` to confirm the server is connected, then use `list_profiles` to
 confirm available regions. Under bearer-token authentication, `current_user`
 may be unavailable; run an ordinary search instead to verify access.
 
+The included `tailscale` skill checks connectivity before internal-service work
+and documents the safe local and Codespaces connection commands.
+
 ## Working in a worktree (edit isolated, run live)
 
 Every dotfile in `$HOME` is symlinked through a single indirection symlink,

@@ -23,7 +23,6 @@ if [[ -z "${SPLUNK_TOKEN_DOTCOM:-}" ]]; then
 fi
 
 require_command docker
-require_command tailscale
 require_command jq
 
 if ! docker info >/dev/null 2>&1; then
@@ -31,7 +30,17 @@ if ! docker info >/dev/null 2>&1; then
   exit 1
 fi
 
-if [[ "$(tailscale status --json 2>/dev/null | jq -r '.BackendState // empty')" != "Running" ]]; then
+tailscale_bin="$(command -v tailscale || true)"
+if [[ -z "$tailscale_bin" && -x /Applications/Tailscale.app/Contents/MacOS/Tailscale ]]; then
+  tailscale_bin=/Applications/Tailscale.app/Contents/MacOS/Tailscale
+fi
+
+if [[ -z "$tailscale_bin" ]]; then
+  echo "Tailscale is required. Install and sign in to the Tailscale client, then retry." >&2
+  exit 1
+fi
+
+if [[ "$("$tailscale_bin" status --json 2>/dev/null | jq -r '.BackendState // empty')" != "Running" ]]; then
   echo "Tailscale is not connected. Run 'tailscale up' and retry." >&2
   exit 1
 fi
