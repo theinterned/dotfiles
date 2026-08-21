@@ -111,3 +111,9 @@ abbr -a cwws coworking-with --stop
 # fix a garbled terminal
 # https://www.oreilly.com/library/view/bash-cookbook/0596526784/ch19s09.html
 abbr -a sane stty sane
+
+# Tailscale
+# The macOS app ships its CLI inside the bundle rather than on PATH.
+if test -x /Applications/Tailscale.app/Contents/MacOS/Tailscale
+    alias tailscale /Applications/Tailscale.app/Contents/MacOS/Tailscale
+end
