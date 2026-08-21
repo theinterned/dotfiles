@@ -11,14 +11,16 @@ My dot files
 ## Splunk MCP
 
 The tracked Copilot configuration starts a Splunk MCP container per Copilot
-session. It reads the US East token from `op://Employee/Splunk token/password`
-locally, or accepts Codespaces secrets for any supported region.
+session, connected to the US East cluster. It reads the token from
+`op://Employee/Splunk token/password` locally, or from `SPLUNK_BEARER_TOKEN`
+in a Codespace.
 
 ### Local macOS
 
 1. Request the `splunk-capability-generate-tokens` entitlement and create an
    API token in [Splunk](https://splunk.githubapp.com).
-2. Run `script/store-splunk-token`, then paste the token without echoing it.
+2. Save it in 1Password as a Password item named `Splunk token` in the
+   `Employee` vault.
 3. Ensure Docker Desktop and Tailscale are running, then start a new `copilot`
    session. The first image pull requires access to
    `ghcr.io/github/splunk-mcp-server`.
@@ -31,10 +33,8 @@ gh auth token | docker login ghcr.io -u "$(gh api user --jq .login)" --password-
 docker pull ghcr.io/github/splunk-mcp-server:latest
 ```
 
-The default profile is `dotcom` (US East). To enable another region, export its
-matching token before launching Copilot: `SPLUNK_TOKEN_EU`,
-`SPLUNK_TOKEN_AE`, `SPLUNK_TOKEN_CUS`, or `SPLUNK_TOKEN_JPW`. The MCP server
-adds only profiles with a token and each profile uses port 443.
+To use another regional cluster, export `SPLUNK_HOST` with that region's
+Tailscale hostname and a token issued by that region.
 
 ### Codespaces
 
@@ -54,18 +54,17 @@ Tailscale and expose the TUN device before the Codespace is created:
 }
 ```
 
-Set a `SPLUNK_TOKEN_DOTCOM` [Codespaces secret](https://docs.github.com/codespaces/managing-your-codespaces/managing-your-account-specific-secrets-for-github-codespaces)
-and add regional token variables only when needed. After each Codespace start,
-connect Tailscale before starting Copilot:
+Set a `SPLUNK_BEARER_TOKEN` [Codespaces secret](https://docs.github.com/codespaces/managing-your-codespaces/managing-your-account-specific-secrets-for-github-codespaces).
+After each Codespace start, connect Tailscale before starting Copilot:
 
 ```sh
 sudo tailscale up --hostname "$CODESPACE_NAME" --accept-routes --report-posture
 ```
 
 The MCP wrapper detects Codespaces and configures Docker to use Tailscale DNS.
-Use `/mcp` to confirm the server is connected, then use `list_profiles` to
-confirm available regions. Under bearer-token authentication, `current_user`
-may be unavailable; run an ordinary search instead to verify access.
+Use `/mcp` to confirm the server is connected. Under bearer-token
+authentication, `current_user` may be unavailable; run an ordinary search
+instead to verify access.
 
 The included `tailscale` skill checks connectivity before internal-service work
 and documents the safe local and Codespaces connection commands.

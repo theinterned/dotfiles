@@ -46,11 +46,7 @@
         "exec \"$HOME/.dotfiles/script/splunk-mcp\""
       ],
       "env": {
-        "SPLUNK_TOKEN_DOTCOM": "${SPLUNK_TOKEN_DOTCOM}",
-        "SPLUNK_TOKEN_EU": "${SPLUNK_TOKEN_EU}",
-        "SPLUNK_TOKEN_AE": "${SPLUNK_TOKEN_AE}",
-        "SPLUNK_TOKEN_CUS": "${SPLUNK_TOKEN_CUS}",
-        "SPLUNK_TOKEN_JPW": "${SPLUNK_TOKEN_JPW}"
+        "SPLUNK_BEARER_TOKEN": "${SPLUNK_BEARER_TOKEN}"
       }
     },
     "1up": {

@@ -39,8 +39,6 @@ cask "chiaki"
 cask "choosy"
 # App to build and share containerised applications and microservices
 cask "docker"
-# Secure mesh VPN required to reach internal Splunk endpoints
-cask "tailscale"
 # Control your Elgato key lights
 cask "elgato-control-center"
 # Web browser
