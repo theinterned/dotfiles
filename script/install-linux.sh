@@ -46,14 +46,26 @@ echo "✅ Linux setup complete"
 echo
 
 echo
-echo "🔗 Linking Copilot CLI MCP config"
+echo "🔗 Registering Copilot CLI MCP servers"
 echo
 
+# ~/.copilot/mcp-config.json is owned by Copilot itself (see install-mac.sh for
+# the full rationale), so register through the supported writer rather than
+# symlinking a tracked copy over it.
 mkdir -p "$HOME/.copilot"
-ln -sfv "$HOME/.dotfiles/.copilot/mcp-config.json" "$HOME/.copilot/mcp-config.json"
+
+if command -v copilot >/dev/null 2>&1; then
+  # `copilot mcp add` refuses to overwrite, so drop any existing entry first.
+  copilot mcp remove splunk >/dev/null 2>&1 || true
+  copilot mcp add splunk \
+    --env 'SPLUNK_BEARER_TOKEN=${SPLUNK_BEARER_TOKEN}' \
+    -- bash -lc 'exec "$HOME/.dotfiles/script/splunk-mcp"'
+else
+  echo "⚠️  copilot CLI not found; skipping MCP server registration"
+fi
 
 echo
-echo "✅ Copilot CLI MCP config linked"
+echo "✅ Copilot CLI MCP servers registered"
 echo
 
 echo

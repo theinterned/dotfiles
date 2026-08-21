@@ -10,10 +10,15 @@ My dot files
 
 ## Splunk MCP
 
-The tracked Copilot configuration starts a Splunk MCP container per Copilot
-session, connected to the US East cluster. It reads the token from
-`op://Employee/Splunk token/password` locally, or from `SPLUNK_BEARER_TOKEN`
-in a Codespace.
+The install scripts register a `splunk` MCP server that starts a Splunk MCP
+container per Copilot session, connected to the US East cluster. It reads the
+token from `op://Employee/Splunk token/password` locally, or from
+`SPLUNK_BEARER_TOKEN` in a Codespace.
+
+`~/.copilot/mcp-config.json` is owned by Copilot itself — `copilot mcp add`, the
+plugin installer and the `setup_*` tools all rewrite it — so it is deliberately
+not tracked here. `script/install-mac.sh` registers the server through
+`copilot mcp add` instead; re-run it if the entry ever goes missing.
 
 ### Local macOS
 
