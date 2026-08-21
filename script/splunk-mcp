@@ -6,6 +6,14 @@ readonly IMAGE="ghcr.io/github/splunk-mcp-server:latest"
 readonly TOKEN_REF="op://Employee/Splunk token/password"
 readonly DOCKER_TIMEOUT=90
 
+# Copilot does not expand ${...} in MCP env values, it passes the literal string
+# through, and a literal is non-empty enough to defeat the check below. A real
+# exported token is inherited from the environment anyway, so treat anything
+# still wearing placeholder syntax as unset.
+if [[ "${SPLUNK_BEARER_TOKEN:-}" == '${'*'}' ]]; then
+  SPLUNK_BEARER_TOKEN=""
+fi
+
 if [[ -z "${SPLUNK_BEARER_TOKEN:-}" ]]; then
   if ! SPLUNK_BEARER_TOKEN="$(op read "$TOKEN_REF" 2>/dev/null)"; then
     echo "No Splunk token. Store one at $TOKEN_REF or export SPLUNK_BEARER_TOKEN." >&2

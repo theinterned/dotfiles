@@ -32,8 +32,10 @@ register() {
 }
 
 # Splunk over Tailscale; the wrapper resolves the token and starts the container.
+# No --env here on purpose: Copilot passes ${...} values through literally rather
+# than expanding them, so declaring one would overwrite a real inherited token
+# (a Codespaces secret, say) with the placeholder string.
 register splunk \
-  --env 'SPLUNK_BEARER_TOKEN=${SPLUNK_BEARER_TOKEN}' \
   -- bash -lc 'exec "$HOME/.dotfiles/script/splunk-mcp"'
 
 # Kusto/Fabric real-time analytics.
