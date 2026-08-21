@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+readonly IMAGE="ghcr.io/github/splunk-mcp-server:latest"
+readonly DOTCOM_TOKEN_REF="op://Employee/Splunk token/password"
+
+require_command() {
+  if ! command -v "$1" >/dev/null 2>&1; then
+    echo "Splunk MCP requires '$1' on PATH." >&2
+    exit 1
+  fi
+}
+
+if [[ -z "${SPLUNK_TOKEN_DOTCOM:-}" ]]; then
+  require_command op
+
+  if ! SPLUNK_TOKEN_DOTCOM="$(op read "$DOTCOM_TOKEN_REF")"; then
+    echo "Store a Splunk API token in $DOTCOM_TOKEN_REF or export SPLUNK_TOKEN_DOTCOM." >&2
+    exit 1
+  fi
+  export SPLUNK_TOKEN_DOTCOM
+fi
+
+require_command docker
+require_command tailscale
+require_command jq
+
+if ! docker info >/dev/null 2>&1; then
+  echo "Docker is not running. Start Docker Desktop and retry." >&2
+  exit 1
+fi
+
+if [[ "$(tailscale status --json 2>/dev/null | jq -r '.BackendState // empty')" != "Running" ]]; then
+  echo "Tailscale is not connected. Run 'tailscale up' and retry." >&2
+  exit 1
+fi
+
+profiles='{}'
+add_profile() {
+  local profile="$1"
+  local host="$2"
+  local token_variable="$3"
+
+  if [[ -n "${!token_variable:-}" ]]; then
+    profiles="$(
+      jq -cn \
+        --argjson profiles "$profiles" \
+        --arg profile "$profile" \
+        --arg host "$host" \
+        --arg token_variable "$token_variable" \
+        '$profiles + {($profile): {host: $host, port: 443, token_env: $token_variable}}'
+    )"
+  fi
+}
+
+add_profile dotcom splunkazure-api-azure-eastus.octoca.ts.net SPLUNK_TOKEN_DOTCOM
+add_profile eu splunkazure-api-prod-weu-01.octoca.ts.net SPLUNK_TOKEN_EU
+add_profile ae splunkazure-api-prod-ae-01.octoca.ts.net SPLUNK_TOKEN_AE
+add_profile cus splunkazure-api-prod-cus-01.octoca.ts.net SPLUNK_TOKEN_CUS
+add_profile jpw splunkazure-api-prod-jpw-01.octoca.ts.net SPLUNK_TOKEN_JPW
+
+docker_args=(run -i --rm)
+if [[ -n "${CODESPACES:-}" ]]; then
+  docker_args+=(--dns=100.100.100.100)
+fi
+
+export SPLUNK_PORT=443
+export SPLUNK_SCHEME=https
+export VERIFY_SSL=true
+export FASTMCP_LOG_LEVEL=INFO
+export SPLUNK_DEFAULT_PROFILE=dotcom
+export SPLUNK_PROFILES_JSON="$profiles"
+
+exec docker "${docker_args[@]}" \
+  -e SPLUNK_PORT \
+  -e SPLUNK_SCHEME \
+  -e VERIFY_SSL \
+  -e FASTMCP_LOG_LEVEL \
+  -e SPLUNK_DEFAULT_PROFILE \
+  -e SPLUNK_PROFILES_JSON \
+  -e SPLUNK_TOKEN_DOTCOM \
+  -e SPLUNK_TOKEN_EU \
+  -e SPLUNK_TOKEN_AE \
+  -e SPLUNK_TOKEN_CUS \
+  -e SPLUNK_TOKEN_JPW \
+  "$IMAGE"

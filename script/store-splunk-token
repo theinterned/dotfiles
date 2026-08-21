@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+readonly VAULT="Employee"
+readonly ITEM_TITLE="Splunk token"
+
+if ! command -v op >/dev/null 2>&1; then
+  echo "1Password CLI ('op') is required." >&2
+  exit 1
+fi
+
+if ! command -v jq >/dev/null 2>&1; then
+  echo "jq is required." >&2
+  exit 1
+fi
+
+printf "Paste the Splunk API token: " >&2
+IFS= read -r -s token
+printf "\n" >&2
+
+if [[ -z "$token" ]]; then
+  echo "A token is required." >&2
+  exit 1
+fi
+
+if op item get "$ITEM_TITLE" --vault "$VAULT" --format json >/dev/null 2>&1; then
+  item="$(op item get "$ITEM_TITLE" --vault "$VAULT" --format json)"
+  command=(op item edit "$ITEM_TITLE" --vault "$VAULT")
+else
+  item="$(op item template get Password)"
+  command=(op item create --vault "$VAULT" -)
+fi
+
+updated_item="$(
+  jq \
+    --arg title "$ITEM_TITLE" \
+    --arg token "$token" \
+    '.title = $title | (.fields[] | select(.purpose == "PASSWORD").value) = $token' \
+    <<<"$item"
+)"
+unset token
+
+printf '%s' "$updated_item" | "${command[@]}" >/dev/null
+echo "Stored $ITEM_TITLE in the $VAULT vault."
