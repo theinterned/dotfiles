@@ -1,3 +1,13 @@
+---
+name: tailscale
+description: >-
+  Check, connect, and troubleshoot the Tailscale client used to reach GitHub
+  internal services over the tailnet. Use when a tailnet-only host will not
+  resolve, when Tailscale needs installing or reconnecting, or before accessing
+  internal services such as the Splunk MCP server — e.g. "is Tailscale
+  connected", "install Tailscale", "host won't resolve", "tailscale up".
+---
+
 # Tailscale
 
 Use this skill before accessing internal services that depend on the GitHub
@@ -49,6 +59,19 @@ sudo tailscale up --hostname "$CODESPACE_NAME" --accept-routes --report-posture
 ```
 
 ## Splunk MCP
+
+The Splunk launcher requires both Docker and a connected Tailscale client. It
+starts Docker Desktop on its own when needed, but it cannot install or sign in
+to Tailscale. In Codespaces it configures Docker to use the Tailscale DNS
+resolver. If the launcher reports a Tailscale failure, restore connectivity
+first, then restart the Copilot session so the MCP server launches again.
+
+A connected client does not by itself guarantee the Splunk hosts are
+reachable: access to `splunkazure-api-*.octoca.ts.net` is granted separately
+through tailnet ACLs alongside the Splunk entitlement. If `tailscale status`
+reports `Running` but the host does not resolve, the ACL is the likely cause.
+
+See the `splunk` skill for querying the MCP server itself.
 
 The Splunk launcher requires both Docker and a connected Tailscale client. It
 starts Docker Desktop on its own when needed, but it cannot install or sign in
