@@ -5,6 +5,49 @@ set -euo pipefail
 readonly IMAGE="ghcr.io/github/splunk-mcp-server:latest"
 readonly TOKEN_REF="op://Employee/Splunk token/password"
 readonly DOCKER_TIMEOUT=90
+readonly KEYCHAIN_SERVICE="splunk-mcp-token"
+readonly KEYCHAIN_ACCOUNT="${USER:-$(id -un)}"
+# Splunk issues 90 day tokens. Re-read from 1Password once a week is left.
+readonly REFRESH_MARGIN=$((7 * 24 * 60 * 60))
+
+# Seconds left on a Splunk JWT. Fails when the value is not a decodable token.
+token_lifetime() {
+  local payload decoded exp
+  payload="${1#*.}"
+  payload="${payload%%.*}"
+  [[ -n "$payload" && "$payload" != "$1" ]] || return 1
+
+  payload="$(tr '_-' '/+' <<<"$payload")"
+  case $((${#payload} % 4)) in
+    2) payload+="==" ;;
+    3) payload+="=" ;;
+  esac
+
+  decoded="$(base64 -D <<<"$payload" 2>/dev/null)" ||
+    decoded="$(base64 -d <<<"$payload" 2>/dev/null)" || return 1
+  exp="$(sed -n 's/.*"exp":[[:space:]]*\([0-9][0-9]*\).*/\1/p' <<<"$decoded")"
+  [[ -n "$exp" ]] || return 1
+
+  echo $((exp - $(date +%s)))
+}
+
+token_is_fresh() {
+  local left
+  left="$(token_lifetime "${1:-}")" || return 1
+  ((left > REFRESH_MARGIN))
+}
+
+keychain_read() {
+  security find-generic-password -w -s "$KEYCHAIN_SERVICE" -a "$KEYCHAIN_ACCOUNT" 2>/dev/null
+}
+
+# -U replaces any existing item. -T trusts /usr/bin/security on the item's ACL,
+# which is what lets later reads succeed without a confirmation dialog.
+keychain_write() {
+  security add-generic-password -U \
+    -s "$KEYCHAIN_SERVICE" -a "$KEYCHAIN_ACCOUNT" \
+    -T /usr/bin/security -w "$1" >/dev/null 2>&1
+}
 
 # Copilot does not expand ${...} in MCP env values, it passes the literal string
 # through, and a literal is non-empty enough to defeat the check below. A real
@@ -14,13 +57,28 @@ if [[ "${SPLUNK_BEARER_TOKEN:-}" == '${'*'}' ]]; then
   SPLUNK_BEARER_TOKEN=""
 fi
 
+if [[ -z "${SPLUNK_BEARER_TOKEN:-}" ]] && command -v security >/dev/null 2>&1; then
+  cached="$(keychain_read)" || cached=""
+  if token_is_fresh "$cached"; then
+    SPLUNK_BEARER_TOKEN="$cached"
+  fi
+  unset cached
+fi
+
+# 1Password prompts for biometric approval on every read, and the wrapper runs
+# once per MCP server start, so this is the path worth avoiding.
 if [[ -z "${SPLUNK_BEARER_TOKEN:-}" ]]; then
   if ! SPLUNK_BEARER_TOKEN="$(op read "$TOKEN_REF" 2>/dev/null)"; then
     echo "No Splunk token. Store one at $TOKEN_REF or export SPLUNK_BEARER_TOKEN." >&2
     exit 1
   fi
-  export SPLUNK_BEARER_TOKEN
+
+  if command -v security >/dev/null 2>&1 && token_is_fresh "$SPLUNK_BEARER_TOKEN"; then
+    keychain_write "$SPLUNK_BEARER_TOKEN" || true
+  fi
 fi
+
+export SPLUNK_BEARER_TOKEN
 
 if ! docker info >/dev/null 2>&1; then
   if [[ ! -d /Applications/Docker.app ]]; then

@@ -12,8 +12,20 @@ My dot files
 
 The install scripts register a `splunk` MCP server that starts a Splunk MCP
 container per Copilot session, connected to the US East cluster. It reads the
-token from `op://Employee/Splunk token/password` locally, or from
-`SPLUNK_BEARER_TOKEN` in a Codespace.
+token from the macOS keychain, falling back to
+`op://Employee/Splunk token/password` locally, or from `SPLUNK_BEARER_TOKEN` in a
+Codespace.
+
+Splunk tokens are valid for 90 days, and 1Password prompts for biometric approval
+on every read, so the wrapper caches the token in the keychain under
+`splunk-mcp-token` and re-reads from 1Password only when the cached copy is
+missing or within a week of expiry. Without that cache every MCP server start
+triggers a prompt — and clients that spawn a server per tool call make that one
+prompt per query. After rotating the token, clear the cache:
+
+```sh
+security delete-generic-password -s splunk-mcp-token -a "$USER"
+```
 
 `~/.copilot/mcp-config.json` is owned by Copilot itself — `copilot mcp add`, the
 plugin installer and the `setup_*` tools all rewrite it — so it is deliberately
