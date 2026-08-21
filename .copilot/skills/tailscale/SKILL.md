@@ -26,8 +26,15 @@ tailscale netcheck
 
 ## Connect
 
-On a local machine, ensure the Tailscale desktop client is installed, running,
-and signed in. If the client reports that it is disconnected, run:
+On a managed macOS machine, install Tailscale from Jamf Self Service rather
+than Homebrew, so the MDM-managed copy stays authoritative:
+
+```sh
+open -a 'Self Service'
+```
+
+Once installed, ensure the client is running and signed in. If it reports that
+it is disconnected, run:
 
 ```sh
 tailscale up
@@ -43,7 +50,13 @@ sudo tailscale up --hostname "$CODESPACE_NAME" --accept-routes --report-posture
 
 ## Splunk MCP
 
-The Splunk launcher requires both Docker and a connected Tailscale client. In
-Codespaces it configures Docker to use the Tailscale DNS resolver. If the
-launcher reports a Tailscale failure, restore connectivity first, then restart
-the Copilot session so the MCP server launches again.
+The Splunk launcher requires both Docker and a connected Tailscale client. It
+starts Docker Desktop on its own when needed, but it cannot install or sign in
+to Tailscale. In Codespaces it configures Docker to use the Tailscale DNS
+resolver. If the launcher reports a Tailscale failure, restore connectivity
+first, then restart the Copilot session so the MCP server launches again.
+
+A connected client does not by itself guarantee the Splunk hosts are
+reachable: access to `splunkazure-api-*.octoca.ts.net` is granted separately
+through tailnet ACLs alongside the Splunk entitlement. If `tailscale status`
+reports `Running` but the host does not resolve, the ACL is the likely cause.

@@ -4,6 +4,7 @@ set -euo pipefail
 
 readonly IMAGE="ghcr.io/github/splunk-mcp-server:latest"
 readonly TOKEN_REF="op://Employee/Splunk token/password"
+readonly DOCKER_TIMEOUT=90
 
 if [[ -z "${SPLUNK_BEARER_TOKEN:-}" ]]; then
   if ! SPLUNK_BEARER_TOKEN="$(op read "$TOKEN_REF" 2>/dev/null)"; then
@@ -14,12 +15,35 @@ if [[ -z "${SPLUNK_BEARER_TOKEN:-}" ]]; then
 fi
 
 if ! docker info >/dev/null 2>&1; then
-  echo "Docker is not running. Start Docker Desktop and retry." >&2
-  exit 1
+  if [[ ! -d /Applications/Docker.app ]]; then
+    echo "Docker is not running. Start the Docker daemon and retry." >&2
+    exit 1
+  fi
+
+  echo "Starting Docker Desktop, waiting up to ${DOCKER_TIMEOUT}s..." >&2
+  open -ga Docker
+
+  for ((i = 0; i < DOCKER_TIMEOUT; i++)); do
+    docker info >/dev/null 2>&1 && break
+    sleep 1
+  done
+
+  if ! docker info >/dev/null 2>&1; then
+    echo "Docker did not become ready in ${DOCKER_TIMEOUT}s. Start Docker Desktop and retry." >&2
+    exit 1
+  fi
 fi
 
 # The macOS app does not put its CLI on PATH.
 tailscale_bin="$(command -v tailscale || echo /Applications/Tailscale.app/Contents/MacOS/Tailscale)"
+if [[ ! -x "$tailscale_bin" ]]; then
+  echo "Tailscale is not installed." >&2
+  if [[ -d "/Applications/Self Service.app" ]]; then
+    echo "Install it from Jamf Self Service: open -a 'Self Service'" >&2
+  fi
+  exit 1
+fi
+
 if ! "$tailscale_bin" status >/dev/null 2>&1; then
   echo "Tailscale is not connected. Run 'tailscale up' and retry." >&2
   exit 1

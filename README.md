@@ -21,9 +21,9 @@ in a Codespace.
    API token in [Splunk](https://splunk.githubapp.com).
 2. Save it in 1Password as a Password item named `Splunk token` in the
    `Employee` vault.
-3. Ensure Docker Desktop and Tailscale are running, then start a new `copilot`
-   session. The first image pull requires access to
-   `ghcr.io/github/splunk-mcp-server`.
+3. Ensure Tailscale is running, then start a new `copilot` session. The wrapper
+   starts Docker Desktop automatically if it is not already running. The first
+   image pull requires access to `ghcr.io/github/splunk-mcp-server`.
 
 If Docker cannot pull the image, authorize it with GitHub Packages:
 
