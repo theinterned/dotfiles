@@ -29,7 +29,9 @@ If Docker cannot pull the image, authorize it with GitHub Packages:
 
 ```sh
 gh auth refresh -s read:packages
-gh auth token | docker login ghcr.io -u "$(gh api user --jq .login)" --password-stdin
+# GH_TOKEN, when set, shadows the refreshed keyring credential and will not
+# carry read:packages, which surfaces as a 403 on pull.
+env -u GH_TOKEN gh auth token | docker login ghcr.io -u "$(gh api user --jq .login)" --password-stdin
 docker pull ghcr.io/github/splunk-mcp-server:latest
 ```
 
