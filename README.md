@@ -17,8 +17,10 @@ token from `op://Employee/Splunk token/password` locally, or from
 
 `~/.copilot/mcp-config.json` is owned by Copilot itself — `copilot mcp add`, the
 plugin installer and the `setup_*` tools all rewrite it — so it is deliberately
-not tracked here. `script/install-mac.sh` registers the server through
-`copilot mcp add` instead; re-run it if the entry ever goes missing.
+not tracked here. `script/register-mcp-servers` is the source of truth instead:
+it declares every MCP server this machine should have and registers them through
+`copilot mcp add`. The install scripts call it, and re-running it on its own is
+safe and repairs the live config after anything rewrites it.
 
 ### Local macOS
 
