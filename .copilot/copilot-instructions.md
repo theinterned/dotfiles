@@ -11,6 +11,15 @@ User-level instructions applied across all repositories on this machine.
 - Use examples for concepts that can confuse non-specialists.
 - Preserve precision without needlessly complex phrasing.
 
+## GitHub references
+
+- Always fully qualify issue and pull request numbers; never write a bare
+  reference such as `#1234`.
+- In pull request and issue bodies, use `org/repo-name#1234`.
+- In ordinary documentation, including Markdown files, use the full URL:
+  `https://github.com/org/repo-name/issues/1234` for issues or
+  `https://github.com/org/repo-name/pull/1234` for pull requests.
+
 ## Code comment quality
 
 Comments state only the facts needed to interpret what the code does and its
