@@ -1,3 +1,6 @@
 [tools]
 node = "lts"
 ruby = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = ["node"]
