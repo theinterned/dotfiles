@@ -19,6 +19,8 @@ User-level instructions applied across all repositories on this machine.
 - In ordinary documentation, including Markdown files, use the full URL:
   `https://github.com/org/repo-name/issues/1234` for issues or
   `https://github.com/org/repo-name/pull/1234` for pull requests.
+- Backticks in these examples are Markdown formatting only; omit them from the
+  actual references.
 
 ## Code comment quality
 
