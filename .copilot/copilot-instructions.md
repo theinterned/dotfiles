@@ -22,6 +22,16 @@ User-level instructions applied across all repositories on this machine.
 - Backticks in these examples are Markdown formatting only; omit them from the
   actual references.
 
+## Issue relationships
+
+- When drafting GitHub issues, record parent, child, blocking, and blocked-by
+  relationships with GitHub's issue relationship features instead of repeating
+  them in the issue-description Markdown.
+- Do not add Markdown sections or lines that only identify a parent issue or
+  describe blocking relationships.
+- Relationship details may appear in the Markdown when they are necessary to
+  explain the issue's narrative, context, or implementation constraints.
+
 ## Code comment quality
 
 Comments state only the facts needed to interpret what the code does and its
