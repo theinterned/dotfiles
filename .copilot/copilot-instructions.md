@@ -31,6 +31,9 @@ User-level instructions applied across all repositories on this machine.
   describe blocking relationships.
 - Relationship details may appear in the Markdown when they are necessary to
   explain the issue's narrative, context, or implementation constraints.
+- When the available GitHub tools cannot set a blocking relationship, use
+  `gh api graphql` with GitHub's native `addBlockedBy` or `removeBlockedBy`
+  mutation. Do not use Markdown as a fallback for the missing tool operation.
 
 ## Code comment quality
 
