@@ -22,6 +22,17 @@ User-level instructions applied across all repositories on this machine.
 - Backticks in these examples are Markdown formatting only; omit them from the
   actual references.
 
+## Pull request relationships
+
+- At the very top of every pull request description, add a bullet for each
+  issue the pull request closes, even when the issue is in another repository
+  or GitHub will not close it automatically.
+- Use a full URL in each relationship bullet. For example:
+  `- Closes https://github.com/org/repo-name/issues/1234`
+- Put other relevant pull request or issue relationships in the same opening
+  bullet list. For example: `- Follow up to https://github.com/org/repo-name/pull/1234`
+  or `- Related Rails change: https://github.com/org/repo-name/pull/1234`.
+
 ## Issue relationships
 
 - When drafting GitHub issues, record parent, child, blocking, and blocked-by
