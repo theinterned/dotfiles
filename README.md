@@ -8,6 +8,88 @@ My dot files
 ./script/setup
 ```
 
+## Splunk MCP
+
+The install scripts register a `splunk` MCP server that starts a Splunk MCP
+container each time Copilot starts the MCP server, connected to the US East cluster. It reads the
+token from the macOS keychain, falling back to
+`op://Employee/Splunk token/password` locally, or from `SPLUNK_BEARER_TOKEN` in a
+Codespace.
+
+Splunk tokens are valid for 90 days, and 1Password prompts for biometric approval
+on every read, so the wrapper caches the token in the keychain under
+`splunk-mcp-token` and re-reads from 1Password only when the cached copy is
+missing or within a week of expiry. Without that cache every MCP server start
+triggers a prompt — and clients that spawn a server per tool call make that one
+prompt per query. After rotating the token, clear the cache:
+
+```sh
+security delete-generic-password -s splunk-mcp-token -a "$USER"
+```
+
+`~/.copilot/mcp-config.json` is owned by Copilot itself — `copilot mcp add`, the
+plugin installer and the `setup_*` tools all rewrite it — so it is deliberately
+not tracked here. `script/register-mcp-servers` is the source of truth instead:
+it declares every MCP server this machine should have and registers them through
+`copilot mcp add`. The install scripts call it, and re-running it on its own is
+safe and repairs the live config after anything rewrites it.
+
+### Local macOS
+
+1. Request the `splunk-capability-generate-tokens` entitlement and create an
+   API token in [Splunk](https://splunk.githubapp.com).
+2. Save it in 1Password as a Password item named `Splunk token` in the
+   `Employee` vault.
+3. Ensure Tailscale is running, then start a new `copilot` session. The wrapper
+   starts Docker Desktop automatically if it is not already running. The first
+   image pull requires access to `ghcr.io/github/splunk-mcp-server`.
+
+If Docker cannot pull the image, authorize it with GitHub Packages:
+
+```sh
+gh auth refresh -s read:packages
+# GH_TOKEN, when set, shadows the refreshed keyring credential and will not
+# carry read:packages, which surfaces as a 403 on pull.
+env -u GH_TOKEN gh auth token | docker login ghcr.io -u "$(gh api user --jq .login)" --password-stdin
+docker pull ghcr.io/github/splunk-mcp-server:latest
+```
+
+To use another regional cluster, export `SPLUNK_HOST` with that region's
+Tailscale hostname and a token issued by that region.
+
+### Codespaces
+
+The target repository's `.devcontainer/devcontainer.json` must enable
+Tailscale and expose the TUN device before the Codespace is created:
+
+```jsonc
+{
+  "features": {
+    "ghcr.io/tailscale/codespace/tailscale": {
+      "version": "latest"
+    }
+  },
+  "runArgs": [
+    "--device=/dev/net/tun"
+  ]
+}
+```
+
+Set a `SPLUNK_BEARER_TOKEN` [Codespaces secret](https://docs.github.com/codespaces/managing-your-codespaces/managing-your-account-specific-secrets-for-github-codespaces).
+After each Codespace start, connect Tailscale before starting Copilot:
+
+```sh
+sudo tailscale up --hostname "$CODESPACE_NAME" --accept-routes --report-posture
+```
+
+The MCP wrapper detects Codespaces and configures Docker to use Tailscale DNS.
+Use `/mcp` to confirm the server is connected. Under bearer-token
+authentication, `current_user` may be unavailable; run an ordinary search
+instead to verify access.
+
+The included `tailscale` skill checks connectivity before internal-service work
+and documents the safe local and Codespaces connection commands.
+
 ## Working in a worktree (edit isolated, run live)
 
 Every dotfile in `$HOME` is symlinked through a single indirection symlink,
