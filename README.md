@@ -11,7 +11,7 @@ My dot files
 ## Splunk MCP
 
 The install scripts register a `splunk` MCP server that starts a Splunk MCP
-container per Copilot session, connected to the US East cluster. It reads the
+container each time Copilot starts the MCP server, connected to the US East cluster. It reads the
 token from the macOS keychain, falling back to
 `op://Employee/Splunk token/password` locally, or from `SPLUNK_BEARER_TOKEN` in a
 Codespace.

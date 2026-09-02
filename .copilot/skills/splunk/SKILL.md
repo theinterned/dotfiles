@@ -10,9 +10,9 @@ description: >-
 
 # Splunk
 
-The tracked Copilot config runs `script/splunk-mcp`, which reads the token from
-`op://Employee/Splunk token/password` and starts the MCP container against the
-US East cluster.
+The `splunk` MCP server registered by `script/register-mcp-servers` runs `script/splunk-mcp`,
+which resolves `SPLUNK_BEARER_TOKEN` (env/keychain/1Password) and starts the MCP container
+against the US East cluster.
 
 Access requires a connected Tailscale client; see the `tailscale` skill when the
 server fails to start.
