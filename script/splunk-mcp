@@ -49,6 +49,12 @@ keychain_write() {
     -T /usr/bin/security -w "$1" >/dev/null 2>&1
 }
 
+tailscale_path() {
+  local path
+  path="$(type -P tailscale || true)"
+  printf '%s\n' "${path:-/Applications/Tailscale.app/Contents/MacOS/Tailscale}"
+}
+
 # Copilot does not expand ${...} in MCP env values, it passes the literal string
 # through, and a literal is non-empty enough to defeat the check below. A real
 # exported token is inherited from the environment anyway, so treat anything
@@ -106,7 +112,7 @@ if ! docker info >/dev/null 2>&1; then
 fi
 
 # The macOS app does not put its CLI on PATH.
-tailscale_bin="$(command -v tailscale || echo /Applications/Tailscale.app/Contents/MacOS/Tailscale)"
+tailscale_bin="$(tailscale_path)"
 if [[ ! -x "$tailscale_bin" ]]; then
   echo "Tailscale is not installed." >&2
   if [[ -d "/Applications/Self Service.app" ]]; then
