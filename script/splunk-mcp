@@ -68,6 +68,11 @@ fi
 # 1Password prompts for biometric approval on every read, and the wrapper runs
 # once per MCP server start, so this is the path worth avoiding.
 if [[ -z "${SPLUNK_BEARER_TOKEN:-}" ]]; then
+  if ! command -v op >/dev/null 2>&1; then
+    echo "1Password CLI (op) is not installed. Install it or export SPLUNK_BEARER_TOKEN." >&2
+    exit 1
+  fi
+
   if ! SPLUNK_BEARER_TOKEN="$(op read "$TOKEN_REF" 2>/dev/null)"; then
     echo "No Splunk token. Store one at $TOKEN_REF or export SPLUNK_BEARER_TOKEN." >&2
     exit 1
