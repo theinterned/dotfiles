@@ -47,14 +47,11 @@ echo "✅ MacOS setup complete"
 echo
 
 echo
-echo "🔗 Linking Copilot CLI MCP config"
+echo "🔗 Registering Copilot CLI MCP servers"
 echo
 
 mkdir -p "$HOME/.copilot"
-ln -sfv "$HOME/.dotfiles/.copilot/mcp-config.json" "$HOME/.copilot/mcp-config.json"
-
-echo
-echo "✅ Copilot CLI MCP config linked"
+"$HOME/.dotfiles/script/register-mcp-servers"
 
 echo
 echo "🔗 Linking Copilot CLI custom instructions"

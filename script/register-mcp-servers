@@ -1,0 +1,52 @@
+#!/bin/bash
+#
+# register-mcp-servers — declare the Copilot MCP servers this machine should have.
+#
+# ~/.copilot/mcp-config.json is owned by Copilot itself: `copilot mcp add`, the
+# plugin installer and the `setup_*` tools all rewrite it. Symlinking a tracked
+# copy over it loses either way -- the file gets replaced (silently detaching the
+# tracked copy) or written through (committing machine-specific absolute paths
+# into a repo that also has to work in a Codespace). Both have happened here.
+#
+# So this script, not a tracked config file, is the source of truth: it declares
+# the servers and registers them through the supported writer. Re-running it is
+# safe and repairs the live config after anything rewrites it.
+#
+# Servers provided by plugins (slack, datadog) are deliberately absent -- the
+# plugin system installs those, and duplicating them here would shadow it.
+
+set -euo pipefail
+
+if ! command -v copilot >/dev/null 2>&1; then
+  echo "⚠️  copilot CLI not found; skipping MCP server registration" >&2
+  exit 0
+fi
+
+# `copilot mcp add` refuses to overwrite an existing server, so drop it first.
+register() {
+  local name="$1"
+  shift
+  copilot mcp remove "$name" >/dev/null 2>&1 || true
+  copilot mcp add "$name" "$@" >/dev/null
+  echo "  ✓ $name"
+}
+
+# Splunk over Tailscale; the wrapper resolves the token and starts the container.
+# No --env here on purpose: Copilot passes ${...} values through literally rather
+# than expanding them, so declaring one would overwrite a real inherited token
+# (a Codespaces secret, say) with the placeholder string.
+register splunk \
+  -- bash -lc 'exec "$HOME/.dotfiles/script/splunk-mcp"'
+
+# Kusto/Fabric real-time analytics.
+register fabric-rti-mcp \
+  --env 'KUSTO_SERVICE_URI=https://gh-analytics.eastus.kusto.windows.net' \
+  --env 'KUSTO_SERVICE_DEFAULT_DB=hydro' \
+  --env 'FABRIC_API_BASE_URL=https://api.fabric.microsoft.com/v1' \
+  -- uvx microsoft-fabric-rti-mcp
+
+register sentry --transport http https://mcp.sentry.dev/mcp
+
+register 1up -- 1up
+
+echo "✅ Copilot CLI MCP servers registered"

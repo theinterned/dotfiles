@@ -46,14 +46,11 @@ echo "✅ Linux setup complete"
 echo
 
 echo
-echo "🔗 Linking Copilot CLI MCP config"
+echo "🔗 Registering Copilot CLI MCP servers"
 echo
 
 mkdir -p "$HOME/.copilot"
-ln -sfv "$HOME/.dotfiles/.copilot/mcp-config.json" "$HOME/.copilot/mcp-config.json"
-
-echo
-echo "✅ Copilot CLI MCP config linked"
+"$HOME/.dotfiles/script/register-mcp-servers"
 echo
 
 echo
@@ -64,6 +61,24 @@ ln -sfv "$HOME/.dotfiles/.copilot/copilot-instructions.md" "$HOME/.copilot/copil
 
 echo
 echo "✅ Copilot CLI custom instructions linked"
+echo
+
+echo
+echo "🔗 Linking Copilot CLI skills"
+echo
+
+mkdir -p "$HOME/.copilot/skills"
+skills_dir="$HOME/.dotfiles/.copilot/skills"
+if [ -d "$skills_dir" ]; then
+  shopt -s nullglob
+  for skill in "$skills_dir"/*/; do
+    ln -sfn "${skill%/}" "$HOME/.copilot/skills/$(basename "${skill%/}")"
+  done
+  shopt -u nullglob
+fi
+
+echo
+echo "✅ Copilot CLI skills linked"
 echo
 
 echo
