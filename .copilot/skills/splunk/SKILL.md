@@ -60,7 +60,8 @@ list of indexes through `srchIndexesAllowed`, so inspect that field rather than
 matching role names:
 
 ```sh
-curl -sS -H "Authorization: Bearer $SPLUNK_BEARER_TOKEN" \
+printf 'Authorization: Bearer %s\n' "$SPLUNK_BEARER_TOKEN" \
+  | curl -sS -H @- \
   'https://splunkazure-api-azure-eastus.octoca.ts.net/services/authorization/roles?output_mode=json&count=0' \
   | jq -r '.entry[].content.srchIndexesAllowed[]?' | sort -u
 ```
