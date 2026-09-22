@@ -72,4 +72,3 @@ through tailnet ACLs alongside the Splunk entitlement. If `tailscale status`
 reports `Running` but the host does not resolve, the ACL is the likely cause.
 
 See the `splunk` skill for querying the MCP server itself.
-
