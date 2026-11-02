@@ -8,6 +8,28 @@ My dot files
 ./script/setup
 ```
 
+## Codespace window colors
+
+In Codespaces, setup colors VS Code's title, status, and activity bars using one
+of eight dark colors chosen from `CODESPACE_NAME`. The color stays the same
+across restarts and rebuilds while the name and palette stay unchanged.
+Different Codespaces can share a color. Local VS Code windows are unchanged.
+GitHub links also use the default opener rather than an extension's opener.
+
+To apply the settings in an existing Codespace, run:
+
+```sh
+bash ~/.dotfiles/script/apply-vscode-settings
+```
+
+The script merges `vscode/machine-settings.json` into
+`data/Machine/settings.json` in both `~/.vscode-remote` and `~/.vscode-server`
+when present, or creates the former if neither exists yet. Unrelated settings
+are preserved; configured keys win. Existing files must be plain JSON (no
+comments or trailing commas). Invalid files are reported and left untouched.
+Applying settings requires `python3` and `CODESPACE_NAME`; outside Codespaces,
+the script does nothing.
+
 ## Splunk MCP
 
 The install scripts register a `splunk` MCP server that starts a Splunk MCP

@@ -1,0 +1,84 @@
+#!/bin/bash
+
+set -euo pipefail
+
+[ "${CODESPACES:-}" = "true" ] || exit 0
+
+if [ -z "${CODESPACE_NAME:-}" ]; then
+  echo "CODESPACE_NAME is missing; cannot choose a stable VS Code color." >&2
+  exit 1
+fi
+
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "python3 is required to apply VS Code remote settings." >&2
+  exit 1
+fi
+
+SCRIPTPATH="$( cd -- "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd -P )"
+
+python3 - "$SCRIPTPATH/../vscode/machine-settings.json" <<'PY'
+import hashlib
+import json
+import os
+from pathlib import Path
+import sys
+import tempfile
+
+
+def merge(existing, incoming):
+    for key, value in incoming.items():
+        if isinstance(value, dict) and isinstance(existing.get(key), dict):
+            merge(existing[key], value)
+        else:
+            existing[key] = value
+
+
+with open(sys.argv[1]) as handle:
+    incoming = json.load(handle)
+
+palette = (
+    "#235093", "#6b327c", "#17655f", "#7a3e24",
+    "#704c12", "#7a3045", "#3f527d", "#4b5e28",
+)
+digest = hashlib.sha256(os.environ["CODESPACE_NAME"].encode()).hexdigest()
+color = palette[int(digest, 16) % len(palette)]
+for key in (
+    "titleBar.activeBackground",
+    "titleBar.inactiveBackground",
+    "statusBar.background",
+    "activityBar.background",
+):
+    incoming["workbench.colorCustomizations"][key] = color
+
+home = Path.home()
+roots = [home / ".vscode-remote", home / ".vscode-server"]
+roots = [root for root in roots if root.is_dir()] or [roots[0]]
+
+for root in roots:
+    target = root / "data/Machine/settings.json"
+    temporary_path = None
+    try:
+        existing = {}
+        if target.exists() and target.stat().st_size:
+            with target.open() as handle:
+                existing = json.load(handle)
+        if not isinstance(existing, dict):
+            raise ValueError("VS Code settings must be a JSON object")
+
+        merge(existing, incoming)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.NamedTemporaryFile(
+            mode="w", dir=target.parent, delete=False
+        ) as handle:
+            temporary_path = handle.name
+            json.dump(existing, handle, indent=2)
+            handle.write("\n")
+        os.replace(temporary_path, target)
+    except (OSError, ValueError) as error:
+        print(f"Cannot apply VS Code settings to {target}: {error}", file=sys.stderr)
+        sys.exit(1)
+    finally:
+        if temporary_path and os.path.exists(temporary_path):
+            os.unlink(temporary_path)
+    print(f"Applied VS Code remote settings with color {color} to {target}")
+PY

@@ -1,0 +1,10 @@
+{
+  "workbench.colorCustomizations": {
+    "titleBar.activeForeground": "#ffffff",
+    "titleBar.inactiveForeground": "#ffffffcc",
+    "statusBar.foreground": "#ffffff"
+  },
+  "workbench.externalUriOpeners": {
+    "https://github.com/**": "default"
+  }
+}
