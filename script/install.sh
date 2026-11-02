@@ -9,6 +9,8 @@ echo
 
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
+bash "$SCRIPTPATH/apply-vscode-settings" || exit "$?"
+
 [ $(uname -s) = "Darwin" ] && export MACOS=1 && export UNIX=1
 [ $(uname -s) = "Linux" ] && export LINUX=1 && export UNIX=1
 
