@@ -1,10 +1,18 @@
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# Microsoft Azure command-line interface
+brew "azure-cli"
 # User-friendly command-line shell for UNIX-like operating systems
 brew "fish"
+# GitHub command-line tool
+brew "gh"
+# Datadog CLI
+brew "datadog-labs/pack/pup"
 # HTTP load generator, ApacheBench (ab) replacement
 brew "hey"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # Polyglot runtime version manager (Node, Ruby, Python, Go, etc.)
 brew "mise"
+# Python package manager and tool runner for Fabric RTI MCP
+brew "uv"

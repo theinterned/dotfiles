@@ -43,10 +43,14 @@ register fabric-rti-mcp \
   --env 'KUSTO_SERVICE_URI=https://gh-analytics.eastus.kusto.windows.net' \
   --env 'KUSTO_SERVICE_DEFAULT_DB=hydro' \
   --env 'FABRIC_API_BASE_URL=https://api.fabric.microsoft.com/v1' \
-  -- uvx microsoft-fabric-rti-mcp
+  -- gh cfs -- uv tool run microsoft-fabric-rti-mcp
 
 register sentry --transport http https://mcp.sentry.dev/mcp
 
 register 1up -- 1up
+
+register playwright -- gh cfs -- npx -y @playwright/mcp@latest
+
+register chrome-devtools -- gh cfs -- npx -y chrome-devtools-mcp@latest
 
 echo "✅ Copilot CLI MCP servers registered"

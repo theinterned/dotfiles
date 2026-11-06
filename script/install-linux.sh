@@ -35,7 +35,9 @@ echo
 echo "🍻 Running brew bundle"
 echo
 
-brew bundle --file=$HOME/Brewfile.codespaces
+brew bundle --file=$HOME/Brewfile.codespaces || exit "$?"
+
+bash "$HOME/.dotfiles/script/setup-cfs" || exit "$?"
 
 echo 
 echo "✅ Homebrew bundle complete"
