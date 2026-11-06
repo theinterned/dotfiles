@@ -8,6 +8,77 @@ My dot files
 ./script/setup
 ```
 
+## npm shortcuts
+
+Zsh/Bash aliases and Fish shortcuts use CFS for package installs and npx:
+
+```sh
+ni              # gh cfs -- npm install
+ni <package>    # gh cfs -- npm install <package>
+nci             # gh cfs -- npm ci
+npx <tool>      # gh cfs -- npx <tool>
+```
+
+Setup installs Azure CLI and the `github/gh-cfs` GitHub CLI extension on macOS
+and in Codespaces. Azure sign-in is a separate, manual step. If GitHub CLI or
+CFS is unavailable, the shortcuts print setup instructions and stop rather
+than downloading directly from npm.
+Test and build shortcuts still use npm directly.
+Open a new shell to load the updated shortcuts.
+The `npx` alias preserves options and tool arguments without adding `--yes`.
+In agent shells without aliases, use `gh cfs -- npx ...` directly.
+
+### Codespaces
+
+Dotfiles setup installs the tools without opening a browser or waiting for
+authentication. In each Codespace, sign in with your `@githubazure.com` account:
+
+```sh
+az login --tenant 398a6654-997b-47e9-b12b-9515b896b4de --allow-no-subscriptions --use-device-code
+gh cfs doctor --auth
+```
+
+Open the displayed URL in your browser and enter the device code when prompted.
+Your laptop's Azure login is not shared with Codespaces. Then use `ni`, `nci`,
+`npx`, or the explicit `gh cfs -- ...` form for package downloads.
+
+For an existing Codespace, install the tools and reopen your shell:
+
+```sh
+brew install azure-cli gh
+bash ~/.dotfiles/script/setup-cfs
+```
+
+Extension installation requires GitHub CLI access to `github/gh-cfs`. If it
+fails, setup reports the error and stops; check the Codespace's repository
+permissions before retrying. Setup never stores credentials in dotfiles or
+starts package installs. Repository registry and lockfile migration is separate
+from this workstation setup.
+
+### MCP package launchers
+
+MCP launchers do not load shell aliases. Playwright and Chrome DevTools are
+registered through `script/register-mcp-servers` with `gh` as the executable
+and `cfs`, `--`, `npx`, followed by the package arguments as separate arguments.
+Do not set the executable to the string `gh cfs -- npx`.
+
+For other npx-based servers, use the same structure:
+
+```json
+{
+  "command": "gh",
+  "args": ["cfs", "--", "npx", "-y", "<trusted-mcp-package>"]
+}
+```
+
+Keep package arguments and environment settings unchanged. Complete Azure
+sign-in manually before starting the servers, then restart the affected MCP
+servers or agent session after changing their registration.
+
+Fabric RTI uses `gh cfs -- uv tool run microsoft-fabric-rti-mcp` rather than
+bare `uvx`, so Python dependency downloads also go through CFS. Its Kusto and
+Fabric environment settings are unchanged. This launcher requires `uv` on PATH.
+
 ## Codespace window colors
 
 In Codespaces, setup colors VS Code's title, status, and activity bars using one
@@ -29,6 +100,26 @@ are preserved; configured keys win. Existing files must be plain JSON (no
 comments or trailing commas). Invalid files are reported and left untouched.
 Applying settings requires `python3` and `CODESPACE_NAME`; outside Codespaces,
 the script does nothing.
+
+## Datadog CLI
+
+The Homebrew bundles install Datadog's `pup` CLI as an alternative to Datadog
+MCP. Install the official `dd-pup` skill separately for Copilot:
+
+```sh
+gh cfs -- npx skills add datadog-labs/agent-skills --skill dd-pup --agent github-copilot --global --full-depth -y
+pup auth login --site datadoghq.com --read-only
+pup auth status
+```
+
+Complete the browser sign-in for the intended Datadog organization. This login
+is separate from MCP and Azure authentication; do not copy credentials between
+them. Restart existing agent sessions to discover the new skill and instructions.
+Use `pup --help` and command-specific help for the installed version.
+
+Investigation commands should use `--read-only`. Only grant write permissions
+when needed for a user-requested change. The existing Datadog MCP plugin is
+left installed.
 
 ## Splunk MCP
 
