@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -euo pipefail
+
+for tool in gh az; do
+  if ! command -v "$tool" >/dev/null 2>&1; then
+    printf 'CFS setup requires %s. Install the dotfiles Homebrew bundle first.\n' "$tool" >&2
+    exit 127
+  fi
+done
+
+if ! gh cfs version >/dev/null 2>&1; then
+  gh extension install github/gh-cfs
+fi
+gh cfs version
+
+cat <<'EOF'
+CFS is installed. Before first use, sign in inside this environment:
+  az login --tenant 398a6654-997b-47e9-b12b-9515b896b4de --allow-no-subscriptions --use-device-code
+Choose your @githubazure.com account, then run:
+  gh cfs doctor --auth
+  gh cfs -- npm install
+Each Codespace needs its own login; your laptop's login is not shared.
+EOF
