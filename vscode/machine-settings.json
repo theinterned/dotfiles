@@ -1,8 +1,19 @@
 {
   "workbench.colorCustomizations": {
-    "titleBar.activeForeground": "#ffffff",
-    "titleBar.inactiveForeground": "#ffffffcc",
-    "statusBar.foreground": "#ffffff"
+    "[GitHub Light Default]": {
+      "titleBar.activeForeground": "#24292f",
+      "titleBar.inactiveForeground": "#424a53",
+      "statusBar.foreground": "#24292f",
+      "activityBar.foreground": "#24292f",
+      "activityBar.inactiveForeground": "#424a53"
+    },
+    "[GitHub Dark Default]": {
+      "titleBar.activeForeground": "#ffffff",
+      "titleBar.inactiveForeground": "#ffffffcc",
+      "statusBar.foreground": "#ffffff",
+      "activityBar.foreground": "#ffffff",
+      "activityBar.inactiveForeground": "#ffffffcc"
+    }
   },
   "workbench.externalUriOpeners": {
     "https://github.com/**": "default"

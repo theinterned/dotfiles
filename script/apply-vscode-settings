@@ -36,19 +36,45 @@ def merge(existing, incoming):
 with open(sys.argv[1]) as handle:
     incoming = json.load(handle)
 
-palette = (
+dark_palette = (
     "#235093", "#6b327c", "#17655f", "#7a3e24",
     "#704c12", "#7a3045", "#3f527d", "#4b5e28",
 )
+light_palette = (
+    "#dce8f8", "#eedff3", "#d9eeeb", "#f4e3da",
+    "#f2e8d5", "#f3dfe5", "#e1e6f1", "#e5ecd9",
+)
 digest = hashlib.sha256(os.environ["CODESPACE_NAME"].encode()).hexdigest()
-color = palette[int(digest, 16) % len(palette)]
-for key in (
+color_index = int(digest, 16) % len(dark_palette)
+backgrounds = (
     "titleBar.activeBackground",
     "titleBar.inactiveBackground",
     "statusBar.background",
     "activityBar.background",
+)
+for theme, palette in (
+    ("GitHub Light Default", light_palette),
+    ("GitHub Dark Default", dark_palette),
 ):
-    incoming["workbench.colorCustomizations"][key] = color
+    for key in backgrounds:
+        incoming["workbench.colorCustomizations"][f"[{theme}]"][key] = palette[color_index]
+
+
+def remove_legacy_colors(settings):
+    colors = settings.get("workbench.colorCustomizations")
+    if not isinstance(colors, dict):
+        return
+    for key in backgrounds:
+        if colors.get(key) in dark_palette:
+            del colors[key]
+    for key, value in (
+        ("titleBar.activeForeground", "#ffffff"),
+        ("titleBar.inactiveForeground", "#ffffffcc"),
+        ("statusBar.foreground", "#ffffff"),
+    ):
+        if colors.get(key) == value:
+            del colors[key]
+
 
 home = Path.home()
 roots = [home / ".vscode-remote", home / ".vscode-server"]
@@ -65,6 +91,7 @@ for root in roots:
         if not isinstance(existing, dict):
             raise ValueError("VS Code settings must be a JSON object")
 
+        remove_legacy_colors(existing)
         merge(existing, incoming)
         target.parent.mkdir(parents=True, exist_ok=True)
         with tempfile.NamedTemporaryFile(
@@ -80,5 +107,8 @@ for root in roots:
     finally:
         if temporary_path and os.path.exists(temporary_path):
             os.unlink(temporary_path)
-    print(f"Applied VS Code remote settings with color {color} to {target}")
+    print(
+        f"Applied VS Code remote settings with light color {light_palette[color_index]} "
+        f"and dark color {dark_palette[color_index]} to {target}"
+    )
 PY
