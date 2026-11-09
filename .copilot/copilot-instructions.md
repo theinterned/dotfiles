@@ -34,6 +34,19 @@ User-level instructions applied across all repositories on this machine.
   Codespaces, not CI or unattended workloads. Tests and builds need no wrapper
   unless they download packages.
 
+### github-ui bootstrap
+
+- For trusted `github/github-ui` local development or personal Codespaces, if
+  setup fails on npm registry access or authentication, use the repo-required
+  Node version, complete CFS setup/sign-in above, and run from the worktree root:
+  `gh cfs -- npm run env -- script/bootstrap`.
+- This supplies temporary CFS authentication to nested npm/npx downloads
+  without editing registry settings or lockfiles.
+- Do not use `gh cfs -- npm exec --call='script/bootstrap'`: the inherited
+  npm exec call setting causes nested npx commands to fail with `EUSAGE`.
+- This workaround does not fix Node-version mismatches or unrelated build
+  failures; diagnose those separately.
+
 ## Datadog
 
 - Prefer the `dd-pup` skill and Datadog's `pup` CLI for Datadog investigations
