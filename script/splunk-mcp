@@ -7,34 +7,51 @@ readonly TOKEN_REF="op://Employee/Splunk token/password"
 readonly DOCKER_TIMEOUT=90
 readonly KEYCHAIN_SERVICE="splunk-mcp-token"
 readonly KEYCHAIN_ACCOUNT="${USER:-$(id -un)}"
-# Splunk issues 90 day tokens. Re-read from 1Password once a week is left.
+# Splunk issues 90 day tokens. Recommend renewal once a week is left.
 readonly REFRESH_MARGIN=$((7 * 24 * 60 * 60))
 
-# Seconds left on a Splunk JWT. Fails when the value is not a decodable token.
+# Decode expiry locally; Splunk still verifies the token's signature.
 token_lifetime() {
-  local payload decoded exp
-  payload="${1#*.}"
-  payload="${payload%%.*}"
-  [[ -n "$payload" && "$payload" != "$1" ]] || return 1
+  printf '%s' "$1" | python3 -c '
+import base64
+import json
+import re
+import sys
+import time
 
-  payload="$(tr '_-' '/+' <<<"$payload")"
-  case $((${#payload} % 4)) in
-    2) payload+="==" ;;
-    3) payload+="=" ;;
-  esac
-
-  decoded="$(base64 -D <<<"$payload" 2>/dev/null)" ||
-    decoded="$(base64 -d <<<"$payload" 2>/dev/null)" || return 1
-  exp="$(sed -n 's/.*"exp":[[:space:]]*\([0-9][0-9]*\).*/\1/p' <<<"$decoded")"
-  [[ -n "$exp" ]] || return 1
-
-  echo $((exp - $(date +%s)))
+try:
+    parts = sys.stdin.read().split(".")
+    if len(parts) != 3 or any(not re.fullmatch(r"[A-Za-z0-9_-]+", p) for p in parts):
+        raise ValueError()
+    payload = base64.b64decode(parts[1] + "=" * (-len(parts[1]) % 4),
+                              altchars=b"-_", validate=True)
+    exp = json.loads(payload)["exp"]
+    if type(exp) is not int or not 0 < exp <= 2**63 - 1:
+        raise ValueError()
+    print(exp - int(time.time()))
+except (ValueError, KeyError, TypeError):
+    sys.exit(1)
+'
 }
 
-token_is_fresh() {
+token_validate() {
   local left
-  left="$(token_lifetime "${1:-}")" || return 1
-  ((left > REFRESH_MARGIN))
+  if ! left="$(token_lifetime "$1")"; then
+    echo "Splunk token is malformed or has no valid JWT expiry." >&2
+    return 1
+  fi
+  if ((left <= 0)); then
+    echo "Splunk token has expired." >&2
+    return 1
+  fi
+  if ((left <= REFRESH_MARGIN)); then
+    echo "Splunk token expires within seven days. Rotate it in Splunk, update 1Password, and run: $0 --refresh-token" >&2
+  fi
+}
+
+token_help() {
+  echo "Create or rotate the token in Splunk and save it at $TOKEN_REF, then run: $0 --refresh-token" >&2
+  echo "In Codespaces, update the SPLUNK_BEARER_TOKEN secret and restart the Codespace." >&2
 }
 
 keychain_read() {
@@ -55,6 +72,43 @@ tailscale_path() {
   printf '%s\n' "${path:-/Applications/Tailscale.app/Contents/MacOS/Tailscale}"
 }
 
+case "${1:-}" in
+  "") [[ $# == 0 ]] || { echo "Usage: $0 [--refresh-token]" >&2; exit 2; } ;;
+  --refresh-token) [[ $# == 1 ]] || { echo "Usage: $0 [--refresh-token]" >&2; exit 2; } ;;
+  *) echo "Usage: $0 [--refresh-token]" >&2; exit 2 ;;
+esac
+
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "Splunk token validation requires python3. Install it and retry." >&2
+  exit 1
+fi
+
+if [[ "${1:-}" == --refresh-token ]]; then
+  if ! command -v security >/dev/null 2>&1; then
+    echo "Token refresh requires macOS Keychain (security). In Codespaces, update the SPLUNK_BEARER_TOKEN secret instead." >&2
+    exit 1
+  fi
+  if ! command -v op >/dev/null 2>&1; then
+    echo "Token refresh requires the 1Password CLI (op). Install it and retry." >&2
+    exit 1
+  fi
+  if ! refreshed="$(op read "$TOKEN_REF" 2>/dev/null)"; then
+    echo "Could not read the Splunk token from 1Password. Unlock 1Password, authorize this explicit refresh, and check $TOKEN_REF." >&2
+    exit 1
+  fi
+  if ! token_validate "$refreshed"; then
+    token_help
+    exit 1
+  fi
+  if ! keychain_write "$refreshed"; then
+    echo "Could not cache the Splunk token in macOS Keychain. Check Keychain access and retry: $0 --refresh-token" >&2
+    exit 1
+  fi
+  unset refreshed
+  echo "Splunk token refreshed in macOS Keychain. No services started." >&2
+  exit 0
+fi
+
 # Copilot does not expand ${...} in MCP env values, it passes the literal string
 # through, and a literal is non-empty enough to defeat the check below. A real
 # exported token is inherited from the environment anyway, so treat anything
@@ -63,32 +117,23 @@ if [[ "${SPLUNK_BEARER_TOKEN:-}" == '${'*'}' ]]; then
   SPLUNK_BEARER_TOKEN=""
 fi
 
-if [[ -z "${SPLUNK_BEARER_TOKEN:-}" ]] && command -v security >/dev/null 2>&1; then
-  cached="$(keychain_read)" || cached=""
-  if token_is_fresh "$cached"; then
-    SPLUNK_BEARER_TOKEN="$cached"
-  fi
-  unset cached
-fi
-
-# 1Password prompts for biometric approval on every read, and the wrapper runs
-# once per MCP server start, so this is the path worth avoiding.
 if [[ -z "${SPLUNK_BEARER_TOKEN:-}" ]]; then
-  if ! command -v op >/dev/null 2>&1; then
-    echo "1Password CLI (op) is not installed. Install it or export SPLUNK_BEARER_TOKEN." >&2
+  if ! command -v security >/dev/null 2>&1; then
+    echo "No inherited SPLUNK_BEARER_TOKEN and macOS Keychain is unavailable." >&2
+    token_help
     exit 1
   fi
-
-  if ! SPLUNK_BEARER_TOKEN="$(op read "$TOKEN_REF" 2>/dev/null)"; then
-    echo "No Splunk token. Store one at $TOKEN_REF or export SPLUNK_BEARER_TOKEN." >&2
+  if ! SPLUNK_BEARER_TOKEN="$(keychain_read)"; then
+    echo "Splunk token cache is missing or unreadable. Check Keychain access." >&2
+    token_help
     exit 1
-  fi
-
-  if command -v security >/dev/null 2>&1 && token_is_fresh "$SPLUNK_BEARER_TOKEN"; then
-    keychain_write "$SPLUNK_BEARER_TOKEN" || true
   fi
 fi
 
+if ! token_validate "$SPLUNK_BEARER_TOKEN"; then
+  token_help
+  exit 1
+fi
 export SPLUNK_BEARER_TOKEN
 
 if ! docker info >/dev/null 2>&1; then
