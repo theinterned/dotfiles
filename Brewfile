@@ -3,6 +3,8 @@ tap "github/bootstrap"
 brew "adr-tools"
 # Record and share terminal sessions
 brew "asciinema"
+# Microsoft Azure command-line interface
+brew "azure-cli"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # User-friendly command-line shell for UNIX-like operating systems
@@ -13,6 +15,8 @@ brew "direnv"
 brew "mise"
 # GitHub command-line tool
 brew "gh"
+# Datadog CLI
+brew "datadog-labs/pack/pup"
 # Syntax-highlighting pager for git and diff output
 brew "git-delta"
 # HTTP load generator, ApacheBench (ab) replacement

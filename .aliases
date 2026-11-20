@@ -26,10 +26,28 @@ alias cdui="cd /workspaces/github-ui"
 alias cui="code /workspaces/github-ui"
 
 # npm
+cfs-run() {
+  if ! command -v gh >/dev/null 2>&1; then
+    printf '%s\n' 'CFS requires GitHub CLI (gh). Install it before running this shortcut.' >&2
+    return 127
+  fi
+  if ! gh cfs version >/dev/null 2>&1; then
+    printf '%s\n' 'CFS is unavailable. Install it with: gh extension install github/gh-cfs' >&2
+    return 127
+  fi
+  gh cfs -- "$@"
+}
+
+cfs-npm() {
+  cfs-run npm "$@"
+}
+
+alias npx="cfs-run npx"
 alias n=npm
 alias nr="npm run"
 alias nrd="npm run dev"
-alias ni="npm install"
+alias ni="cfs-npm install"
+alias nci="cfs-npm ci"
 alias nw="npm workspace"
 alias nws="npm workspaces"
 alias nwsr="npm workspaces run"

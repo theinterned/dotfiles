@@ -29,8 +29,26 @@ abbr -a anrd npm run dev --prefix /workspaces/github/vendor/alloy
 abbr -a ani npm install --prefix /workspaces/github/vendor/alloy
 
 # npm stuff
+function cfs-run
+    if not command -sq gh
+        printf '%s\n' 'CFS requires GitHub CLI (gh). Install it before running this shortcut.' >&2
+        return 127
+    end
+    if not gh cfs version >/dev/null 2>&1
+        printf '%s\n' 'CFS is unavailable. Install it with: gh extension install github/gh-cfs' >&2
+        return 127
+    end
+    gh cfs -- $argv
+end
+
+function cfs-npm
+    cfs-run npm $argv
+end
+
+alias npx 'cfs-run npx'
 abbr -a n npm
-abbr -a ni npm install
+abbr -a ni cfs-npm install
+abbr -a nci cfs-npm ci
 abbr -a nr npm run
 abbr -a nrd npm run dev
 abbr -a nsb npm run storybook
