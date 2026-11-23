@@ -30,6 +30,8 @@ User-level instructions applied across all repositories on this machine.
 - Never bypass CFS by changing registries, disabling security checks, or
   removing lockfiles or integrity hashes. Do not retry unrelated dependency,
   build, or lifecycle-script failures as authentication problems.
+- If CFS reports a missing version (for example `ETARGET` or `E404`) or
+  Defender blocks a public registry, use the `cfs-blocked-packages` skill.
 - Use this employee-login setup only for local development and personal
   Codespaces, not CI or unattended workloads. Tests and builds need no wrapper
   unless they download packages.
