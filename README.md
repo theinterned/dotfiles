@@ -8,6 +8,15 @@ My dot files
 ./script/setup
 ```
 
+## Raycast Spotify controls
+
+Add `raycast/scripts` as a Script Commands directory in Raycast. The
+**Connect Spotify to Amp** command opens Spotify's device picker and selects
+`Amp (Office)`. It reads the visible device name from a temporary screenshot
+of the Spotify window, then deletes the screenshot. Allow the app running the
+script (such as Raycast, Terminal, or Script Editor) under **System Settings →
+Privacy & Security → Accessibility** and **Screen & System Audio Recording**.
+
 ## npm shortcuts
 
 Zsh/Bash aliases and Fish shortcuts use CFS for package installs and npx:
