@@ -137,10 +137,17 @@ It uses an inherited `SPLUNK_BEARER_TOKEN` (including a Codespaces secret), or
 the macOS Keychain cache under service `splunk-mcp-token`, account `$USER`.
 The launcher requires `python3` to validate the token's JWT expiry.
 
-Normal startup never reads 1Password. Missing, unreadable, malformed, or expired
-tokens stop startup before Docker or Tailscale is invoked and print recovery
-instructions. Tokens within seven days of expiry still work, with a renewal
-warning. Splunk verifies the token's signature when authenticating requests.
+If the Keychain cache is missing, unreadable, malformed, or expired, normal
+startup falls back to 1Password once and caches a valid token so later starts
+do not prompt. On macOS, a desktop notification shows the refresh command
+below; the MCP server's stderr log has the full fix steps. Notifications also
+appear when the token is within seven days of expiry or the fallback fails.
+If the 1Password copy is also missing, malformed, or
+expired, startup stops before Docker or Tailscale is invoked and explains how
+to rotate the token and update the item. An invalid inherited token stops
+startup without falling back. Tokens within seven days of expiry still work
+without a 1Password read, with the same renewal instructions. Splunk verifies
+the token's signature when authenticating requests.
 
 Splunk tokens are valid for 90 days. After creating or rotating one in Splunk,
 save it at `op://Employee/Splunk token/password`, then explicitly refresh:
@@ -149,11 +156,14 @@ save it at `op://Employee/Splunk token/password`, then explicitly refresh:
 bash ~/.dotfiles/script/splunk-mcp --refresh-token
 ```
 
-Only this refresh mode reads 1Password and may request biometric/app approval.
-It validates expiry, replaces the Keychain cache without putting the token in
-command arguments, and exits without starting any services. If the 1Password
+Refresh mode reads 1Password and may request biometric/app approval, just like
+the automatic fallback. It validates expiry, replaces the Keychain cache
+without putting the token in command arguments, and exits without starting
+any services. If the 1Password
 copy is expired, rotate it first; reading it again does not renew it. Cache
-write failures are reported rather than silently ignored. Keychain permissions
+write failures stop startup and explain that later starts may prompt again
+until caching succeeds. Check Keychain access and retry the refresh command.
+Keychain permissions
 and 1Password authentication are unchanged.
 
 `~/.copilot/mcp-config.json` is owned by Copilot itself — `copilot mcp add`, the
