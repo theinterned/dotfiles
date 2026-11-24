@@ -14,14 +14,24 @@ function setup(options = {}) {
     pickerOpen: options.pickerOpen === true,
     panelReadyAt: 0,
     selectedAt: null,
+    computerSelectedAt: null,
     pressed: [],
     sleeps: [],
+    screenChecked: false,
+    screenRequested: false,
+    imports: [],
+    created: false,
     removed: false
   }
   const app = {}
   const window = {}
   const picker = { role: 'AXCheckBox', description: 'Connect to a device' }
   const panel = { role: 'AXGroup', description: 'Connect to a device' }
+  const current = { role: 'AXGroup', description: 'Current device' }
+  const currentComputer = { role: 'AXGroup', description: 'This computer' }
+  const list = { role: 'AXList' }
+  const computer = { role: 'AXButton', title: 'This computer' }
+  const duplicateComputer = { role: 'AXButton', title: 'This computer' }
   const indicator = { role: 'AXButton' }
   const target = {}
   const enhanced = {}
@@ -32,7 +42,11 @@ function setup(options = {}) {
 
   const bridge = value => value
   bridge.AXIsProcessTrusted = () => true
-  bridge.CGPreflightScreenCaptureAccess = () => true
+  bridge.CGPreflightScreenCaptureAccess = () => {
+    state.screenChecked = true
+    return options.screenAllowed !== false
+  }
+  bridge.CGRequestScreenCaptureAccess = () => { state.screenRequested = true }
   bridge.NSRunningApplication = {
     runningApplicationsWithBundleIdentifier: () => ({
       js: state.running ? [{ processIdentifier: 1 }] : []
@@ -53,13 +67,16 @@ function setup(options = {}) {
   bridge.NSUUID = { UUID: { UUIDString: 'test' } }
   bridge.NSFileManager = {
     defaultManager: {
-      createDirectoryAtPathWithIntermediateDirectoriesAttributesError: () => true,
+      createDirectoryAtPathWithIntermediateDirectoriesAttributesError: () => {
+        state.created = true
+        return true
+      },
       removeItemAtPathError: () => { state.removed = true; return true }
     }
   }
   const context = {
     $: bridge,
-    ObjC: { import: () => {}, bindFunction: () => {}, unwrap: value => value },
+    ObjC: { import: name => { state.imports.push(name) }, bindFunction: () => {}, unwrap: value => value },
     Application: name => name === 'Spotify'
       ? { activate: () => { state.running = true } }
       : { processes: { byName: () => ({ attributes: { byName: () => enhanced } }) } },
@@ -69,11 +86,23 @@ function setup(options = {}) {
   vm.runInContext(source, context)
 
   context.attribute = (node, name) => node === app && name === 'AXWindows' ? { js: [window] } : null
+  const computerIsCurrent = () => options.localCurrent || (
+    state.computerSelectedAt !== null &&
+    state.now >= state.computerSelectedAt + (options.computerConfirmDelay || 0)
+  )
   context.children = node => {
-    if (node !== window) return []
-    const nodes = options.indicatorFirst ? [picker, indicator] : [indicator, picker]
-    if (state.pickerOpen && state.now >= state.panelReadyAt) nodes.push(panel)
-    return nodes
+    if (node === window) {
+      const nodes = options.indicatorFirst ? [picker, indicator] : [indicator, picker]
+      if (state.pickerOpen && state.now >= state.panelReadyAt) nodes.push(panel)
+      return nodes
+    }
+    if (node === panel) return state.now >= (options.listAvailableAt || 0) ? [current, list] : [current]
+    if (node === current) return computerIsCurrent() ? [currentComputer] : []
+    if (node === list && !computerIsCurrent() && !options.computerMissing &&
+        state.now >= (options.computerAvailableAt || 0)) {
+      return options.duplicateComputer ? [computer, duplicateComputer] : [computer]
+    }
+    return []
   }
   context.text = (node, name) => {
     if (name === 'AXRole') return node.role || null
@@ -85,6 +114,7 @@ function setup(options = {}) {
       )
       return connected ? 'Playing on Amp (Office)' : 'Playing on this computer'
     }
+    if (name === 'AXTitle') return node.title || null
     return null
   }
   context.press = node => {
@@ -100,6 +130,10 @@ function setup(options = {}) {
       state.pressed.push('target')
       state.selectedAt = state.now
       if (options.autoClose) state.pickerOpen = false
+    } else if (node === computer) {
+      state.pressed.push('computer')
+      state.computerSelectedAt = state.now
+      if (options.computerAutoClose) state.pickerOpen = false
     } else {
       throw new Error('Unexpected control')
     }
@@ -183,4 +217,66 @@ test('reports when a successful connection cannot close the picker', () => {
   assert.throws(() => context.run(), /Spotify's device picker did not close/)
   assert.deepEqual(state.pressed, ['target', 'picker'])
   assert.equal(state.removed, true)
+})
+
+test('confirms an already-selected computer without screen recording access', () => {
+  const { context, state } = setup({ localCurrent: true, screenAllowed: false })
+  assert.equal(context.run(['--computer']), 'This computer is already connected.')
+  assert.deepEqual(state.pressed, ['picker', 'picker'])
+  assert.equal(state.pickerOpen, false)
+  assert.equal(state.screenChecked, false)
+  assert.equal(state.created, false)
+  assert.equal(state.imports.includes('Vision'), false)
+})
+
+test('selects the computer and reopens the picker if Spotify closes it', () => {
+  const { context, state } = setup({ computerAutoClose: true, computerConfirmDelay: 300, screenAllowed: false })
+  assert.equal(context.run(['--computer']), 'Connected to This computer.')
+  assert.deepEqual(state.pressed, ['picker', 'computer', 'picker', 'picker'])
+  assert.equal(state.pickerOpen, false)
+  assert.equal(state.screenChecked, false)
+  assert.equal(state.created, false)
+})
+
+test('waits for the computer to appear in the device list', () => {
+  const { context, state } = setup({ listAvailableAt: 900, computerAvailableAt: 1100 })
+  assert.equal(context.run(['--computer']), 'Connected to This computer.')
+  assert.deepEqual(state.pressed, ['picker', 'computer', 'picker'])
+  assert.ok(state.now >= 1100)
+})
+
+test('does not select another device when the computer is missing', () => {
+  const { context, state } = setup({ computerMissing: true })
+  assert.throws(() => context.run(['--computer']), /Could not find This computer/)
+  assert.deepEqual(state.pressed, ['picker'])
+})
+
+test('does not select an ambiguous computer device', () => {
+  const { context, state } = setup({ duplicateComputer: true })
+  assert.throws(() => context.run(['--computer']), /More than one device matched This computer/)
+  assert.deepEqual(state.pressed, ['picker'])
+})
+
+test('reports when Spotify does not confirm the computer connection', () => {
+  const { context, state } = setup({ computerConfirmDelay: Infinity })
+  assert.throws(() => context.run(['--computer']), /Spotify did not confirm the connection/)
+  assert.deepEqual(state.pressed, ['picker', 'computer'])
+})
+
+test('reports when the computer is connected but the picker cannot close', () => {
+  const { context, state } = setup({ localCurrent: true, pickerOpen: true, stuckOpen: true })
+  assert.throws(() => context.run(['--computer']), /Connected to This computer, but Spotify's device picker did not close/)
+  assert.deepEqual(state.pressed, ['picker'])
+})
+
+test('still requests screen recording access for Amp', () => {
+  const { context, state } = setup({ screenAllowed: false })
+  assert.throws(() => context.run(), /Screen & System Audio Recording/)
+  assert.equal(state.screenRequested, true)
+})
+
+test('rejects unsupported command arguments', () => {
+  const { context, state } = setup()
+  assert.throws(() => context.run(['--unknown']), /Unsupported Spotify device command/)
+  assert.deepEqual(state.pressed, [])
 })

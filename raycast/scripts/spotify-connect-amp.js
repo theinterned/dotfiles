@@ -11,12 +11,12 @@
 
 ObjC.import('Cocoa')
 ObjC.import('ApplicationServices')
-ObjC.import('Vision')
 ObjC.bindFunction('CFMakeCollectable', ['id', ['void *']])
 ObjC.bindFunction('CGPreflightScreenCaptureAccess', ['bool', []])
 ObjC.bindFunction('CGRequestScreenCaptureAccess', ['bool', []])
 
 const deviceName = 'Amp (Office)'
+const computerName = 'This computer'
 
 function attribute(element, name) {
   const result = Ref()
@@ -154,6 +154,20 @@ function panel(window) {
   )
 }
 
+function devicePicker(window) {
+  return findDescendant(window, node =>
+    text(node, 'AXRole') === 'AXCheckBox' && text(node, 'AXDescription') === 'Connect to a device'
+  )
+}
+
+function openPicker(window, picker) {
+  if (text(picker, 'AXValue') !== 1) press(picker)
+  $.NSThread.sleepForTimeInterval(0.5)
+  const section = waitFor(() => panel(window), 4.5, 0.5)
+  if (!section) throw new Error("Spotify's device picker did not open.")
+  return section
+}
+
 function isConnected(window) {
   return findDescendant(window, node =>
     text(node, 'AXRole') === 'AXButton' && text(node, 'AXTitle') === `Playing on ${deviceName}`
@@ -170,17 +184,58 @@ function playbackControls(window) {
   return { connected: connected !== null, picker }
 }
 
-function closePicker(window, picker) {
-  const control = picker || findDescendant(window, node =>
-    text(node, 'AXRole') === 'AXCheckBox' && text(node, 'AXDescription') === 'Connect to a device'
-  )
-  if (!control) throw new Error(`Connected to ${deviceName}, but could not find Spotify's device picker to close it.`)
+function closePicker(window, picker, targetName = deviceName) {
+  const control = picker || devicePicker(window)
+  if (!control) throw new Error(`Connected to ${targetName}, but could not find Spotify's device picker to close it.`)
   const value = text(control, 'AXValue')
   if (value === 1) press(control)
   else if (value !== 0) throw new Error("Could not check whether Spotify's device picker is open.")
   if (!waitFor(() => text(control, 'AXValue') === 0 && !panel(window), 3)) {
-    throw new Error(`Connected to ${deviceName}, but Spotify's device picker did not close.`)
+    throw new Error(`Connected to ${targetName}, but Spotify's device picker did not close.`)
   }
+}
+
+function computerIsCurrent(section) {
+  const current = findDescendant(section, node => text(node, 'AXDescription') === 'Current device')
+  return current && findDescendant(current, node => text(node, 'AXDescription') === computerName)
+}
+
+function locateComputer(section) {
+  if (computerIsCurrent(section)) return { current: true }
+  const list = findDescendant(section, node => text(node, 'AXRole') === 'AXList')
+  if (!list) return null
+  const matches = Array.from(descendants(list)).filter(node =>
+    text(node, 'AXRole') === 'AXButton' && text(node, 'AXTitle') === computerName
+  )
+  if (matches.length > 1) throw new Error(`More than one device matched ${computerName}.`)
+  return matches.length === 1 ? { button: matches[0] } : null
+}
+
+function connectComputer(window, picker, section) {
+  let target = locateComputer(section)
+  if (!target) {
+    target = waitFor(() => {
+      const currentPanel = panel(window)
+      return currentPanel && locateComputer(currentPanel)
+    }, 5)
+  }
+  if (!target) throw new Error(`Could not find ${computerName} in Spotify's device list.`)
+  if (!target.current) {
+    press(target.button)
+    const confirmed = waitFor(() => {
+      const currentPanel = panel(window)
+      if (currentPanel) return computerIsCurrent(currentPanel)
+      const control = devicePicker(window)
+      if (!control) return null
+      const value = text(control, 'AXValue')
+      if (value === 0) press(control)
+      else if (value !== 1) throw new Error("Could not check whether Spotify's device picker is open.")
+      return null
+    }, 12)
+    if (!confirmed) throw new Error(`Selected ${computerName}, but Spotify did not confirm the connection.`)
+  }
+  closePicker(window, target.current ? picker : null, computerName)
+  return target.current ? `${computerName} is already connected.` : `Connected to ${computerName}.`
 }
 
 function locateDevice(window, pid, path) {
@@ -206,13 +261,20 @@ function locateDevice(window, pid, path) {
   return matches[0] || null
 }
 
-function run() {
+function run(args = []) {
+  if (args.length > 1 || (args.length === 1 && args[0] !== '--computer')) {
+    throw new Error('Unsupported Spotify device command.')
+  }
+  const computer = args.length === 1
   if (!$.AXIsProcessTrusted()) {
     throw new Error('Allow the app running this command in System Settings > Privacy & Security > Accessibility.')
   }
-  if (!$.CGPreflightScreenCaptureAccess()) {
-    $.CGRequestScreenCaptureAccess()
-    throw new Error('Allow the app running this command in System Settings > Privacy & Security > Screen & System Audio Recording, then quit and reopen that app.')
+  if (!computer) {
+    ObjC.import('Vision')
+    if (!$.CGPreflightScreenCaptureAccess()) {
+      $.CGRequestScreenCaptureAccess()
+      throw new Error('Allow the app running this command in System Settings > Privacy & Security > Screen & System Audio Recording, then quit and reopen that app.')
+    }
   }
 
   const wasRunning = $.NSRunningApplication.runningApplicationsWithBundleIdentifier($('com.spotify.client')).js.length > 0
@@ -229,16 +291,16 @@ function run() {
   const windows = attribute(app, 'AXWindows')
   if (!windows || windows.js.length === 0) throw new Error('Open a Spotify window and try again.')
   const window = windows.js[0]
-  const { connected, picker } = playbackControls(window)
+  const { connected, picker } = computer
+    ? { connected: false, picker: devicePicker(window) }
+    : playbackControls(window)
   if (connected) {
     closePicker(window, picker)
     return `${deviceName} is already connected.`
   }
   if (!picker) throw new Error("Could not find Spotify's device picker.")
-  if (text(picker, 'AXValue') !== 1) press(picker)
-  $.NSThread.sleepForTimeInterval(0.5)
-  const section = waitFor(() => panel(window), 4.5, 0.5)
-  if (!section) throw new Error("Spotify's device picker did not open.")
+  const section = openPicker(window, picker)
+  if (computer) return connectComputer(window, picker, section)
 
   const files = $.NSFileManager.defaultManager
   const directory = ObjC.unwrap($.NSTemporaryDirectory()) + 'spotify-connect-' + ObjC.unwrap($.NSUUID.UUID.UUIDString)

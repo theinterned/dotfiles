@@ -11,12 +11,13 @@ My dot files
 ## Raycast Spotify controls
 
 Add `raycast/scripts` as a Script Commands directory in Raycast. The
-**Connect Spotify to Amp** command opens Spotify's device picker and selects
-`Amp (Office)`, then closes the picker on success. It reads the visible device
-name from a temporary screenshot of the Spotify window, then deletes the
-screenshot. Allow the app running the script (such as Raycast, Terminal, or
-Script Editor) under **System Settings → Privacy & Security → Accessibility**
-and **Screen & System Audio Recording**.
+**Connect Spotify to Amp** and **Connect Spotify to This Computer** commands
+select the corresponding device and close the picker on success. Both require
+**Accessibility** permission for the app running the command (such as Raycast)
+in **System Settings → Privacy & Security**. The Amp command also needs
+**Screen & System Audio Recording** permission: it reads the device name from
+a temporary screenshot of the Spotify window, then deletes the screenshot.
+The computer command does not take a screenshot.
 
 ## npm shortcuts
 
