@@ -36,15 +36,31 @@ function children(element) {
   return value === null ? [] : Array.from(value.js)
 }
 
-function descendants(root) {
+function* descendants(root) {
   const pending = [root]
-  const found = []
   while (pending.length) {
     const node = pending.pop()
-    found.push(node)
+    yield node
     pending.push(...children(node))
   }
-  return found
+}
+
+function findDescendant(root, predicate) {
+  for (const node of descendants(root)) {
+    if (predicate(node)) return node
+  }
+  return null
+}
+
+function waitFor(check, timeout, interval = 0.2) {
+  const deadline = $.NSProcessInfo.processInfo.systemUptime + timeout
+  while (true) {
+    const result = check()
+    if (result) return result
+    const remaining = deadline - $.NSProcessInfo.processInfo.systemUptime
+    if (remaining <= 0) return null
+    $.NSThread.sleepForTimeInterval(Math.min(interval, remaining))
+  }
 }
 
 function press(element) {
@@ -133,27 +149,50 @@ function recognizedDevicePoints(windowInfo, path) {
 }
 
 function panel(window) {
-  return descendants(window).find(node =>
+  return findDescendant(window, node =>
     text(node, 'AXRole') === 'AXGroup' && text(node, 'AXDescription') === 'Connect to a device'
   )
 }
 
 function isConnected(window) {
-  return descendants(window).some(node =>
+  return findDescendant(window, node =>
     text(node, 'AXRole') === 'AXButton' && text(node, 'AXTitle') === `Playing on ${deviceName}`
   )
+}
+
+function playbackControls(window) {
+  let picker = null
+  const connected = findDescendant(window, node => {
+    const role = text(node, 'AXRole')
+    if (!picker && role === 'AXCheckBox' && text(node, 'AXDescription') === 'Connect to a device') picker = node
+    return role === 'AXButton' && text(node, 'AXTitle') === `Playing on ${deviceName}`
+  })
+  return { connected: connected !== null, picker }
+}
+
+function closePicker(window, picker) {
+  const control = picker || findDescendant(window, node =>
+    text(node, 'AXRole') === 'AXCheckBox' && text(node, 'AXDescription') === 'Connect to a device'
+  )
+  if (!control) throw new Error(`Connected to ${deviceName}, but could not find Spotify's device picker to close it.`)
+  const value = text(control, 'AXValue')
+  if (value === 1) press(control)
+  else if (value !== 0) throw new Error("Could not check whether Spotify's device picker is open.")
+  if (!waitFor(() => text(control, 'AXValue') === 0 && !panel(window), 3)) {
+    throw new Error(`Connected to ${deviceName}, but Spotify's device picker did not close.`)
+  }
 }
 
 function locateDevice(window, pid, path) {
   const section = panel(window)
   if (!section) throw new Error("Spotify's device picker is not open.")
-  const nodes = descendants(section)
+  const nodes = Array.from(descendants(section))
   const current = nodes.find(node => text(node, 'AXDescription') === 'Current device')
   const list = nodes.find(node => text(node, 'AXRole') === 'AXList')
   if (!current || !list) throw new Error("Could not find Spotify's device list.")
 
   const buttons = children(list).flatMap(row =>
-    descendants(row).filter(node => text(node, 'AXRole') === 'AXButton')
+    Array.from(descendants(row)).filter(node => text(node, 'AXRole') === 'AXButton')
   )
   const points = recognizedDevicePoints(visibleWindow(window, pid), path)
   const matches = []
@@ -176,29 +215,29 @@ function run() {
     throw new Error('Allow the app running this command in System Settings > Privacy & Security > Screen & System Audio Recording, then quit and reopen that app.')
   }
 
+  const wasRunning = $.NSRunningApplication.runningApplicationsWithBundleIdentifier($('com.spotify.client')).js.length > 0
   Application('Spotify').activate()
-  $.NSThread.sleepForTimeInterval(1)
+  if (!wasRunning) $.NSThread.sleepForTimeInterval(1)
   const processes = $.NSRunningApplication.runningApplicationsWithBundleIdentifier($('com.spotify.client')).js
   if (processes.length !== 1) throw new Error('Could not identify the Spotify process.')
   const pid = processes[0].processIdentifier
   const app = $.AXUIElementCreateApplication(pid)
-  Application('System Events').processes.byName('Spotify').attributes.byName('AXEnhancedUserInterface').value = true
-  $.NSThread.sleepForTimeInterval(1)
+  const enhanced = Application('System Events').processes.byName('Spotify').attributes.byName('AXEnhancedUserInterface')
+  const wasEnhanced = enhanced.value()
+  enhanced.value = true
+  if (!wasEnhanced) $.NSThread.sleepForTimeInterval(1)
   const windows = attribute(app, 'AXWindows')
   if (!windows || windows.js.length === 0) throw new Error('Open a Spotify window and try again.')
   const window = windows.js[0]
-  if (isConnected(window)) return `${deviceName} is already connected.`
-  const picker = descendants(window).find(node =>
-    text(node, 'AXRole') === 'AXCheckBox' && text(node, 'AXDescription') === 'Connect to a device'
-  )
+  const { connected, picker } = playbackControls(window)
+  if (connected) {
+    closePicker(window, picker)
+    return `${deviceName} is already connected.`
+  }
   if (!picker) throw new Error("Could not find Spotify's device picker.")
   if (text(picker, 'AXValue') !== 1) press(picker)
-
-  let section = null
-  for (let i = 0; i < 10 && !section; i++) {
-    $.NSThread.sleepForTimeInterval(0.5)
-    section = panel(window)
-  }
+  $.NSThread.sleepForTimeInterval(0.5)
+  const section = waitFor(() => panel(window), 4.5, 0.5)
   if (!section) throw new Error("Spotify's device picker did not open.")
 
   const files = $.NSFileManager.defaultManager
@@ -211,13 +250,14 @@ function run() {
   try {
     const target = locateDevice(window, pid, path)
     if (!target) throw new Error(`Could not read ${deviceName} in Spotify's visible device list.`)
-    if (target.current) return `${deviceName} is already connected.`
-    press(target.button)
-    for (let i = 0; i < 12; i++) {
-      $.NSThread.sleepForTimeInterval(1)
-      if (isConnected(window)) return `Connected to ${deviceName}.`
+    if (!target.current) {
+      press(target.button)
+      if (!waitFor(() => isConnected(window), 12)) {
+        throw new Error(`Selected ${deviceName}, but Spotify did not confirm the connection.`)
+      }
     }
-    throw new Error(`Selected ${deviceName}, but Spotify did not confirm the connection.`)
+    closePicker(window, target.current ? picker : null)
+    return target.current ? `${deviceName} is already connected.` : `Connected to ${deviceName}.`
   } finally {
     const cleanupError = Ref()
     if (!files.removeItemAtPathError($(directory), cleanupError)) {
