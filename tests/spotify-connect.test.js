@@ -253,6 +253,13 @@ test('closes an open picker when already connected', () => {
   assert.equal(state.pickerOpen, false)
 })
 
+test('does not activate Spotify when the playing indicator is found before the picker', () => {
+  const { run, state } = setup({ connected: true, indicatorFirst: true })
+  assert.equal(run(), '🔊 Amp (Office) is already connected.')
+  assert.equal(state.spotifyActivations, 0)
+  assert.equal(state.frontmost.bundleIdentifier, 'app.editor')
+})
+
 test('still enables Spotify accessibility when starting from a cold state', () => {
   const { run, state } = setup({ running: false, enhanced: false, connected: true })
   assert.equal(run(), '🔊 Amp (Office) is already connected.')

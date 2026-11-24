@@ -256,7 +256,7 @@ function connect(deviceName) {
     const windows = attribute(app, 'AXWindows')
     window = windows && windows.js.length ? windows.js[0] : null
     controls = window ? playbackControls(window, deviceName) : null
-    if (controls && controls.picker) break
+    if (controls && (controls.connected || controls.picker)) break
     if (attempt === 0) Application('Spotify').activate()
   }
   if (!window) throw new Error('Open a Spotify window and try again.')
