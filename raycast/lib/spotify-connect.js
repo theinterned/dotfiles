@@ -96,8 +96,8 @@ function visibleWindow(window, pid) {
       b && Math.abs(b.X - x) < 2 && Math.abs(b.Y - y) < 2 &&
       Math.abs(b.Width - width) < 2 && Math.abs(b.Height - height) < 2
   })
-  if (matches.length !== 1) throw new Error("Could not identify Spotify's visible window.")
-  return matches[0]
+  if (matches.length > 1) throw new Error("Could not identify Spotify's visible window.")
+  return matches[0] || null
 }
 
 function capture(windowInfo, path) {
@@ -149,6 +149,7 @@ function devicePicker(window) {
 function openPicker(window, picker) {
   if (text(picker, 'AXValue') !== 1) press(picker)
   $.NSThread.sleepForTimeInterval(0.5)
+  if (!panel(window)) Application('Spotify').activate()
   const section = waitFor(() => panel(window), 4.5, 0.5)
   if (!section) throw new Error("Spotify's device picker did not open.")
   return section
@@ -209,13 +210,21 @@ function locateAccessibleDevice(devices, deviceName) {
 }
 
 function locateDevice(window, pid, deviceName, screenshotPath, useScreenshot = true) {
-  const devices = deviceList(window)
+  let devices = deviceList(window)
   if (!devices) return null
   const accessible = locateAccessibleDevice(devices, deviceName)
   if (accessible || !useScreenshot) return accessible
 
   const path = screenshotPath()
-  const points = recognizedDevicePoints(visibleWindow(window, pid), path, deviceName)
+  let windowInfo = visibleWindow(window, pid)
+  if (!windowInfo) {
+    Application('Spotify').activate()
+    windowInfo = waitFor(() => visibleWindow(window, pid), 2)
+    devices = waitFor(() => deviceList(window), 2)
+    if (!devices) throw new Error("Could not find Spotify's device list.")
+  }
+  if (!windowInfo) throw new Error("Could not identify Spotify's visible window.")
+  const points = recognizedDevicePoints(windowInfo, path, deviceName)
   const matches = []
   for (const point of points) {
     if (containsPoint(devices.current, point)) matches.push({ current: true })
@@ -228,13 +237,11 @@ function locateDevice(window, pid, deviceName, screenshotPath, useScreenshot = t
 }
 
 function connect(deviceName) {
-  if (!$.AXIsProcessTrusted()) {
-    throw new Error('Allow the app running this command in System Settings > Privacy & Security > Accessibility.')
-  }
-
   const wasRunning = $.NSRunningApplication.runningApplicationsWithBundleIdentifier($('com.spotify.client')).js.length > 0
-  Application('Spotify').activate()
-  if (!wasRunning) $.NSThread.sleepForTimeInterval(1)
+  if (!wasRunning) {
+    Application('Spotify').activate()
+    $.NSThread.sleepForTimeInterval(1)
+  }
   const processes = $.NSRunningApplication.runningApplicationsWithBundleIdentifier($('com.spotify.client')).js
   if (processes.length !== 1) throw new Error('Could not identify the Spotify process.')
   const pid = processes[0].processIdentifier
@@ -243,10 +250,17 @@ function connect(deviceName) {
   const wasEnhanced = enhanced.value()
   enhanced.value = true
   if (!wasEnhanced) $.NSThread.sleepForTimeInterval(1)
-  const windows = attribute(app, 'AXWindows')
-  if (!windows || windows.js.length === 0) throw new Error('Open a Spotify window and try again.')
-  const window = windows.js[0]
-  const { connected, picker } = playbackControls(window, deviceName)
+  let window = null
+  let controls = null
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const windows = attribute(app, 'AXWindows')
+    window = windows && windows.js.length ? windows.js[0] : null
+    controls = window ? playbackControls(window, deviceName) : null
+    if (controls && controls.picker) break
+    if (attempt === 0) Application('Spotify').activate()
+  }
+  if (!window) throw new Error('Open a Spotify window and try again.')
+  const { connected, picker } = controls
   if (connected) {
     closePicker(window, picker, deviceName)
     return `${deviceName} is already connected.`
@@ -313,9 +327,59 @@ function connect(deviceName) {
   }
 }
 
+function frontmostApplication() {
+  // NSWorkspace's frontmostApplication can stay stale during an osascript run.
+  const processes = Application('System Events').processes.whose({ frontmost: true })()
+  if (!processes.length) return null
+  if (processes.length !== 1) throw new Error('Could not identify the currently focused app.')
+  return $.NSRunningApplication.runningApplicationWithProcessIdentifier(processes[0].unixId())
+}
+
+function previousApplication() {
+  const app = frontmostApplication()
+  const raycastIsFrontmost = app && ObjC.unwrap(app.bundleIdentifier) === 'com.raycast.macos'
+  const raycast = raycastIsFrontmost ? app :
+    $.NSRunningApplication.runningApplicationsWithBundleIdentifier($('com.raycast.macos')).js[0]
+  if (raycast) {
+    const process = Application('System Events').processes.byName('Raycast')
+    process.visible = false
+    if (!waitFor(() => !process.visible(), 2)) {
+      throw new Error('Could not hide Raycast before connecting Spotify.')
+    }
+  }
+  if (!raycastIsFrontmost) return app
+  const previous = waitFor(() => {
+    const current = frontmostApplication()
+    return current && ObjC.unwrap(current.bundleIdentifier) !== 'com.raycast.macos' ? current : null
+  }, 2)
+  if (!previous) throw new Error('Raycast did not return focus to the previous app.')
+  return previous
+}
+
+function restoreFocus(app) {
+  if (!app || !Application('System Events').processes.whose({ unixId: app.processIdentifier })().length) return
+  const current = frontmostApplication()
+  if (current && current.processIdentifier === app.processIdentifier) return
+  if (!app.activateWithOptions($.NSApplicationActivateIgnoringOtherApps) ||
+      !waitFor(() => {
+        const current = frontmostApplication()
+        return current && current.processIdentifier === app.processIdentifier
+      }, 2)) {
+    throw new Error(`Could not restore focus to ${ObjC.unwrap(app.localizedName)}.`)
+  }
+}
+
 function run(args = []) {
   if (args.length !== 1 || typeof args[0] !== 'string' || !args[0].trim()) {
     throw new Error('Provide exactly one Spotify device name.')
   }
-  return connect(args[0])
+  if (!$.AXIsProcessTrusted()) {
+    throw new Error('Allow the app running this command in System Settings > Privacy & Security > Accessibility.')
+  }
+  const previous = previousApplication()
+  try {
+    return connect(args[0])
+  } finally {
+    restoreFocus(previous)
+  }
 }

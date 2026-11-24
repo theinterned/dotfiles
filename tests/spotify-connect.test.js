@@ -22,8 +22,35 @@ function setup(options = {}) {
     imports: [],
     captures: [],
     created: false,
-    removed: false
+    removed: false,
+    focusAttempts: 0,
+    spotifyActivations: 0,
+    raycastHidden: false
   }
+  const previousApp = {
+    processIdentifier: 2,
+    bundleIdentifier: 'app.editor',
+    localizedName: 'Text Editor',
+    terminated: false,
+    activateWithOptions: () => {
+      state.focusAttempts++
+      if (options.focusFails) return false
+      if (!options.focusStuck) state.frontmost = previousApp
+      return true
+    }
+  }
+  const spotifyApp = { processIdentifier: 1, bundleIdentifier: 'com.spotify.client', terminated: false }
+  const raycastApp = { processIdentifier: 3, bundleIdentifier: 'com.raycast.macos' }
+  const raycastProcess = {}
+  Object.defineProperty(raycastProcess, 'visible', {
+    get: () => () => !state.raycastHidden,
+    set: () => {
+      if (options.hideFails) throw new Error('Could not hide Raycast before connecting Spotify.')
+      state.raycastHidden = true
+      if (!options.raycastStuck && state.frontmost === raycastApp) state.frontmost = previousApp
+    }
+  })
+  state.frontmost = options.raycastFrontmost ? raycastApp : options.spotifyFrontmost ? spotifyApp : previousApp
   const app = {}
   const window = {}
   const picker = { role: 'AXCheckBox', description: 'Connect to a device' }
@@ -70,10 +97,15 @@ function setup(options = {}) {
   }
   bridge.CGRequestScreenCaptureAccess = () => { state.screenRequested = true }
   bridge.NSRunningApplication = {
-    runningApplicationsWithBundleIdentifier: () => ({
-      js: state.running ? [{ processIdentifier: 1 }] : []
-    })
+    runningApplicationsWithBundleIdentifier: bundle => ({
+      js: bundle === 'com.raycast.macos'
+        ? (options.raycastRunning || options.raycastFrontmost ? [raycastApp] : [])
+        : (state.running ? [spotifyApp] : [])
+    }),
+    runningApplicationWithProcessIdentifier: pid =>
+      [previousApp, spotifyApp, raycastApp].find(app => app.processIdentifier === pid)
   }
+  bridge.NSWorkspace = { sharedWorkspace: { frontmostApplication: state.frontmost } }
   bridge.AXUIElementCreateApplication = () => app
   bridge.NSThread = {
     sleepForTimeInterval: seconds => {
@@ -116,8 +148,25 @@ function setup(options = {}) {
     $: bridge,
     ObjC: { import: name => { state.imports.push(name) }, bindFunction: () => {}, unwrap: value => value },
     Application: name => name === 'Spotify'
-      ? { activate: () => { state.running = true } }
-      : { processes: { byName: () => ({ attributes: { byName: () => enhanced } }) } },
+      ? { activate: () => {
+          if ((options.raycastRunning || options.raycastFrontmost) && !state.raycastHidden) {
+            throw new Error('Raycast was not dismissed before Spotify automation.')
+          }
+          state.spotifyActivations++
+          state.running = true
+          state.frontmost = spotifyApp
+          if (options.previousQuits) previousApp.terminated = true
+        } }
+      : { processes: {
+          byName: name => name === 'Raycast'
+            ? raycastProcess : { attributes: { byName: () => enhanced } },
+          whose: filter => () => {
+            const apps = filter.frontmost ? [state.frontmost] :
+              [previousApp, spotifyApp, raycastApp].filter(app =>
+                !app.terminated && app.processIdentifier === filter.unixId)
+            return apps.map(app => ({ unixId: () => app.processIdentifier }))
+          }
+        } },
     Ref: () => []
   }
   vm.createContext(context)
@@ -126,8 +175,10 @@ function setup(options = {}) {
   context.attribute = (node, name) => node === app && name === 'AXWindows' ? { js: [window] } : null
   context.children = node => {
     if (node === window) {
+      if (options.backgroundUnavailable && state.frontmost !== spotifyApp) return []
       const nodes = options.indicatorFirst ? [picker, indicator] : [indicator, picker]
-      if (state.pickerOpen && state.now >= state.panelReadyAt) nodes.push(panel)
+      if (state.pickerOpen && state.now >= state.panelReadyAt &&
+          (!options.backgroundPickerUnavailable || state.frontmost === spotifyApp)) nodes.push(panel)
       return nodes
     }
     if (node === panel) return listAvailable() ? [current, list] : [current]
@@ -158,6 +209,9 @@ function setup(options = {}) {
     return null
   }
   context.press = node => {
+    if ((options.raycastRunning || options.raycastFrontmost) && !state.raycastHidden) {
+      throw new Error('Raycast was not dismissed before Spotify automation.')
+    }
     if (node === picker) {
       state.pressed.push('picker')
       if (state.pickerOpen) {
@@ -175,7 +229,7 @@ function setup(options = {}) {
     }
   }
   context.capture = (info, path) => { state.captures.push(path) }
-  context.visibleWindow = () => windowInfo
+  context.visibleWindow = () => options.windowHidden && state.frontmost !== spotifyApp ? null : windowInfo
   context.geometry = (node, name) => name === 'AXPosition' ? node.bounds.slice(0, 2) : node.bounds.slice(2)
   return { context, state, run: () => context.run([deviceName]) }
 }
@@ -187,6 +241,9 @@ test('does not wait, open the picker, or request screen recording when already c
   assert.deepEqual(state.pressed, [])
   assert.equal(state.screenChecked, false)
   assert.equal(state.created, false)
+  assert.equal(state.frontmost.bundleIdentifier, 'app.editor')
+  assert.equal(state.focusAttempts, 0)
+  assert.equal(state.spotifyActivations, 0)
 })
 
 test('closes an open picker when already connected', () => {
@@ -242,6 +299,7 @@ test('does not select a device when the target is missing', () => {
   assert.deepEqual(state.pressed, ['picker'])
   assert.equal(state.pickerOpen, true)
   assert.equal(state.removed, true)
+  assert.equal(state.frontmost.bundleIdentifier, 'app.editor')
 })
 
 test('reports an unconfirmed connection and removes the screenshot', () => {
@@ -345,6 +403,9 @@ test('selects an arbitrary device by a nested accessible label', () => {
   assert.deepEqual(state.pressed, ['picker', 'target', 'picker'])
   assert.equal(state.screenChecked, false)
   assert.equal(state.created, false)
+  assert.equal(state.spotifyActivations, 0)
+  assert.equal(state.focusAttempts, 0)
+  assert.equal(state.frontmost.bundleIdentifier, 'app.editor')
 })
 
 test('confirms an arbitrary unnamed device through text recognition when no playing indicator exists', () => {
@@ -388,4 +449,83 @@ test('waits for an accessible current label after selection without requiring a 
   assert.deepEqual(state.pressed, ['picker', 'target', 'picker'])
   assert.equal(state.screenChecked, false)
   assert.ok(state.now >= 1100)
+})
+
+test('hides Raycast before remembering the previously focused app', () => {
+  const { run, state } = setup({ raycastFrontmost: true, connected: true, backgroundUnavailable: true })
+  assert.equal(run(), 'Amp (Office) is already connected.')
+  assert.equal(state.raycastHidden, true)
+  assert.equal(state.frontmost.bundleIdentifier, 'app.editor')
+  assert.equal(state.focusAttempts, 1)
+})
+
+test('reports when Raycast cannot be dismissed before touching Spotify', () => {
+  for (const options of [{ hideFails: true }, { raycastStuck: true }]) {
+    const { run, state } = setup({ raycastFrontmost: true, ...options })
+    assert.throws(run, /Could not hide Raycast|Raycast did not return focus/)
+    assert.deepEqual(state.pressed, [])
+    assert.equal(state.frontmost.bundleIdentifier, 'com.raycast.macos')
+  }
+})
+
+test('does not reactivate Spotify when it was already focused', () => {
+  const { run, state } = setup({ spotifyFrontmost: true, connected: true })
+  assert.equal(run(), 'Amp (Office) is already connected.')
+  assert.equal(state.frontmost.bundleIdentifier, 'com.spotify.client')
+  assert.equal(state.focusAttempts, 0)
+})
+
+test('does not try to reopen a previous app that quit during the command', () => {
+  const { run, state } = setup({ previousQuits: true, connected: true, backgroundUnavailable: true })
+  assert.equal(run(), 'Amp (Office) is already connected.')
+  assert.equal(state.focusAttempts, 0)
+})
+
+test('reports failed focus restoration instead of reporting success', () => {
+  for (const options of [{ focusFails: true }, { focusStuck: true }]) {
+    const { run, state } = setup({ connected: true, backgroundUnavailable: true, ...options })
+    assert.throws(run, /Could not restore focus to Text Editor/)
+    assert.equal(state.frontmost.bundleIdentifier, 'com.spotify.client')
+    assert.equal(state.focusAttempts, 1)
+    if (options.focusStuck) assert.equal(state.now, 2000)
+  }
+})
+
+test('hides Raycast even when it is not the frontmost app', () => {
+  const { run, state } = setup({ raycastRunning: true, accessible: true })
+  assert.equal(run(), 'Connected to Amp (Office).')
+  assert.equal(state.raycastHidden, true)
+  assert.equal(state.frontmost.bundleIdentifier, 'app.editor')
+  assert.equal(state.spotifyActivations, 0)
+})
+
+test('restores focus after foreground access even when NSWorkspace keeps its initial app cached', () => {
+  const { run, state } = setup({ connected: true, backgroundUnavailable: true })
+  assert.equal(run(), 'Amp (Office) is already connected.')
+  assert.equal(state.spotifyActivations, 1)
+  assert.equal(state.focusAttempts, 1)
+  assert.equal(state.frontmost.bundleIdentifier, 'app.editor')
+})
+
+test('brings Spotify forward only if its picker cannot render in the background', () => {
+  const { run, state } = setup({ accessible: true, backgroundPickerUnavailable: true })
+  assert.equal(run(), 'Connected to Amp (Office).')
+  assert.equal(state.spotifyActivations, 1)
+  assert.equal(state.frontmost.bundleIdentifier, 'app.editor')
+})
+
+test('restores focus when an unnamed device requires a hidden Spotify window to be shown', () => {
+  const { run, state } = setup({ windowHidden: true })
+  assert.equal(run(), 'Connected to Amp (Office).')
+  assert.equal(state.spotifyActivations, 1)
+  assert.equal(state.focusAttempts, 1)
+  assert.equal(state.frontmost.bundleIdentifier, 'app.editor')
+  assert.equal(state.removed, true)
+})
+
+test('restores focus after a foreground-only command fails', () => {
+  const { run, state } = setup({ backgroundUnavailable: true, missing: true })
+  assert.throws(run, /Could not find Amp \(Office\)/)
+  assert.equal(state.spotifyActivations, 1)
+  assert.equal(state.frontmost.bundleIdentifier, 'app.editor')
 })
