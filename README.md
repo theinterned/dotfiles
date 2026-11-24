@@ -11,7 +11,7 @@ My dot files
 ## Raycast Spotify controls
 
 Add `raycast/scripts` as a Script Commands directory in Raycast. The
-**Connect Spotify to Amp** and **Connect Spotify to This Computer** commands
+**Spotify Connect to Amp** and **Spotify Connect to This Computer** commands
 select the corresponding device and close the picker on success. They close
 Raycast before starting and try to control Spotify in the background. If Spotify
 needs to come forward, they restore the previously focused app afterward

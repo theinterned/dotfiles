@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # @raycast.schemaVersion 1
-# @raycast.title Connect Spotify to This Computer
+# @raycast.title Spotify Connect to This Computer
 # @raycast.mode silent
 # @raycast.icon ./Spotify.png
 # @raycast.packageName Spotify

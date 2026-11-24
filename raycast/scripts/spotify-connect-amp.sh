@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # @raycast.schemaVersion 1
-# @raycast.title Connect Spotify to Amp
+# @raycast.title Spotify Connect to Amp
 # @raycast.mode silent
 # @raycast.icon ./Spotify.png
 # @raycast.packageName Spotify
