@@ -14,10 +14,21 @@ Add `raycast/scripts` as a Script Commands directory in Raycast. The
 **Connect Spotify to Amp** and **Connect Spotify to This Computer** commands
 select the corresponding device and close the picker on success. Both require
 **Accessibility** permission for the app running the command (such as Raycast)
-in **System Settings → Privacy & Security**. The Amp command also needs
-**Screen & System Audio Recording** permission: it reads the device name from
+in **System Settings → Privacy & Security**.
+
+Both launchers call `raycast/lib/spotify-connect.js` with a device name. The shared
+code tries Accessibility first. If Spotify does not expose the name (as with some
+Sonos device rows), it requires **Screen & System Audio Recording** permission to read
 a temporary screenshot of the Spotify window, then deletes the screenshot.
-The computer command does not take a screenshot.
+Accessible names, including **This computer**, do not need a screenshot.
+
+To change a device, edit the final quoted name in its `spotify-connect-*.sh`
+launcher to match Spotify exactly. To add a command, copy a launcher within
+`raycast/scripts`, change its Raycast title and description, and set the device
+name. Keep the copy executable with `chmod +x raycast/scripts/your-command.sh`.
+
+The Amp launcher was renamed from `.js` to `.sh`. Refresh Raycast's Script Commands
+and reassign its hotkey if needed.
 
 ## npm shortcuts
 

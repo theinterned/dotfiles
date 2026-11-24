@@ -1,22 +1,8 @@
-#!/usr/bin/env -S /usr/bin/osascript -l JavaScript
-
-// @raycast.schemaVersion 1
-// @raycast.title Connect Spotify to Amp
-// @raycast.mode compact
-// @raycast.icon ./Spotify.png
-// @raycast.packageName Spotify
-// @raycast.description Connect Spotify to Amp (Office) using its device picker.
-// @raycast.author Ned Schwartz
-// @raycast.authorURL https://github.com/theinterned
-
 ObjC.import('Cocoa')
 ObjC.import('ApplicationServices')
 ObjC.bindFunction('CFMakeCollectable', ['id', ['void *']])
 ObjC.bindFunction('CGPreflightScreenCaptureAccess', ['bool', []])
 ObjC.bindFunction('CGRequestScreenCaptureAccess', ['bool', []])
-
-const deviceName = 'Amp (Office)'
-const computerName = 'This computer'
 
 function attribute(element, name) {
   const result = Ref()
@@ -123,7 +109,7 @@ function capture(windowInfo, path) {
   if (task.terminationStatus !== 0) throw new Error('Could not capture the Spotify window.')
 }
 
-function recognizedDevicePoints(windowInfo, path) {
+function recognizedDevicePoints(windowInfo, path, deviceName) {
   capture(windowInfo, path)
   const handler = $.VNImageRequestHandler.alloc.initWithURLOptions($.NSURL.fileURLWithPath($(path)), $({}))
   const request = $.VNRecognizeTextRequest.alloc.init
@@ -139,7 +125,7 @@ function recognizedDevicePoints(windowInfo, path) {
     if (!candidate) return []
     const label = ObjC.unwrap(candidate.string).trim()
     const prefix = label.endsWith(deviceName) ? label.slice(0, -deviceName.length).trim() : null
-    if (prefix === null || prefix.length > 2) return []
+    if (prefix === null || prefix.length > 2 || /[\p{L}\p{N}]/u.test(prefix)) return []
     const box = observation.boundingBox
     return [{
       x: bounds.X + (box.origin.x + box.size.width / 2) * bounds.Width,
@@ -168,13 +154,13 @@ function openPicker(window, picker) {
   return section
 }
 
-function isConnected(window) {
+function isConnected(window, deviceName) {
   return findDescendant(window, node =>
     text(node, 'AXRole') === 'AXButton' && text(node, 'AXTitle') === `Playing on ${deviceName}`
   )
 }
 
-function playbackControls(window) {
+function playbackControls(window, deviceName) {
   let picker = null
   const connected = findDescendant(window, node => {
     const role = text(node, 'AXRole')
@@ -184,7 +170,7 @@ function playbackControls(window) {
   return { connected: connected !== null, picker }
 }
 
-function closePicker(window, picker, targetName = deviceName) {
+function closePicker(window, picker, targetName) {
   const control = picker || devicePicker(window)
   if (!control) throw new Error(`Connected to ${targetName}, but could not find Spotify's device picker to close it.`)
   const value = text(control, 'AXValue')
@@ -195,86 +181,55 @@ function closePicker(window, picker, targetName = deviceName) {
   }
 }
 
-function computerIsCurrent(section) {
-  const current = findDescendant(section, node => text(node, 'AXDescription') === 'Current device')
-  return current && findDescendant(current, node => text(node, 'AXDescription') === computerName)
-}
-
-function locateComputer(section) {
-  if (computerIsCurrent(section)) return { current: true }
-  const list = findDescendant(section, node => text(node, 'AXRole') === 'AXList')
-  if (!list) return null
-  const matches = Array.from(descendants(list)).filter(node =>
-    text(node, 'AXRole') === 'AXButton' && text(node, 'AXTitle') === computerName
-  )
-  if (matches.length > 1) throw new Error(`More than one device matched ${computerName}.`)
-  return matches.length === 1 ? { button: matches[0] } : null
-}
-
-function connectComputer(window, picker, section) {
-  let target = locateComputer(section)
-  if (!target) {
-    target = waitFor(() => {
-      const currentPanel = panel(window)
-      return currentPanel && locateComputer(currentPanel)
-    }, 5)
-  }
-  if (!target) throw new Error(`Could not find ${computerName} in Spotify's device list.`)
-  if (!target.current) {
-    press(target.button)
-    const confirmed = waitFor(() => {
-      const currentPanel = panel(window)
-      if (currentPanel) return computerIsCurrent(currentPanel)
-      const control = devicePicker(window)
-      if (!control) return null
-      const value = text(control, 'AXValue')
-      if (value === 0) press(control)
-      else if (value !== 1) throw new Error("Could not check whether Spotify's device picker is open.")
-      return null
-    }, 12)
-    if (!confirmed) throw new Error(`Selected ${computerName}, but Spotify did not confirm the connection.`)
-  }
-  closePicker(window, target.current ? picker : null, computerName)
-  return target.current ? `${computerName} is already connected.` : `Connected to ${computerName}.`
-}
-
-function locateDevice(window, pid, path) {
+function deviceList(window) {
   const section = panel(window)
-  if (!section) throw new Error("Spotify's device picker is not open.")
-  const nodes = Array.from(descendants(section))
-  const current = nodes.find(node => text(node, 'AXDescription') === 'Current device')
-  const list = nodes.find(node => text(node, 'AXRole') === 'AXList')
-  if (!current || !list) throw new Error("Could not find Spotify's device list.")
+  if (!section) return null
+  const current = findDescendant(section, node => text(node, 'AXDescription') === 'Current device')
+  const list = findDescendant(section, node => text(node, 'AXRole') === 'AXList')
+  if (!current || !list) return null
+  const buttons = Array.from(descendants(list)).filter(node => text(node, 'AXRole') === 'AXButton')
+  return { current, buttons }
+}
 
-  const buttons = children(list).flatMap(row =>
-    Array.from(descendants(row)).filter(node => text(node, 'AXRole') === 'AXButton')
-  )
-  const points = recognizedDevicePoints(visibleWindow(window, pid), path)
+function labels(element) {
+  const values = [text(element, 'AXTitle'), text(element, 'AXDescription')]
+  if (text(element, 'AXRole') === 'AXStaticText') values.push(text(element, 'AXValue'))
+  return values.filter(value => typeof value === 'string' && value.trim().length > 0)
+}
+
+function hasLabel(root, deviceName) {
+  return findDescendant(root, node => labels(node).includes(deviceName)) !== null
+}
+
+function locateAccessibleDevice(devices, deviceName) {
+  const matches = devices.buttons.filter(button => hasLabel(button, deviceName)).map(button => ({ button }))
+  if (children(devices.current).some(node => hasLabel(node, deviceName))) matches.push({ current: true })
+  if (matches.length > 1) throw new Error(`More than one device matched ${deviceName}.`)
+  return matches.length === 1 ? { ...matches[0], method: 'accessibility' } : null
+}
+
+function locateDevice(window, pid, deviceName, screenshotPath, useScreenshot = true) {
+  const devices = deviceList(window)
+  if (!devices) return null
+  const accessible = locateAccessibleDevice(devices, deviceName)
+  if (accessible || !useScreenshot) return accessible
+
+  const path = screenshotPath()
+  const points = recognizedDevicePoints(visibleWindow(window, pid), path, deviceName)
   const matches = []
   for (const point of points) {
-    if (containsPoint(current, point)) matches.push({ current: true })
-    for (const button of buttons) {
+    if (containsPoint(devices.current, point)) matches.push({ current: true })
+    for (const button of devices.buttons) {
       if (containsPoint(button, point)) matches.push({ button })
     }
   }
   if (matches.length > 1) throw new Error(`More than one visible device matched ${deviceName}.`)
-  return matches[0] || null
+  return matches.length === 1 ? { ...matches[0], method: 'screenshot' } : null
 }
 
-function run(args = []) {
-  if (args.length > 1 || (args.length === 1 && args[0] !== '--computer')) {
-    throw new Error('Unsupported Spotify device command.')
-  }
-  const computer = args.length === 1
+function connect(deviceName) {
   if (!$.AXIsProcessTrusted()) {
     throw new Error('Allow the app running this command in System Settings > Privacy & Security > Accessibility.')
-  }
-  if (!computer) {
-    ObjC.import('Vision')
-    if (!$.CGPreflightScreenCaptureAccess()) {
-      $.CGRequestScreenCaptureAccess()
-      throw new Error('Allow the app running this command in System Settings > Privacy & Security > Screen & System Audio Recording, then quit and reopen that app.')
-    }
   }
 
   const wasRunning = $.NSRunningApplication.runningApplicationsWithBundleIdentifier($('com.spotify.client')).js.length > 0
@@ -291,39 +246,76 @@ function run(args = []) {
   const windows = attribute(app, 'AXWindows')
   if (!windows || windows.js.length === 0) throw new Error('Open a Spotify window and try again.')
   const window = windows.js[0]
-  const { connected, picker } = computer
-    ? { connected: false, picker: devicePicker(window) }
-    : playbackControls(window)
+  const { connected, picker } = playbackControls(window, deviceName)
   if (connected) {
-    closePicker(window, picker)
+    closePicker(window, picker, deviceName)
     return `${deviceName} is already connected.`
   }
   if (!picker) throw new Error("Could not find Spotify's device picker.")
-  const section = openPicker(window, picker)
-  if (computer) return connectComputer(window, picker, section)
+  openPicker(window, picker)
 
   const files = $.NSFileManager.defaultManager
-  const directory = ObjC.unwrap($.NSTemporaryDirectory()) + 'spotify-connect-' + ObjC.unwrap($.NSUUID.UUID.UUIDString)
-  const error = Ref()
-  if (!files.createDirectoryAtPathWithIntermediateDirectoriesAttributesError($(directory), false, $({ NSFilePosixPermissions: 448 }), error)) {
-    throw new Error(`Could not create a temporary directory: ${ObjC.unwrap(error[0].localizedDescription)}`)
+  let directory = null
+  function screenshotPath() {
+    if (directory !== null) return directory + '/spotify.png'
+    if (!$.CGPreflightScreenCaptureAccess()) {
+      $.CGRequestScreenCaptureAccess()
+      throw new Error('Allow the app running this command in System Settings > Privacy & Security > Screen & System Audio Recording, then quit and reopen that app.')
+    }
+    ObjC.import('Vision')
+    const temporaryDirectory = ObjC.unwrap($.NSTemporaryDirectory()) + 'spotify-connect-' + ObjC.unwrap($.NSUUID.UUID.UUIDString)
+    const error = Ref()
+    if (!files.createDirectoryAtPathWithIntermediateDirectoriesAttributesError($(temporaryDirectory), false, $({ NSFilePosixPermissions: 448 }), error)) {
+      throw new Error(`Could not create a temporary directory: ${ObjC.unwrap(error[0].localizedDescription)}`)
+    }
+    directory = temporaryDirectory
+    return directory + '/spotify.png'
   }
-  const path = directory + '/spotify.png'
+
   try {
-    const target = locateDevice(window, pid, path)
-    if (!target) throw new Error(`Could not read ${deviceName} in Spotify's visible device list.`)
+    const devices = waitFor(() => deviceList(window), 5)
+    if (!devices) throw new Error("Could not find Spotify's device list.")
+    let target = locateAccessibleDevice(devices, deviceName)
+    if (!target && devices.buttons.every(button => findDescendant(button, node => labels(node).length > 0))) {
+      // Give accessible labels time to load without delaying unnamed device rows.
+      target = waitFor(() => locateDevice(window, pid, deviceName, screenshotPath, false), 5)
+    }
+    if (!target) target = locateDevice(window, pid, deviceName, screenshotPath)
+    if (!target) throw new Error(`Could not find ${deviceName} in Spotify's device list.`)
     if (!target.current) {
       press(target.button)
-      if (!waitFor(() => isConnected(window), 12)) {
+      const confirmed = waitFor(() => {
+        if (isConnected(window, deviceName)) return true
+        if (!panel(window)) {
+          const control = devicePicker(window)
+          if (!control) return null
+          const value = text(control, 'AXValue')
+          if (value === 0) press(control)
+          else if (value !== 1) throw new Error("Could not check whether Spotify's device picker is open.")
+          return null
+        }
+        const current = locateDevice(window, pid, deviceName, screenshotPath, target.method === 'screenshot')
+        return current && current.current
+      }, 12)
+      if (!confirmed) {
         throw new Error(`Selected ${deviceName}, but Spotify did not confirm the connection.`)
       }
     }
-    closePicker(window, target.current ? picker : null)
+    closePicker(window, target.current ? picker : null, deviceName)
     return target.current ? `${deviceName} is already connected.` : `Connected to ${deviceName}.`
   } finally {
-    const cleanupError = Ref()
-    if (!files.removeItemAtPathError($(directory), cleanupError)) {
-      throw new Error(`Could not remove temporary Spotify screenshot: ${ObjC.unwrap(cleanupError[0].localizedDescription)}`)
+    if (directory !== null) {
+      const cleanupError = Ref()
+      if (!files.removeItemAtPathError($(directory), cleanupError)) {
+        throw new Error(`Could not remove temporary Spotify screenshot: ${ObjC.unwrap(cleanupError[0].localizedDescription)}`)
+      }
     }
   }
+}
+
+function run(args = []) {
+  if (args.length !== 1 || typeof args[0] !== 'string' || !args[0].trim()) {
+    throw new Error('Provide exactly one Spotify device name.')
+  }
+  return connect(args[0])
 }

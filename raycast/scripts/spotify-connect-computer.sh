@@ -9,4 +9,4 @@
 # @raycast.author Ned Schwartz
 # @raycast.authorURL https://github.com/theinterned
 
-exec "$(dirname "$0")/spotify-connect-amp.js" --computer
+exec /usr/bin/osascript -l JavaScript "$(dirname "$0")/../lib/spotify-connect.js" "This computer"
