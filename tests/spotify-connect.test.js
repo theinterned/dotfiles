@@ -236,7 +236,7 @@ function setup(options = {}) {
 
 test('does not wait, open the picker, or request screen recording when already connected', () => {
   const { run, state } = setup({ connected: true, screenAllowed: false })
-  assert.equal(run(), 'Amp (Office) is already connected.')
+  assert.equal(run(), '🔊 Amp (Office) is already connected.')
   assert.deepEqual(state.sleeps, [])
   assert.deepEqual(state.pressed, [])
   assert.equal(state.screenChecked, false)
@@ -248,14 +248,14 @@ test('does not wait, open the picker, or request screen recording when already c
 
 test('closes an open picker when already connected', () => {
   const { run, state } = setup({ connected: true, pickerOpen: true, indicatorFirst: true })
-  assert.equal(run(), 'Amp (Office) is already connected.')
+  assert.equal(run(), '🔊 Amp (Office) is already connected.')
   assert.deepEqual(state.pressed, ['picker'])
   assert.equal(state.pickerOpen, false)
 })
 
 test('still enables Spotify accessibility when starting from a cold state', () => {
   const { run, state } = setup({ running: false, enhanced: false, connected: true })
-  assert.equal(run(), 'Amp (Office) is already connected.')
+  assert.equal(run(), '🔊 Amp (Office) is already connected.')
   assert.equal(state.running, true)
   assert.equal(state.enhanced, true)
   assert.deepEqual(state.sleeps, [1, 1])
@@ -263,7 +263,7 @@ test('still enables Spotify accessibility when starting from a cold state', () =
 
 test('waits for the picker and confirms a delayed connection promptly', () => {
   const { run, state } = setup({ panelDelay: 900, confirmDelay: 450 })
-  assert.equal(run(), 'Connected to Amp (Office).')
+  assert.equal(run(), '🔊 Connected to Amp (Office).')
   assert.deepEqual(state.pressed, ['picker', 'target', 'picker'])
   assert.equal(state.pickerOpen, false)
   assert.equal(state.removed, true)
@@ -272,14 +272,14 @@ test('waits for the picker and confirms a delayed connection promptly', () => {
 
 test('closes an already-open picker after selecting Amp', () => {
   const { run, state } = setup({ pickerOpen: true })
-  assert.equal(run(), 'Connected to Amp (Office).')
+  assert.equal(run(), '🔊 Connected to Amp (Office).')
   assert.deepEqual(state.pressed, ['target', 'picker'])
   assert.equal(state.pickerOpen, false)
 })
 
 test('reads an unnamed current device and closes the picker', () => {
   const { run, state } = setup({ current: true })
-  assert.equal(run(), 'Amp (Office) is already connected.')
+  assert.equal(run(), '🔊 Amp (Office) is already connected.')
   assert.deepEqual(state.pressed, ['picker', 'picker'])
   assert.equal(state.pickerOpen, false)
   assert.equal(state.removed, true)
@@ -288,7 +288,7 @@ test('reads an unnamed current device and closes the picker', () => {
 
 test('does not reopen the picker when the playing indicator confirms the connection', () => {
   const { run, state } = setup({ autoClose: true })
-  assert.equal(run(), 'Connected to Amp (Office).')
+  assert.equal(run(), '🔊 Connected to Amp (Office).')
   assert.deepEqual(state.pressed, ['picker', 'target'])
   assert.equal(state.pickerOpen, false)
 })
@@ -318,7 +318,7 @@ test('reports when a successful connection cannot close the picker', () => {
 
 test('confirms an already-selected computer without screen recording access', () => {
   const { run, state } = setup({ deviceName: 'This computer', accessible: true, current: true, screenAllowed: false })
-  assert.equal(run(), 'This computer is already connected.')
+  assert.equal(run(), '🔊 This computer is already connected.')
   assert.deepEqual(state.pressed, ['picker', 'picker'])
   assert.equal(state.pickerOpen, false)
   assert.equal(state.screenChecked, false)
@@ -331,7 +331,7 @@ test('selects an accessible device and reopens the picker if Spotify closes it',
     deviceName: 'This computer', accessible: true, indicator: false,
     autoClose: true, confirmDelay: 300, screenAllowed: false
   })
-  assert.equal(run(), 'Connected to This computer.')
+  assert.equal(run(), '🔊 Connected to This computer.')
   assert.deepEqual(state.pressed, ['picker', 'target', 'picker', 'picker'])
   assert.equal(state.pickerOpen, false)
   assert.equal(state.screenChecked, false)
@@ -343,7 +343,7 @@ test('waits for accessible device labels before trying a screenshot', () => {
     deviceName: 'This computer', accessible: true, listAvailableAt: 900,
     targetAvailableAt: 3100, screenAllowed: false
   })
-  assert.equal(run(), 'Connected to This computer.')
+  assert.equal(run(), '🔊 Connected to This computer.')
   assert.deepEqual(state.pressed, ['picker', 'target', 'picker'])
   assert.equal(state.screenChecked, false)
   assert.ok(state.now >= 3100)
@@ -399,7 +399,7 @@ test('selects an arbitrary device by a nested accessible label', () => {
   const { run, state } = setup({
     deviceName: 'Desk speakers', accessible: true, nestedLabel: true, indicator: false, screenAllowed: false
   })
-  assert.equal(run(), 'Connected to Desk speakers.')
+  assert.equal(run(), '🔊 Connected to Desk speakers.')
   assert.deepEqual(state.pressed, ['picker', 'target', 'picker'])
   assert.equal(state.screenChecked, false)
   assert.equal(state.created, false)
@@ -410,7 +410,7 @@ test('selects an arbitrary device by a nested accessible label', () => {
 
 test('confirms an arbitrary unnamed device through text recognition when no playing indicator exists', () => {
   const { run, state } = setup({ deviceName: 'Living room "Mini"', indicator: false, autoClose: true })
-  assert.equal(run(), 'Connected to Living room "Mini".')
+  assert.equal(run(), '🔊 Connected to Living room "Mini".')
   assert.deepEqual(state.pressed, ['picker', 'target', 'picker', 'picker'])
   assert.equal(state.pickerOpen, false)
   assert.equal(state.captures.length, 2)
@@ -429,7 +429,7 @@ test('does not match a different visible device sharing the requested name as a 
 
 test('allows a leading icon when recognizing a visible device name', () => {
   const { run, state } = setup({ deviceName: 'Desk speakers', ocrLabel: '> Desk speakers' })
-  assert.equal(run(), 'Connected to Desk speakers.')
+  assert.equal(run(), '🔊 Connected to Desk speakers.')
   assert.deepEqual(state.pressed, ['picker', 'target', 'picker'])
   assert.equal(state.removed, true)
 })
@@ -445,7 +445,7 @@ test('waits for an accessible current label after selection without requiring a 
   const { run, state } = setup({
     deviceName: 'Desk speakers', accessible: true, indicator: false, currentLabelDelay: 600, screenAllowed: false
   })
-  assert.equal(run(), 'Connected to Desk speakers.')
+  assert.equal(run(), '🔊 Connected to Desk speakers.')
   assert.deepEqual(state.pressed, ['picker', 'target', 'picker'])
   assert.equal(state.screenChecked, false)
   assert.ok(state.now >= 1100)
@@ -453,7 +453,7 @@ test('waits for an accessible current label after selection without requiring a 
 
 test('hides Raycast before remembering the previously focused app', () => {
   const { run, state } = setup({ raycastFrontmost: true, connected: true, backgroundUnavailable: true })
-  assert.equal(run(), 'Amp (Office) is already connected.')
+  assert.equal(run(), '🔊 Amp (Office) is already connected.')
   assert.equal(state.raycastHidden, true)
   assert.equal(state.frontmost.bundleIdentifier, 'app.editor')
   assert.equal(state.focusAttempts, 1)
@@ -470,14 +470,14 @@ test('reports when Raycast cannot be dismissed before touching Spotify', () => {
 
 test('does not reactivate Spotify when it was already focused', () => {
   const { run, state } = setup({ spotifyFrontmost: true, connected: true })
-  assert.equal(run(), 'Amp (Office) is already connected.')
+  assert.equal(run(), '🔊 Amp (Office) is already connected.')
   assert.equal(state.frontmost.bundleIdentifier, 'com.spotify.client')
   assert.equal(state.focusAttempts, 0)
 })
 
 test('does not try to reopen a previous app that quit during the command', () => {
   const { run, state } = setup({ previousQuits: true, connected: true, backgroundUnavailable: true })
-  assert.equal(run(), 'Amp (Office) is already connected.')
+  assert.equal(run(), '🔊 Amp (Office) is already connected.')
   assert.equal(state.focusAttempts, 0)
 })
 
@@ -493,7 +493,7 @@ test('reports failed focus restoration instead of reporting success', () => {
 
 test('hides Raycast even when it is not the frontmost app', () => {
   const { run, state } = setup({ raycastRunning: true, accessible: true })
-  assert.equal(run(), 'Connected to Amp (Office).')
+  assert.equal(run(), '🔊 Connected to Amp (Office).')
   assert.equal(state.raycastHidden, true)
   assert.equal(state.frontmost.bundleIdentifier, 'app.editor')
   assert.equal(state.spotifyActivations, 0)
@@ -501,7 +501,7 @@ test('hides Raycast even when it is not the frontmost app', () => {
 
 test('restores focus after foreground access even when NSWorkspace keeps its initial app cached', () => {
   const { run, state } = setup({ connected: true, backgroundUnavailable: true })
-  assert.equal(run(), 'Amp (Office) is already connected.')
+  assert.equal(run(), '🔊 Amp (Office) is already connected.')
   assert.equal(state.spotifyActivations, 1)
   assert.equal(state.focusAttempts, 1)
   assert.equal(state.frontmost.bundleIdentifier, 'app.editor')
@@ -509,14 +509,14 @@ test('restores focus after foreground access even when NSWorkspace keeps its ini
 
 test('brings Spotify forward only if its picker cannot render in the background', () => {
   const { run, state } = setup({ accessible: true, backgroundPickerUnavailable: true })
-  assert.equal(run(), 'Connected to Amp (Office).')
+  assert.equal(run(), '🔊 Connected to Amp (Office).')
   assert.equal(state.spotifyActivations, 1)
   assert.equal(state.frontmost.bundleIdentifier, 'app.editor')
 })
 
 test('restores focus when an unnamed device requires a hidden Spotify window to be shown', () => {
   const { run, state } = setup({ windowHidden: true })
-  assert.equal(run(), 'Connected to Amp (Office).')
+  assert.equal(run(), '🔊 Connected to Amp (Office).')
   assert.equal(state.spotifyActivations, 1)
   assert.equal(state.focusAttempts, 1)
   assert.equal(state.frontmost.bundleIdentifier, 'app.editor')

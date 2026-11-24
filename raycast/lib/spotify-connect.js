@@ -378,7 +378,7 @@ function run(args = []) {
   }
   const previous = previousApplication()
   try {
-    return connect(args[0])
+    return `🔊 ${connect(args[0])}`
   } finally {
     restoreFocus(previous)
   }
