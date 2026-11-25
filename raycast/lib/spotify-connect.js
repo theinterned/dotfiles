@@ -279,7 +279,7 @@ function connect(deviceName) {
     ObjC.import('Vision')
     const temporaryDirectory = ObjC.unwrap($.NSTemporaryDirectory()) + 'spotify-connect-' + ObjC.unwrap($.NSUUID.UUID.UUIDString)
     const error = Ref()
-    if (!files.createDirectoryAtPathWithIntermediateDirectoriesAttributesError($(temporaryDirectory), false, $({ NSFilePosixPermissions: 448 }), error)) {
+    if (!files.createDirectoryAtPathWithIntermediateDirectoriesAttributesError($(temporaryDirectory), false, $({ NSFilePosixPermissions: 0o700 }), error)) {
       throw new Error(`Could not create a temporary directory: ${ObjC.unwrap(error[0].localizedDescription)}`)
     }
     directory = temporaryDirectory
