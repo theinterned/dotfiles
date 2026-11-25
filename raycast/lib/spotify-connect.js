@@ -204,7 +204,12 @@ function hasLabel(root, deviceName) {
 
 function locateAccessibleDevice(devices, deviceName) {
   const matches = devices.buttons.filter(button => hasLabel(button, deviceName)).map(button => ({ button }))
-  if (children(devices.current).some(node => hasLabel(node, deviceName))) matches.push({ current: true })
+  const current = children(devices.current).some(child => findDescendant(child, node => {
+    const names = labels(node)
+    return names.includes(deviceName) ||
+      (text(node, 'AXRole') === 'AXStaticText' && names.includes(`${deviceName} \u2022 Lossless`))
+  }))
+  if (current) matches.push({ current: true })
   if (matches.length > 1) throw new Error(`More than one device matched ${deviceName}.`)
   return matches.length === 1 ? { ...matches[0], method: 'accessibility' } : null
 }

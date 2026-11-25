@@ -57,6 +57,7 @@ function setup(options = {}) {
   const panel = { role: 'AXGroup', description: 'Connect to a device' }
   const current = { role: 'AXGroup', description: 'Current device', bounds: [700, 100, 300, 100] }
   const currentLabel = { role: 'AXGroup' }
+  const currentStatus = { role: 'AXStaticText' }
   const currentButton = { role: 'AXButton' }
   const list = { role: 'AXList' }
   const target = { role: 'AXButton', bounds: [700, 220, 300, 80] }
@@ -186,6 +187,7 @@ function setup(options = {}) {
       if (state.selectedAt !== null && state.now < state.selectedAt + (options.currentLabelDelay || 0)) return []
       return [currentLabel, currentButton]
     }
+    if (node === currentLabel && options.currentHasQualityLabel) return [currentStatus]
     if (node === list) {
       return targetAvailable() ? [other, target, ...(options.duplicate ? [duplicate] : [])] : [other]
     }
@@ -194,9 +196,12 @@ function setup(options = {}) {
   }
   context.text = (node, name) => {
     if (name === 'AXRole') return node.role || null
-    if (name === 'AXDescription' && node === currentLabel) return currentName()
+    if (name === 'AXDescription' && node === currentLabel) {
+      return options.currentHasQualityLabel ? 'Bluetooth headphones' : currentName()
+    }
     if (name === 'AXDescription') return node.description || null
     if (name === 'AXValue' && node === picker) return state.pickerOpen ? 1 : 0
+    if (name === 'AXValue' && node === currentStatus) return `${currentName()} \u2022 Lossless`
     if (name === 'AXValue') return node.value || null
     if (name === 'AXTitle' && node === indicator) {
       return options.indicator === false || options.current ? null : `Playing on ${currentName()}`
@@ -331,6 +336,17 @@ test('confirms an already-selected computer without screen recording access', ()
   assert.equal(state.screenChecked, false)
   assert.equal(state.created, false)
   assert.equal(state.imports.includes('Vision'), false)
+})
+
+test('recognizes the computer as current when Spotify shows the audio output name and quality', () => {
+  const { run, state } = setup({
+    deviceName: 'This computer', accessible: true, current: true,
+    currentHasQualityLabel: true, screenAllowed: false
+  })
+  assert.equal(run(), '🔊 This computer is already connected.')
+  assert.deepEqual(state.pressed, ['picker', 'picker'])
+  assert.equal(state.pickerOpen, false)
+  assert.equal(state.screenChecked, false)
 })
 
 test('selects an accessible device and reopens the picker if Spotify closes it', () => {

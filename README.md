@@ -25,6 +25,8 @@ code tries Accessibility first. If Spotify does not expose the name (as with som
 Sonos device rows), it requires **Screen & System Audio Recording** permission to read
 a temporary screenshot of the Spotify window, then deletes the screenshot.
 Accessible names, including **This computer**, do not need a screenshot.
+**This computer** uses the Mac's selected audio output, which may be Bluetooth
+headphones rather than the built-in speakers.
 
 To change a device, edit the final quoted name in its `spotify-connect-*.sh`
 launcher to match Spotify exactly. To add a command, copy a launcher within
