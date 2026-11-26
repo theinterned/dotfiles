@@ -160,21 +160,39 @@ left installed.
 ## Splunk MCP
 
 The install scripts register a `splunk` MCP server that starts a Splunk MCP
-container each time Copilot starts the MCP server, connected to the US East cluster. It reads the
-token from the macOS keychain, falling back to
-`op://Employee/Splunk token/password` locally, or from `SPLUNK_BEARER_TOKEN` in a
-Codespace.
+container each time Copilot starts the MCP server, connected to the US East cluster.
+It uses an inherited `SPLUNK_BEARER_TOKEN` (including a Codespaces secret), or
+the macOS Keychain cache under service `splunk-mcp-token`, account `$USER`.
+The launcher requires `python3` to validate the token's JWT expiry.
 
-Splunk tokens are valid for 90 days, and 1Password prompts for biometric approval
-on every read, so the wrapper caches the token in the keychain under
-`splunk-mcp-token` and re-reads from 1Password only when the cached copy is
-missing or within a week of expiry. Without that cache every MCP server start
-triggers a prompt — and clients that spawn a server per tool call make that one
-prompt per query. After rotating the token, clear the cache:
+If the Keychain cache is missing, unreadable, malformed, or expired, normal
+startup falls back to 1Password once and caches a valid token so later starts
+do not prompt. On macOS, a desktop notification shows the refresh command
+below; the MCP server's stderr log has the full fix steps. Notifications also
+appear when the token is within seven days of expiry or the fallback fails.
+If the 1Password copy is also missing, malformed, or
+expired, startup stops before Docker or Tailscale is invoked and explains how
+to rotate the token and update the item. An invalid inherited token stops
+startup without falling back. Tokens within seven days of expiry still work
+without a 1Password read, with the same renewal instructions. Splunk verifies
+the token's signature when authenticating requests.
+
+Splunk tokens are valid for 90 days. After creating or rotating one in Splunk,
+save it at `op://Employee/Splunk token/password`, then explicitly refresh:
 
 ```sh
-security delete-generic-password -s splunk-mcp-token -a "$USER"
+bash ~/.dotfiles/script/splunk-mcp --refresh-token
 ```
+
+Refresh mode reads 1Password and may request biometric/app approval, just like
+the automatic fallback. It validates expiry, replaces the Keychain cache
+without putting the token in command arguments, and exits without starting
+any services. If the 1Password
+copy is expired, rotate it first; reading it again does not renew it. Cache
+write failures stop startup and explain that later starts may prompt again
+until caching succeeds. Check Keychain access and retry the refresh command.
+Keychain permissions
+and 1Password authentication are unchanged.
 
 `~/.copilot/mcp-config.json` is owned by Copilot itself — `copilot mcp add`, the
 plugin installer and the `setup_*` tools all rewrite it — so it is deliberately
@@ -189,7 +207,9 @@ safe and repairs the live config after anything rewrites it.
    API token in [Splunk](https://splunk.githubapp.com).
 2. Save it in 1Password as a Password item named `Splunk token` in the
    `Employee` vault.
-3. Ensure Tailscale is running, then start a new `copilot` session. The wrapper
+3. Run `bash ~/.dotfiles/script/splunk-mcp --refresh-token` and complete the
+   explicit 1Password approval.
+4. Ensure Tailscale is running, then start a new `copilot` session. The wrapper
    starts Docker Desktop automatically if it is not already running. The first
    image pull requires access to `ghcr.io/github/splunk-mcp-server`.
 
@@ -225,6 +245,8 @@ Tailscale and expose the TUN device before the Codespace is created:
 ```
 
 Set a `SPLUNK_BEARER_TOKEN` [Codespaces secret](https://docs.github.com/codespaces/managing-your-codespaces/managing-your-account-specific-secrets-for-github-codespaces).
+After rotation, update this secret and restart the Codespace to inherit the new
+value. Refresh mode is for macOS Keychain, not Codespaces.
 After each Codespace start, connect Tailscale before starting Copilot:
 
 ```sh
