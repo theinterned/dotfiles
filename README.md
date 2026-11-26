@@ -8,6 +8,34 @@ My dot files
 ./script/setup
 ```
 
+## Raycast Spotify controls
+
+Add `raycast/scripts` as a Script Commands directory in Raycast. The
+**Spotify Connect to Amp** and **Spotify Connect to This Computer** commands
+select the corresponding device and close the picker on success. They close
+Raycast before starting and try to control Spotify in the background. If Spotify
+needs to come forward, they restore the previously focused app afterward
+(including on failure), provided it is still running. Script output reports
+success or failure without keeping Raycast's main window open. Both require
+**Accessibility** permission for the app running the command (such as Raycast)
+in **System Settings → Privacy & Security**.
+
+Both launchers call `raycast/lib/spotify-connect.js` with a device name. The shared
+code tries Accessibility first. If Spotify does not expose the name (as with some
+Sonos device rows), it requires **Screen & System Audio Recording** permission to read
+a temporary screenshot of the Spotify window, then deletes the screenshot.
+Accessible names, including **This computer**, do not need a screenshot.
+**This computer** uses the Mac's selected audio output, which may be Bluetooth
+headphones rather than the built-in speakers.
+
+To change a device, edit the final quoted name in its `spotify-connect-*.sh`
+launcher to match Spotify exactly. To add a command, copy a launcher within
+`raycast/scripts`, change its Raycast title and description, and set the device
+name. Keep the copy executable with `chmod +x raycast/scripts/your-command.sh`.
+
+The Amp launcher was renamed from `.js` to `.sh`. Refresh Raycast's Script Commands
+and reassign its hotkey if needed.
+
 ## npm shortcuts
 
 Zsh/Bash aliases and Fish shortcuts use CFS for package installs and npx:
